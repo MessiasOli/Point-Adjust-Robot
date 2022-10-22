@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "z/c8ZXzhT1NQOWzfAvu3iUfHuIv6mv3sKhMv7mLn6Kj9QOchPlIfFATvLkXbDoskh0nFmsKmkgBHIj7exNCouQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\MessiasOliveira\\source\\repos\\Point Adjust Robot\\Point Adjust Robot\\Point Adjust Robot.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\MessiasOliveira\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.17.0\\microsoft.visualstudio.azure.containers.tools.targets.1.17.0.nupkg.sha512"
+  ],
+  "logs": []
+}
