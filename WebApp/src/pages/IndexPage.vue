@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center" padding> </q-page>
+  <q-page padding> </q-page>
 </template>
 
 <script>

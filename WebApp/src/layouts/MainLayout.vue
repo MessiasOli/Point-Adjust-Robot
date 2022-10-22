@@ -13,7 +13,7 @@
 
         <q-toolbar-title> Robô de pontos </q-toolbar-title>
 
-        <div>App {{ $q.version }}</div>
+        <div>App {{ appVersion }}</div>
       </q-toolbar>
     </q-header>
 
@@ -44,7 +44,7 @@ const linksList = [
     title: "Home",
     caption: "",
     icon: "home",
-    rout: "Home",
+    route: { name: "home" },
   },
 ];
 
@@ -53,6 +53,13 @@ export default defineComponent({
 
   components: {
     EssentialLink,
+  },
+
+  computed: {
+    appVersion() {
+      return this.$store.getters.appVersion;
+    },
+    // other computed values here
   },
 
   setup() {
@@ -65,6 +72,10 @@ export default defineComponent({
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },
     };
+  },
+
+  mounted() {
+    console.log("this", this);
   },
 });
 </script>
