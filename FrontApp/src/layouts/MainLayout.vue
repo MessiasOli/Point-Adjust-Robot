@@ -30,7 +30,7 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <router-view class="container" />
     </q-page-container>
   </q-layout>
 </template>
@@ -97,3 +97,11 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.container {
+  padding: 8px;
+  height: 93vh;
+  overflow-y: hidden;
+}
+</style>
