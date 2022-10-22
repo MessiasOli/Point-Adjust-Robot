@@ -17,6 +17,8 @@ export default defineComponent({
   provide() {
     return {
       showMessage: this.show,
+      dialog: this.dialog,
+      working: this.working,
     };
   },
 
@@ -37,6 +39,58 @@ export default defineComponent({
         timeout: 3000,
         progress: true,
       });
+    },
+
+    dialog(message, confirm = () => {}, notConfirm = () => {}) {
+      this.$q
+        .dialog({
+          title: "Atenção",
+          message: message,
+          cancel: true,
+          persistent: true,
+          ok: {
+            label: "Sim",
+            push: true,
+          },
+          cancel: {
+            label: "Não",
+            push: true,
+            color: "negative",
+          },
+        })
+        .onOk(() => {
+          confirm();
+        })
+        .onCancel(() => {
+          notConfirm();
+        })
+        .onDismiss(() => {
+          // console.log('I am triggered on both OK and Cancel')
+        });
+    },
+
+    working(message) {
+      const dialog = this.$q.dialog({
+        title: message,
+        dark: true,
+        progress: {
+          spinner: QSpinnerGears,
+          color: "amber",
+        },
+        persistent: true, // we want the user to not be able to close it
+        ok: false, // we want the user to not be able to close it
+      });
+
+      var finish = (message) => {
+        dialog.update({
+          title: "Finalizado!",
+          message: message,
+          progress: false,
+          ok: true,
+        });
+      };
+
+      return finish;
     },
   },
 });

@@ -36,7 +36,7 @@
         label="Limpar"
       />
       <q-btn
-        @click="sendAdjusts"
+        @click="showDialog"
         class="q-ml-sm"
         color="primary"
         icon="auto_mode"
@@ -52,7 +52,7 @@ import GridAdjust from "./gridConfig";
 
 export default {
   name: "AdjustWorkshift",
-  inject: ["showMessage"],
+  inject: ["showMessage", "dialog", "working"],
   components: {
     VGrid,
   },
@@ -90,12 +90,18 @@ export default {
       this.showMessage("Tabela limpa!", "success");
     },
 
+    showDialog() {
+      this.dialog(
+        "Todos os dados dessa tabela serão inseridos, deseja continuar ?",
+        this.sendAdjusts
+      );
+    },
+
     sendAdjusts() {
-      this.showMessage("Iniciando trabalho!", "build");
-      this.wait = true;
+      let finish = this.working("Por favor aguarde...");
+
       setTimeout(() => {
-        this.wait = false;
-        this.showMessage("Trabalho concluído!", "successs");
+        finish("Trabalho concluído!", "successs");
       }, 7000);
     },
   },
