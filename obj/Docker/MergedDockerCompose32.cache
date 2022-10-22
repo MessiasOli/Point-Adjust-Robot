@@ -1,0 +1,39 @@
+name: dockercompose12972431920248165075
+services:
+  poitadjustrobotapi:
+    build:
+      context: C:\Users\MessiasOliveira\source\repos\Point Adjust Robot
+      dockerfile: PoitAdjustRobotAPI/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      PATH: '"C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Python310\Scripts\;C:\Python310\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program
+        Files\dotnet\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program
+        Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL
+        Server\Client SDK\ODBC\170\Tools\Binn\;C:\ProgramData\chocolatey\bin;C:\Program
+        Files\TortoiseHg\;C:\Program Files (x86)\Microsoft SQL Server\160\DTS\Binn\;C:\Program
+        Files\Azure Data Studio\bin;C:\Users\MessiasOliveira\AppData\Roaming\nvm;C:\Program
+        Files\nodejs;C:\WebDriver;C:\Program Files\Docker\Docker\resources\bin;C:\Program
+        Files\Git\cmd;C:\Users\MessiasOliveira\AppData\Local\Microsoft\WindowsApps;C:\Users\MessiasOliveira\AppData\Local\Programs\Microsoft
+        VS Code\bin;C:\Users\MessiasOliveira\AppData\Roaming\npm;C:\Users\MessiasOliveira\.dotnet\tools;C:\Users\MessiasOliveira\AppData\Local\GitHubDesktop\bin;C:\Users\MessiasOliveira\.nuget\packages\microsoft.extensions.apidescription.server\3.0.0\tools;C:\Users\MessiasOliveira\.nuget\packages\microsoft.visualstudio.azure.containers.tools.targets\1.17.0\tools;C:\Program
+        Files\Docker\Docker\resources\bin:/app/"'
+    image: poitadjustrobotapi
+    networks:
+      localnetwork: null
+    ports:
+    - mode: ingress
+      target: 80
+      protocol: tcp
+    restart: unless-stopped
+  selenium:
+    image: browserless/chrome
+    networks:
+      localnetwork: null
+    ports:
+    - mode: ingress
+      target: 4444
+      published: "4444"
+      protocol: tcp
+networks:
+  localnetwork:
+    name: dockercompose12972431920248165075_localnetwork
+    driver: bridge

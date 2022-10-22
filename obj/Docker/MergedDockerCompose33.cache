@@ -1,0 +1,92 @@
+name: dockercompose12972431920248165075
+services:
+  poitadjustrobotapi:
+    build:
+      context: C:\Users\MessiasOliveira\source\repos\Point Adjust Robot
+      dockerfile: PoitAdjustRobotAPI/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: PoitAdjustRobotAPI
+      target: base
+    container_name: PoitAdjustRobotAPI
+    entrypoint:
+    - tail
+    - -f
+    - /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      DOTNET_USE_POLLING_FILE_WATCHER: "1"
+      NUGET_FALLBACK_PACKAGES: ""
+      PATH: '"C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Python310\Scripts\;C:\Python310\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program
+        Files\dotnet\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program
+        Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL
+        Server\Client SDK\ODBC\170\Tools\Binn\;C:\ProgramData\chocolatey\bin;C:\Program
+        Files\TortoiseHg\;C:\Program Files (x86)\Microsoft SQL Server\160\DTS\Binn\;C:\Program
+        Files\Azure Data Studio\bin;C:\Users\MessiasOliveira\AppData\Roaming\nvm;C:\Program
+        Files\nodejs;C:\WebDriver;C:\Program Files\Docker\Docker\resources\bin;C:\Program
+        Files\Git\cmd;C:\Users\MessiasOliveira\AppData\Local\Microsoft\WindowsApps;C:\Users\MessiasOliveira\AppData\Local\Programs\Microsoft
+        VS Code\bin;C:\Users\MessiasOliveira\AppData\Roaming\npm;C:\Users\MessiasOliveira\.dotnet\tools;C:\Users\MessiasOliveira\AppData\Local\GitHubDesktop\bin;C:\Users\MessiasOliveira\.nuget\packages\microsoft.extensions.apidescription.server\3.0.0\tools;C:\Users\MessiasOliveira\.nuget\packages\microsoft.visualstudio.azure.containers.tools.targets\1.17.0\tools;C:\Program
+        Files\Docker\Docker\resources\bin:/app/"'
+    image: poitadjustrobotapi:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /root/.nuget/packages  "/app/bin/Debug/net6.0/PoitAdjustRobotAPI.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    networks:
+      localnetwork: null
+    ports:
+    - mode: ingress
+      target: 80
+      protocol: tcp
+    restart: unless-stopped
+    tty: true
+    volumes:
+    - type: bind
+      source: C:\Users\MessiasOliveira\source\repos\Point Adjust Robot\PoitAdjustRobotAPI
+      target: /app
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\MessiasOliveira\source\repos\Point Adjust Robot
+      target: /src
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\MessiasOliveira\vsdbg\vs2017u5
+      target: /remote_debugger
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\MessiasOliveira\.nuget\packages\
+      target: /root/.nuget/packages
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\MessiasOliveira\AppData\Roaming/ASP.NET/Https
+      target: /root/.aspnet/https
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\MessiasOliveira\AppData\Roaming/Microsoft/UserSecrets
+      target: /root/.microsoft/usersecrets
+      read_only: true
+      bind:
+        create_host_path: true
+  selenium:
+    image: browserless/chrome
+    networks:
+      localnetwork: null
+    ports:
+    - mode: ingress
+      target: 4444
+      published: "4444"
+      protocol: tcp
+networks:
+  localnetwork:
+    name: dockercompose12972431920248165075_localnetwork
+    driver: bridge

@@ -1,0 +1,30 @@
+name: dockercompose12972431920248165075
+services:
+  poitadjustrobotapi:
+    build:
+      context: C:\Users\MessiasOliveira\source\repos\Point Adjust Robot
+      dockerfile: PoitAdjustRobotAPI/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      PATH: /app/
+    image: poitadjustrobotapi
+    networks:
+      localnetwork: null
+    ports:
+    - mode: ingress
+      target: 80
+      protocol: tcp
+    restart: unless-stopped
+  selenium:
+    image: browserless/chrome
+    networks:
+      localnetwork: null
+    ports:
+    - mode: ingress
+      target: 4444
+      published: "4444"
+      protocol: tcp
+networks:
+  localnetwork:
+    name: dockercompose12972431920248165075_localnetwork
+    driver: bridge

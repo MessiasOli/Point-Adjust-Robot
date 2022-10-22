@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoitAdjustRobotAPI", "PoitAdjustRobotAPI\PoitAdjustRobotAPI.csproj", "{F18F1729-0573-424A-A068-FE28229AF5F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoitAdjustRobotAPI", "PoitAdjustRobotAPI\PoitAdjustRobotAPI.csproj", "{F18F1729-0573-424A-A068-FE28229AF5F3}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "frontapp", "FrontApp\frontapp.esproj", "{D2CE181A-9FBB-4C28-A0B4-658E4932BCAE}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{1865DC23-35E9-4C72-9CE6-6D3728EEBB04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,16 @@ Global
 		{F18F1729-0573-424A-A068-FE28229AF5F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F18F1729-0573-424A-A068-FE28229AF5F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F18F1729-0573-424A-A068-FE28229AF5F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2CE181A-9FBB-4C28-A0B4-658E4932BCAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2CE181A-9FBB-4C28-A0B4-658E4932BCAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2CE181A-9FBB-4C28-A0B4-658E4932BCAE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D2CE181A-9FBB-4C28-A0B4-658E4932BCAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2CE181A-9FBB-4C28-A0B4-658E4932BCAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2CE181A-9FBB-4C28-A0B4-658E4932BCAE}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{1865DC23-35E9-4C72-9CE6-6D3728EEBB04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1865DC23-35E9-4C72-9CE6-6D3728EEBB04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1865DC23-35E9-4C72-9CE6-6D3728EEBB04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1865DC23-35E9-4C72-9CE6-6D3728EEBB04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -25,3 +25,16 @@ C:\Users\MessiasOliveira\source\repos\Point Adjust Robot\PoitAdjustRobotAPI\obj\
 C:\Users\MessiasOliveira\source\repos\Point Adjust Robot\PoitAdjustRobotAPI\obj\Debug\net6.0\PoitAdjustRobotAPI.pdb
 C:\Users\MessiasOliveira\source\repos\Point Adjust Robot\PoitAdjustRobotAPI\obj\Debug\net6.0\PoitAdjustRobotAPI.genruntimeconfig.cache
 C:\Users\MessiasOliveira\source\repos\Point Adjust Robot\PoitAdjustRobotAPI\obj\Debug\net6.0\ref\PoitAdjustRobotAPI.dll
+C:\Users\MessiasOliveira\source\repos\Point Adjust Robot\PoitAdjustRobotAPI\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\MessiasOliveira\source\repos\Point Adjust Robot\PoitAdjustRobotAPI\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
+C:\Users\MessiasOliveira\source\repos\Point Adjust Robot\PoitAdjustRobotAPI\bin\Debug\net6.0\WebDriver.dll
+C:\Users\MessiasOliveira\source\repos\Point Adjust Robot\PoitAdjustRobotAPI\bin\Debug\net6.0\WebDriver.Support.dll
+C:\Users\MessiasOliveira\source\repos\Point Adjust Robot\PoitAdjustRobotAPI\bin\Debug\net6.0\Appium.Net.dll
+C:\Users\MessiasOliveira\source\repos\Point Adjust Robot\PoitAdjustRobotAPI\bin\Debug\net6.0\Castle.Core.dll
+C:\Users\MessiasOliveira\source\repos\Point Adjust Robot\PoitAdjustRobotAPI\bin\Debug\net6.0\SeleniumExtras.PageObjects.dll
+C:\Users\MessiasOliveira\source\repos\Point Adjust Robot\PoitAdjustRobotAPI\bin\Debug\net6.0\log4net.dll
+C:\Users\MessiasOliveira\source\repos\Point Adjust Robot\PoitAdjustRobotAPI\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\MessiasOliveira\source\repos\Point Adjust Robot\PoitAdjustRobotAPI\bin\Debug\net6.0\System.Drawing.Common.dll
+C:\Users\MessiasOliveira\source\repos\Point Adjust Robot\PoitAdjustRobotAPI\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\MessiasOliveira\source\repos\Point Adjust Robot\PoitAdjustRobotAPI\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp2.0\System.Drawing.Common.dll
+C:\Users\MessiasOliveira\source\repos\Point Adjust Robot\PoitAdjustRobotAPI\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.0\System.Drawing.Common.dll
