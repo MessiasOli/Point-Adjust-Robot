@@ -28,8 +28,7 @@ export default defineComponent({
     },
 
     route: {
-      type: String,
-      default: "",
+      type: Object,
     },
 
     icon: {

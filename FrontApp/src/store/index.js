@@ -7,6 +7,8 @@ const store = createStore({
     return {
       count: 0,
       packageVersion: "0",
+      lastAdjustWorkshift: "-",
+      lastCoverWorkshift: "-",
     };
   },
   mutations: {
@@ -16,10 +18,20 @@ const store = createStore({
     appVersion(state, value) {
       state.packageVersion = value;
     },
+    lastAdjustWorkshift(state, value) {
+      state.lastAdjustWorkshift = value;
+    },
+    lastCoverWorkshift(state, value) {
+      state.lastCoverWorkshift = value;
+    },
   },
+
   getters: {
     appVersion: (state) => {
       return state.packageVersion;
+    },
+    lastAdjustWorkshift: (state) => {
+      return state.lastAdjustWorkshift;
     },
   },
 });

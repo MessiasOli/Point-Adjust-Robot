@@ -10,38 +10,51 @@
       :options="options"
       :range="true"
     ></v-grid>
-
-    <div class="group-btn">
+    <div class="footer">
       <div>
-        <q-spinner-tail
-          class="q-mr-lg"
-          v-if="wait"
-          color="purple"
-          size="2.5em"
-        />
-        <q-tooltip :offset="[0, 8]">Aguardando retorno dos dados.</q-tooltip>
+        <q-badge
+          v-if="lastUpdate"
+          outline
+          transparent
+          align="middle"
+          color="primary"
+        >
+          {{ lastUpdate }}
+        </q-badge>
+        <q-tooltip :offset="[0, 8]">Ultima atualização.</q-tooltip>
       </div>
-      <q-btn
-        @click="addLines"
-        class="q-ml-sm"
-        color="primary"
-        icon="add"
-        label="Adicionar mais linhas"
-      />
-      <q-btn
-        @click="clearLines"
-        class="q-ml-sm"
-        color="primary"
-        icon="clear_all"
-        label="Limpar"
-      />
-      <q-btn
-        @click="showDialog"
-        class="q-ml-sm"
-        color="primary"
-        icon="auto_mode"
-        label="Enviar dados"
-      />
+      <div class="group-btn">
+        <div>
+          <q-spinner-tail
+            class="q-mr-lg"
+            v-if="wait"
+            color="purple"
+            size="2.5em"
+          />
+          <q-tooltip :offset="[0, 8]">Aguardando retorno dos dados.</q-tooltip>
+        </div>
+        <q-btn
+          @click="addLines"
+          class="q-ml-sm"
+          color="primary"
+          icon="add"
+          label="Adicionar mais linhas"
+        />
+        <q-btn
+          @click="clearLines"
+          class="q-ml-sm"
+          color="primary"
+          icon="clear_all"
+          label="Limpar"
+        />
+        <q-btn
+          @click="showDialog"
+          class="q-ml-sm"
+          color="primary"
+          icon="auto_mode"
+          label="Enviar dados"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -49,9 +62,11 @@
 <script>
 import VGrid from "@revolist/vue3-datagrid";
 import GridAdjust from "./gridConfig";
+import * as moment from "moment";
 
 export default {
   name: "AdjustWorkshift",
+
   inject: ["showMessage", "dialog", "working"],
   components: {
     VGrid,
@@ -63,6 +78,7 @@ export default {
       rows: GridAdjust.rows,
       options: GridAdjust.options,
       wait: false,
+      lastUpdate: "", //moment().format("DD/MM/yyyy HH:mm:ss"),
     };
   },
 
@@ -99,12 +115,26 @@ export default {
 
     sendAdjusts() {
       let finish = this.working("Por favor aguarde...");
+      let data = this.rows.filter((r) => r.matriculation != "");
 
-      setTimeout(() => {
-        finish("Trabalho concluído!", "successs");
-      }, 7000);
+      this.$api
+        .post(`/adjustworkshift`, data)
+        .then((res) => {
+          if (res.status == 200) {
+            finish(res.data);
+
+            this.lastUpdate = moment().format("DD/MM/yyyy HH:mm:ss");
+          } else {
+            finish(res.data);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          finish("Falha ao executar a inserção dos dados!", "falha");
+        });
     },
   },
+  mounted() {},
 };
 </script>
 
@@ -117,5 +147,10 @@ export default {
   display: flex;
   margin: 8px 16px;
   justify-content: flex-end;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

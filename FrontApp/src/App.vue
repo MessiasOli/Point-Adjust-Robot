@@ -81,9 +81,10 @@ export default defineComponent({
         ok: false, // we want the user to not be able to close it
       });
 
-      var finish = (message) => {
+      var finish = (message, fail) => {
+        console.log("fail", fail);
         dialog.update({
-          title: "Finalizado!",
+          title: fail ? "Ops... aconteceu algo errado" : "Processo concluído!",
           message: message,
           progress: false,
           ok: true,
