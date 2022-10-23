@@ -1,8 +1,16 @@
 <template>
   <div padding>
-    <h6>Ajuste de Marcação</h6>
+    <div class="header">
+      <h6>Ajuste de Marcação</h6>
+      <q-input v-model="search" filled placeholder="Search">
+        <template v-slot:append>
+          <q-icon name="search" />
+        </template>
+      </q-input>
+    </div>
 
     <v-grid
+      ref="table"
       class="table"
       theme="compact"
       :source="rows"
@@ -76,10 +84,35 @@ export default {
     return {
       columns: GridAdjust.columns,
       rows: GridAdjust.rows,
+      rowsBkp: [],
       options: GridAdjust.options,
       wait: false,
       lastUpdate: "", //moment().format("DD/MM/yyyy HH:mm:ss"),
+      search: "",
     };
+  },
+
+  watch: {
+    search(filter, lastFilter) {
+      if (!filter) {
+        this.rows = this.rowsBkp;
+        return;
+      }
+
+      if (!lastFilter) this.rowsBkp = this.$refs.table.source;
+
+      let filterUpper = filter.toUpperCase();
+      this.rows = this.rowsBkp.filter((d) => {
+        return (
+          d.matriculation.toUpperCase().includes(filterUpper) ||
+          d.data.toUpperCase().includes(filterUpper) ||
+          d.hour.toUpperCase().includes(filterUpper) ||
+          d.reference.toUpperCase().includes(filterUpper) ||
+          d.justification.toUpperCase().includes(filterUpper) ||
+          d.note.toUpperCase().includes(filterUpper)
+        );
+      });
+    },
   },
 
   methods: {
@@ -139,8 +172,18 @@ export default {
 </script>
 
 <style scoped>
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+h6 {
+  margin: 20px 8px;
+}
+
 .table {
-  height: calc(100% - 180px);
+  height: calc(100% - 130px);
 }
 
 .group-btn {
