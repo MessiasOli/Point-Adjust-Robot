@@ -115,7 +115,9 @@ export default {
           d.entry1.toUpperCase().includes(filterUpper) ||
           d.departure1.toUpperCase().includes(filterUpper) ||
           d.entry2.toUpperCase().includes(filterUpper) ||
-          d.departure2.toUpperCase().includes(filterUpper)
+          d.departure2.toUpperCase().includes(filterUpper) ||
+          d.employeeHours.toUpperCase().includes(filterUpper) ||
+          d.hedgingFeature.toUpperCase().includes(filterUpper)
         );
       });
     },
@@ -157,7 +159,7 @@ export default {
       let data = this.rows.filter((r) => r.matriculation != "");
 
       this.$api
-        .post(`/adjustworkshift`, data)
+        .post(`/SetCoverWorkshift`, data)
         .then((res) => {
           if (res.status == 200) {
             finish(res.data);
