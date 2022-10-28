@@ -5,6 +5,11 @@ const GridAdjust = {
   },
   columns: [
     {
+      prop: "type",
+      name: "Tipo",
+      sortable: true,
+    },
+    {
       prop: "matriculation",
       name: "Matrícula",
       sortable: true,
@@ -22,6 +27,7 @@ const GridAdjust = {
   ],
   rows: [
     {
+      type: "Entrada",
       matriculation: "X000001",
       data: "20/10/2022",
       hour: "12:30",
@@ -30,6 +36,25 @@ const GridAdjust = {
       note: "Acerto 3 Marcações segundo Política de Ponto",
     },
     {
+      type: "Entrada",
+      matriculation: "X000001",
+      data: "21/10/2022",
+      hour: "12:30",
+      reference: "21/10/2022",
+      justification: "Outros",
+      note: "Acerto 3 Marcações segundo Política de Ponto",
+    },
+    {
+      type: "Saída",
+      matriculation: "X000001",
+      data: "21/10/2022",
+      hour: "12:30",
+      reference: "21/10/2022",
+      justification: "Outros",
+      note: "Acerto 3 Marcações segundo Política de Ponto",
+    },
+    {
+      type: "Saída",
       matriculation: "X000001",
       data: "21/10/2022",
       hour: "12:30",

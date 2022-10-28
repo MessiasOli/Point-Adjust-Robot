@@ -154,7 +154,9 @@ export default {
         .post(`/adjustworkshift`, data)
         .then((res) => {
           if (res.status == 200) {
-            finish(res.data);
+            finish(res.data.message);
+            this.rows = res.data.content;
+            this.Add1000Lines();
 
             this.lastUpdate = moment().format("DD/MM/yyyy HH:mm:ss");
           } else {

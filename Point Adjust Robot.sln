@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoitAdjustRobotAPI", "PoitAdjustRobotAPI\PoitAdjustRobotAPI.csproj", "{F18F1729-0573-424A-A068-FE28229AF5F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Point Adjust Robot", "Point Adjust Robot\Point Adjust Robot.csproj", "{26FDB209-A1DE-4A07-B816-DF645140635C}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "frontapp", "FrontApp\frontapp.esproj", "{D2CE181A-9FBB-4C28-A0B4-658E4932BCAE}"
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "frontapp", "FrontApp\frontapp.esproj", "{A729BBEF-8A29-41AF-8BAB-468B868655DF}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{1865DC23-35E9-4C72-9CE6-6D3728EEBB04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{FE40FFD1-1E2F-41B7-BDD7-62C1725603F8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{B5E55D1F-627A-4A39-A4C0-700942F41DF9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,25 +17,29 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F18F1729-0573-424A-A068-FE28229AF5F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F18F1729-0573-424A-A068-FE28229AF5F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F18F1729-0573-424A-A068-FE28229AF5F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F18F1729-0573-424A-A068-FE28229AF5F3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D2CE181A-9FBB-4C28-A0B4-658E4932BCAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D2CE181A-9FBB-4C28-A0B4-658E4932BCAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D2CE181A-9FBB-4C28-A0B4-658E4932BCAE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{D2CE181A-9FBB-4C28-A0B4-658E4932BCAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D2CE181A-9FBB-4C28-A0B4-658E4932BCAE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D2CE181A-9FBB-4C28-A0B4-658E4932BCAE}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{1865DC23-35E9-4C72-9CE6-6D3728EEBB04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1865DC23-35E9-4C72-9CE6-6D3728EEBB04}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1865DC23-35E9-4C72-9CE6-6D3728EEBB04}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1865DC23-35E9-4C72-9CE6-6D3728EEBB04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26FDB209-A1DE-4A07-B816-DF645140635C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26FDB209-A1DE-4A07-B816-DF645140635C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26FDB209-A1DE-4A07-B816-DF645140635C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26FDB209-A1DE-4A07-B816-DF645140635C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A729BBEF-8A29-41AF-8BAB-468B868655DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A729BBEF-8A29-41AF-8BAB-468B868655DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A729BBEF-8A29-41AF-8BAB-468B868655DF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A729BBEF-8A29-41AF-8BAB-468B868655DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A729BBEF-8A29-41AF-8BAB-468B868655DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A729BBEF-8A29-41AF-8BAB-468B868655DF}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{FE40FFD1-1E2F-41B7-BDD7-62C1725603F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE40FFD1-1E2F-41B7-BDD7-62C1725603F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE40FFD1-1E2F-41B7-BDD7-62C1725603F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE40FFD1-1E2F-41B7-BDD7-62C1725603F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5E55D1F-627A-4A39-A4C0-700942F41DF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5E55D1F-627A-4A39-A4C0-700942F41DF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5E55D1F-627A-4A39-A4C0-700942F41DF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5E55D1F-627A-4A39-A4C0-700942F41DF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {B6D64F93-E416-416B-84DC-E5F96FBCDC4A}
+		SolutionGuid = {D9730891-5B1F-4B86-8644-616BD9ED3244}
 	EndGlobalSection
 EndGlobal
