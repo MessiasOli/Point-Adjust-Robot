@@ -17,27 +17,35 @@ export default defineComponent({
   provide() {
     return {
       showMessage: this.show,
+      showWarning: this.warning,
       dialog: this.dialog,
       working: this.working,
     };
   },
 
   methods: {
-    show(message, spinner) {
-      let type = "success" ? "positive" : null;
+    show(message, spinnerInfo) {
+      let type = spinnerInfo == "success" ? "positive" : null;
 
       this.$q.notify({
         type,
-        spinner: icons(spinner),
+        spinner: icons(spinnerInfo),
         message: message,
         position: "bottom-left",
-        color: !spinner
+        color: !spinnerInfo
           ? "primary"
-          : spinner == "success"
+          : spinnerInfo == "success"
           ? "primary"
           : "purple",
         timeout: 3000,
         progress: true,
+      });
+    },
+
+    warning(message) {
+      this.$q.notify({
+        type: "warning",
+        message: message,
       });
     },
 
@@ -70,21 +78,39 @@ export default defineComponent({
     },
 
     working(message) {
-      const dialog = this.$q.dialog({
-        title: message,
-        dark: true,
-        progress: {
-          spinner: QSpinnerGears,
-          color: "amber",
-        },
-        persistent: true, // we want the user to not be able to close it
-        ok: false, // we want the user to not be able to close it
-      });
+      var allReady = true;
+      const dialog = this.$q
+        .dialog({
+          title: message,
+          dark: true,
+          progress: {
+            spinner: QSpinnerGears,
+            color: "amber",
+          },
+          persistent: true, // we want the user to not be able to close it
+          ok: false, // we want the user to not be able to close it
+          cancel: true,
+        })
+        .onCancel((_) => {
+          console.log("allReady", allReady);
+          setTimeout(() => {
+            if (allReady) {
+              this.$api.get("stopwork");
+              this.show(
+                "Aguarde a confirmação em instantes...",
+                "report_problem"
+              );
+            }
+          }, 500);
+        });
 
       var finish = (message, fail) => {
-        console.log("fail", fail);
+        allReady = !(fail || !fail.conteins("falha"));
+        console.log("🦾🤖 >> allReady", allReady);
         dialog.update({
-          title: fail ? "Ops... aconteceu algo errado" : "Processo concluído!",
+          title: allReady
+            ? "Ops... aconteceu algo errado"
+            : "Processo concluído!",
           message: message,
           progress: false,
           ok: true,
@@ -98,8 +124,6 @@ export default defineComponent({
 
 var icons = function (notify) {
   switch (notify) {
-    case "warning":
-      return "warning";
     case "alert":
       return "report_problem";
     case "build":

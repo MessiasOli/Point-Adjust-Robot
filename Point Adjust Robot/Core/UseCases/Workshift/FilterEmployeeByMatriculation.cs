@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using Point_Adjust_Robot.Core.Tools;
 using PoitAdjustRobotAPI.Core.Interface;
 
 namespace Point_Adjust_Robot.Core.UseCases.Workshift
@@ -19,32 +20,54 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
 
         public void Dispose(){}
 
-        public void DoWork()
+        public IUseCase<bool> DoWork()
         {
+            string step = "";
             try
             {
-                if (driver.FindElement(By.Id("pushActionRefuse")).Displayed)
-                    driver.FindElement(By.Id("pushActionRefuse")).Click();
-            }
-            catch { }
+                WebDriverTools tools = new WebDriverTools(driver);
 
-            driver.FindElement(By.CssSelector(".icon-filtro-")).Click();
-            Thread.Sleep(1000);
-            driver.FindElement(By.CssSelector(".hbox:nth-child(4) .textarea-config")).Click();
-            {
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
-                wait.Until(driver => driver.FindElement(By.XPath("/html/body/core-main/div/searchfilter/div/div[1]/div[2]/div[2]/div/form/div[4]/div[4]/div[2]/nexti-textarea/div/textarea")).Enabled);
-            }
-            driver.FindElement(By.XPath("/html/body/core-main/div/searchfilter/div/div[1]/div[2]/div[2]/div/form/div[4]/div[4]/div[2]/nexti-textarea/div/textarea")).SendKeys(matriculation);
-            driver.FindElement(By.LinkText("Filtrar")).Click();
-            Thread.Sleep(1500);
+                step = "Limpando mensagem de anuncios.";
+                tools.ClickIfExists("/html/body/div[3]/div[2]/a[1]");
 
-            try
-            {
-                if (driver.FindElement(By.Id("pushActionRefuse")).Displayed)
-                    driver.FindElement(By.Id("pushActionRefuse")).Click();
+                step = "Clicando em filtrar";
+                var xPathFilter = "/html/body/core-main/div/div[2]/div[1]/div/div[1]/div[2]/div/div/div[1]/div[1]/div[2]/i";
+                tools.AwaitAndClick(xPathFilter);
+
+                step = "Remove filtros pré selecionados.";
+                if (tools.IsVisible("/html/body/core-main/div/searchfilter/div/div[1]/div[2]/div[3]/div/div[1]/a"))
+                {
+                    var yPathFiltered = "/html/body/core-main/div/searchfilter/div/div[1]/div[2]/div[3]/div/div[1]";
+                    foreach (var filtered in driver.FindElements(By.XPath(yPathFiltered)))
+                    {
+                        filtered.FindElement(By.ClassName("item_close")).Click();
+                    }
+                }
+
+                step = "Inserindo a matrícula em cloaborador";
+                var xPath = "/html/body/core-main/div/searchfilter/div/div[1]/div[2]/div[2]/div/form/div[4]/div[4]/div[1]/autocomplete/div/div/input";
+                tools.Await(xPath);
+                driver.FindElement(By.XPath(xPath)).Clear();
+                driver.FindElement(By.XPath(xPath)).SendKeys(matriculation);
+
+                step = "Selecionando colaborador encontrado.";
+                xPath = "/html/body/core-main/div/searchfilter/div/div[1]/div[2]/div[2]/div/form/div[4]/div[4]/div[1]/autocomplete/div/div/div[2]/li";
+                tools.AwaitAndClick(xPath);
+
+                step = "Clicando em filtrar o colaborador.";
+                driver.FindElement(By.LinkText("Filtrar")).Click();
+
+                step = "Aguardando ir para mesa de operações.";
+                tools.Await(xPathFilter);
+
+                step = "Limpando mensagem de anuncios.";
+                tools.ClickIfExists("/html/body/div[3]/div[2]/a[1]");
             }
-            catch { }
+            catch
+            {
+                throw new ArgumentException(step);
+            }
+            return this;
         }
     }
 }

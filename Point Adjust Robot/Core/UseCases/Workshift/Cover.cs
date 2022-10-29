@@ -27,7 +27,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
             this.coverWorkShift = coverWorkShift;
         }
 
-        public override void DoWork()
+        public override IUseCase<Return<List<CoverWorkShift>>> DoWork()
         {
             string step = "Setando a organização Login";
 
@@ -213,7 +213,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                         }
 
                         result.content.Add(workShift);
-                        WriterLog.Write(e, $"Falha ao inserir a matrícula {workShift.matriculation}", step, "Adjustment");
+                        WriterLog.Write(e, workShift.matriculation, $"Falha ao inserir a matrícula {workShift.matriculation}", step, "Adjustment");
                     }
                 }
                 driver.Quit();
@@ -223,8 +223,10 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
             catch(Exception e)
             {
                 this.result.message = "Erro execução da requisição";
-                WriterLog.Write(e, step, "Falha ao enviar requisição para a API", "Cover");
+                WriterLog.Write(e, "Metodo", step, "Falha ao enviar requisição para a API", "Cover");
             }
+
+            return this;
         }
 
         private void AdjustValues(CoverWorkShift workShift)

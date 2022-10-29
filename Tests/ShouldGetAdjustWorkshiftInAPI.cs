@@ -3,7 +3,7 @@ using Repository.Nexti;
 
 namespace Tests
 {
-    public class GetAdjustWorkshiftInAPI
+    public class ShouldGetAdjustWorkshiftInAPI
     {
         [Fact]  
         public void GetAdjustId()

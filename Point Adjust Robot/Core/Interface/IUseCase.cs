@@ -3,7 +3,6 @@
     public interface IUseCase<T> : IDisposable
     {
         public T result { get; set; }
-
-        public void DoWork();
+        public IUseCase<T> DoWork();
     }
 }

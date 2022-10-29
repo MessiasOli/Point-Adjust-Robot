@@ -11,7 +11,9 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title> Robô de pontos </q-toolbar-title>
+        <q-toolbar-title class="cursor-pointer" @click="sentToHome" flat>
+          Robô de pontos
+        </q-toolbar-title>
 
         <div>App {{ appVersion }}</div>
       </q-toolbar>
@@ -92,6 +94,12 @@ export default defineComponent({
     };
   },
 
+  methods: {
+    sentToHome() {
+      this.$router.push({ name: "home" }).catch(() => {});
+    },
+  },
+
   mounted() {
     console.log("this", this);
   },
@@ -102,6 +110,6 @@ export default defineComponent({
 .container {
   padding: 8px;
   height: 93vh;
-  overflow-y: hidden;
+  overflow-y: auto;
 }
 </style>

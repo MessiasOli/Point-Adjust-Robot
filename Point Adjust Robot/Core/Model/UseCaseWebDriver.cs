@@ -12,7 +12,10 @@ namespace Point_Adjust_Robot.Core.Model
 
         public UseCaseWebDriver()
         {
-            var path = Directory.GetParent(Directory.GetParent(Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString()).ToString()).ToString();
+            var path = Directory.GetCurrentDirectory();
+            path = path.Contains("Test") ?
+                Directory.GetParent(Directory.GetParent(Directory.GetParent(Directory.GetParent(path).ToString()).ToString()).ToString()).ToString() :
+                Directory.GetParent(path).ToString();
             path += "\\Files\\";
             //options.AddArguments("--headless", "--window-size=1552,1000");
             options.AddArguments("--start-maximized");
@@ -27,7 +30,7 @@ namespace Point_Adjust_Robot.Core.Model
             driver.Quit();
         }
 
-        public virtual void DoWork()
+        public virtual IUseCase<T> DoWork()
         {
             throw new NotImplementedException();
         }

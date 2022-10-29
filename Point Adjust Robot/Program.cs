@@ -1,3 +1,4 @@
+using Point_Adjust_Robot.Controllers;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSingleton<SingletonWorkshift>();
+builder.Services.AddHostedService<SingletonWorkshift>(provider => provider.GetService<SingletonWorkshift>());
 
 builder.Services.AddCors(options =>
 {

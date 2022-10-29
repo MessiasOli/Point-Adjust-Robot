@@ -1,1 +1,4 @@
 /* app global css */
+.cursor-pointer {
+  cursor: pointer;
+}

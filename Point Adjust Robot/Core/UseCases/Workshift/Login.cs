@@ -2,16 +2,25 @@
 using OpenQA.Selenium;
 using PoitAdjustRobotAPI.Core.Interface;
 using Point_Adjust_Robot.Core.Tools;
+using Point_Adjust_Robot.Core.Model;
 
 namespace Point_Adjust_Robot.Core.UseCases.Workshift
 {
     public class Login : IUseCase<bool>
     {
         private IWebDriver driver;
+        private string user = "messias.teste";
+        private string key = "1234";
 
         public Login(IWebDriver driver)
         {
             this.driver = driver;
+        }
+
+        public Login(IWebDriver driver, string user, string key) : this(driver)
+        {
+            this.user = String.IsNullOrEmpty(user) ? this.user : user;
+            this.key = String.IsNullOrEmpty(key) ? this.key : key;
         }
 
         public bool result { get; set; } = true;
@@ -21,7 +30,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
             driver.Dispose();
         }
 
-        public void DoWork()
+        public IUseCase<bool> DoWork()
         {
             try
             {
@@ -41,8 +50,8 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                     wait.Until(driver => driver.FindElement(By.Id("inputUsername")).Displayed && driver.FindElement(By.Id("inputUsername")).Enabled);
                 }
 
-                driver.FindElement(By.Id("inputUsername")).SendKeys("messias.teste");
-                driver.FindElement(By.Id("inputPassword")).SendKeys("1234");
+                driver.FindElement(By.Id("inputUsername")).SendKeys(this.user);
+                driver.FindElement(By.Id("inputPassword")).SendKeys(this.key);
                 driver.FindElement(By.CssSelector(".btn:nth-child(7)")).Click();
 
                 {
@@ -64,6 +73,8 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
 
                 result = false;
             }
+
+            return this;
         }
     }
 }

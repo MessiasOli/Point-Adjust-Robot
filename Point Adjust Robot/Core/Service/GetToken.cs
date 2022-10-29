@@ -40,7 +40,7 @@ namespace Point_Adjust_Robot.Core.Service
             }
             catch (Exception e)
             {
-                WriterLog.Write(e, step, "Falha ao coletar o token da api", "GetToken");
+                WriterLog.Write(e, "API", step, "Falha ao coletar o token da api", "GetToken");
                 return null;
             }
         }

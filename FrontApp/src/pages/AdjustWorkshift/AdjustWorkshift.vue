@@ -71,11 +71,12 @@
 import VGrid from "@revolist/vue3-datagrid";
 import GridAdjust from "./gridConfig";
 import * as moment from "moment";
+import CommandAdjust from "../model/CommandAdjust";
 
 export default {
   name: "AdjustWorkshift",
 
-  inject: ["showMessage", "dialog", "working"],
+  inject: ["showMessage", "showWarning", "dialog", "working"],
   components: {
     VGrid,
   },
@@ -147,11 +148,21 @@ export default {
     },
 
     sendAdjusts() {
-      let finish = this.working("Por favor aguarde...");
       let data = this.rows.filter((r) => r.matriculation != "");
+      let commandAdjust;
 
+      try {
+        commandAdjust = new CommandAdjust(data);
+      } catch {
+        this.showWarning("Você precisa inserir um usuário nexti");
+        this.$router.push({ name: "Settings" }).catch(() => {});
+        return;
+      }
+      console.log("🦾🤖 >> commandAdjust", commandAdjust);
+
+      let finish = this.working("Por favor aguarde...");
       this.$api
-        .post(`/adjustworkshift`, data)
+        .post(`/adjustworkshift`, commandAdjust)
         .then((res) => {
           if (res.status == 200) {
             finish(res.data.message);
@@ -159,6 +170,13 @@ export default {
             this.Add1000Lines();
 
             this.lastUpdate = moment().format("DD/MM/yyyy HH:mm:ss");
+          } else if (res.status == 206) {
+            this.showMessage(
+              res.data.message.replace("stoped: ", ""),
+              "success"
+            );
+            this.rows = res.data.content;
+            this.Add1000Lines();
           } else {
             finish(res.data);
           }

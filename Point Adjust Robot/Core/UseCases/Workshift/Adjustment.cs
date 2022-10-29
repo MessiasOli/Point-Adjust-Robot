@@ -5,11 +5,15 @@ using System.Data;
 using System.Linq;
 using System.Threading;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.DevTools.V104.Input;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
+using Point_Adjust_Robot.Controllers;
+using Point_Adjust_Robot.Core.DesignPatterns.Command;
+using Point_Adjust_Robot.Core.Interface;
 using Point_Adjust_Robot.Core.Model;
 using Point_Adjust_Robot.Core.Tools;
 using Point_Adjust_Robot.Core.UseCases.Workshift;
@@ -28,15 +32,35 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
         ChromeOptions options = new ChromeOptions();
         private List<WorkShiftAdjustment> workShiftList;
         WebDriverTools tools;
+        IBackgroundService worker;
+        private FrontSettings frontSettings;
+        private CommandAdjust workShiftList1;
+
+        public Adjustment(CommandAdjust command, SingletonWorkshift worker)
+        {
+            this.workShiftList = command.workShiftAdjustments;
+            this.frontSettings = command.GetFrontSettings();
+
+            if (frontSettings.showChrome)
+                options.AddArguments("--start-maximized");
+            else
+                options.AddArguments("--headless", "--window-size=1552,832");
+
+            driver = new ChromeDriver(options);
+            js = (IJavaScriptExecutor)driver;
+            vars = new Dictionary<string, object>();
+
+            this.worker = worker;
+        }
 
         public Adjustment(List<WorkShiftAdjustment> workShiftList)
         {
             this.workShiftList = workShiftList;
-            // options.AddArguments("--headless", "--window-size=1552,832");
-            options.AddArguments("--start-maximized");
-            driver = new ChromeDriver(options);
-            js = (IJavaScriptExecutor)driver;
-            vars = new Dictionary<string, object>();
+        }
+
+        public Adjustment(CommandAdjust workShiftList1)
+        {
+            this.workShiftList1 = workShiftList1;
         }
 
         public void Dispose()
@@ -44,7 +68,7 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
             driver.Quit();
         }
 
-        public void DoWork()
+        public IUseCase<Return<List<WorkShiftAdjustment>>> DoWork()
         {
             string step = "Setando a organização Login";
             try
@@ -53,7 +77,7 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
                 int countSucess = 0;;
                 
                 step = "Fazendo login";
-                var login = new Login(driver);
+                var login = new Login(driver, frontSettings.user, frontSettings.password);
                 tools = new WebDriverTools(driver);
                 login.DoWork();
 
@@ -69,6 +93,13 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
                 foreach (var workShift in this.workShiftList)
                 {
 
+                    step = "Solicitação de parada iniciada";
+                    if (worker.CallToStop())
+                    {
+                        this.result.content.Add(workShift);
+                        continue;
+                    }
+
                     step = "Ajustando dados";
                     workShift.note = String.IsNullOrEmpty(workShift.note) ? "Nada a declarar." : workShift.note;
 
@@ -83,72 +114,94 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
                         driver.FindElement(By.XPath("/html/body/core-main/div/div[2]/div[1]/div/div[1]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/div/div/div[2]/div[3]/div/div[1]/div/div/div/div[3]/div/div/div/div/div[2]/h5/span[2]")).Click();
                         Thread.Sleep(2000);
 
-                        step = "Procurando elemento na tabela";
-                        tools.AwaitAndClick("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[1]/ul/li[2]/a");
-                        tools.Await("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div[1]/div[3]");
-
-                        string day = workShift.data.Split("/")[0] + " - ";
-                        bool foundElementToEdit = false;
-
-                        foreach(var elDate in driver.FindElements(By.ClassName("row_day")).ToList())
+                        var plusButton = "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[2]/div/div[2]/div[2]/div[1]/span[2]";
+                        if (!tools.IsVisible(plusButton))
                         {
-                            string text = elDate.Text;
-                            if (!(text.Contains(day) && text.Contains(workShift.hour.Split(":")[0]))) continue;
-                            foreach(var elTime in elDate.FindElements(By.ClassName("time")).ToList())
-                            {
-                                text = elTime.Text;
-                                if (!text.Contains(workShift.hour.Split(":")[0])) continue;
+                            step = "Abrindo a tabela caso não esteja visível";
+                            tools.AwaitAndClick("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[1]/ul/li[2]/a");
+                            tools.Await("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div[1]/div[3]");
+                            Thread.Sleep(1500);
+                        }
 
-                                elTime.Click();
-                                Thread.Sleep(1000);
-                                foundElementToEdit = true;
+                        step = "Ajustando dados para procurar a hora no calendário";
+                        string day = workShift.data.Split("/")[0] + " - ";
+                        bool foundElementToEdit = !String.IsNullOrEmpty(workShift.replaceTime);
+                        var (hourFound, deletePoint) = workShift.replaceTime.ToLower().Contains("cancelar") ? 
+                                                    (workShift.hour, true) : 
+                                                    (workShift.replaceTime, false);
+
+                        step = "Procurando a hora para a subistituir calendário";
+                        if (foundElementToEdit){
+                            foundElementToEdit = false;
+                            foreach (var elDate in driver.FindElements(By.ClassName("row_day")).ToList())
+                            {
+                                string text = elDate.Text;
+                                if (!(text.Contains(day) && text.Contains(hourFound))) continue;
+                                foreach(var elTime in elDate.FindElements(By.ClassName("time")).ToList())
+                                {
+                                    text = elTime.Text;
+                                    if (text != hourFound) continue;
+
+                                    step = "Selecionando a hora a ser ajustada";
+                                    elTime.Click();
+                                    Thread.Sleep(1000);
+                                    foundElementToEdit = true;
+                                    break;
+                                }
                                 break;
                             }
-                            break;
+
+                            if(!foundElementToEdit)
+                                throw new ArgumentException($"Não foi possível encontrar a hora para ajuste {workShift.replaceTime} para a data {workShift.reference}");
                         }
 
                         step = "Editando os valores.";
                         if (!foundElementToEdit)
                         {
                             step = "Clicando em plus.";
-                            driver.FindElement(By.XPath("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[1]/ul/li[2]/a")).Click();
+                            tools.AwaitAndClick(plusButton);
                             Thread.Sleep(1500);
 
                             driver.FindElement(By.CssSelector(".row_day:nth-child(5) .col:nth-child(6)")).Click();
-                            Thread.Sleep(2000);
+                            Thread.Sleep(1500);
                         
-                        // }
+                        }
 
-                        step = "Inserindo Horas.";
-                        var path = foundElementToEdit ?
-                            "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div[2]/div[2]/timepicker/input" :
-                            "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div/div[2]/timepicker/input";
+                        if (!deletePoint)
+                        {
+                            step = "Inserindo Data.";
+                            var path = foundElementToEdit ?
+                                "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div[2]/div[1]/datepicker/p/input" :
+                                "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div/div[1]/datepicker/p/input";
 
-                        var inputHour = tools.GetElement(path);
-                        inputHour.Clear();
+                            var inputData = driver.FindElement(By.XPath(path));
+                            inputData.Clear();
+                            inputData.SendKeys(workShift.data);
+                            inputData.SendKeys(Keys.Enter);
 
-                        (string hour, string minutes) = workShift.GetHour();
-                        inputHour.SendKeys(hour);
-                        inputHour.SendKeys(minutes);
 
-                        step = "Inserindo Data.";
-                        path = foundElementToEdit ?
-                            "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div[2]/div[1]/datepicker/p/input" :
-                            "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div/div[1]/datepicker/p/input";
+                            step = "Inserindo Horas.";
+                            path = foundElementToEdit ?
+                                "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div[2]/div[2]/timepicker/input" :
+                                "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div/div[2]/timepicker/input";
 
-                        var inputData = driver.FindElement(By.XPath(path));
-                        inputData.Clear();
-                        inputData.SendKeys(workShift.data);
+                            var inputHour = tools.GetElement(path);
+                            inputHour.Clear();
+                            (string hour, string minutes) = workShift.GetHour();
+                            inputHour.SendKeys(hour);
+                            inputHour.SendKeys(minutes);
 
-                        step = "Inserindo Referencia.";
-                        path = foundElementToEdit ?
-                            "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div[2]/div[3]/datepicker/p/input" :
-                            "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div/div[3]/datepicker/p/input";
 
-                        var inputReferencia = driver.FindElement(By.XPath(path));
-                        inputReferencia.Clear();
-                        inputReferencia.SendKeys(workShift.reference);
+                            step = "Inserindo Referencia.";
+                            path = foundElementToEdit ?
+                                "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div[2]/div[3]/datepicker/p/input" :
+                                "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div/div[3]/datepicker/p/input";
 
+                            var inputReferencia = driver.FindElement(By.XPath(path));
+                            inputReferencia.Click();
+                            inputReferencia.Clear();
+                            inputReferencia.SendKeys(workShift.reference);
+                            inputReferencia.SendKeys(Keys.Enter);
                         }
                         else
                         {
@@ -165,17 +218,17 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
                         }
 
                         step = "Inserindo Observações.";
-                        driver.FindElement(By.Id("note")).Click();
                         driver.FindElement(By.Id("note")).SendKeys(workShift.note);
 
                         driver.FindElement(By.LinkText("Confirmar")).Click();
-                        Thread.Sleep(2000);
+                        Thread.Sleep(1000);
                         countSucess++;
                     }
                     catch(Exception e)
                     {
+                        var infoMessage = JsonConvert.SerializeObject(workShift, Formatting.Indented);
                         result.content.Add(workShift);
-                        WriterLog.Write(e, $"Falha ao inserir a matrícula {workShift.matriculation}", step, "Adjustment");
+                        WriterLog.Write(e, workShift.matriculation, step, infoMessage, "Adjustment");
                     }
                 }
 
@@ -190,13 +243,18 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
             {
                 this.result.message = "Erro execução da requisição.";
                 driver.Quit();
-                WriterLog.Write(e, step, "", "Adjustment");
+                WriterLog.Write(e, "Metodo", step, this.result.message, "Adjustment");
                 throw new ArgumentException("Erro - step: " + step, e);
             }
+
+            return this;
         }
 
         private string GetResult(string time, int countSucess)
         {
+            if (this.worker.CallToStop())
+                return $"stoped: {countSucess} inseridos e {result.content.Count} foram interrompidos tempo gasto {time} minutos.";;
+
             if (result.content.Count == 0)
                 return $"{countSucess} registros inseridos em {time} minutos.";
 

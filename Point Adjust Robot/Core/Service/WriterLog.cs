@@ -11,25 +11,26 @@ namespace PoitAdjustRobotAPI.Service
     public static class WriterLog
     {
 
-        public static void Write(string message, string step, string strContent, string method)
+        public static void Write(string key, string message, string step, string strContent, string method)
         {
-            Send(message, step, strContent, method);
+            Send(key, message, step, strContent, method);
         }
         
-        public static void Write(Exception e, string step, string strContent, string method)
+        public static void Write(Exception e, string key, string step, string strContent, string method)
         {
             string exception = e.InnerException is null ? e.Message : e.Message + " Inner " + e.InnerException;
-            Send(exception, step, strContent, method);
+            Send(key ,exception, step, strContent, method);
         }
 
-        private async static void Send(string errorMessage, string step, string infoMessage, string methodName)
+        private async static void Send(string key, string errorMessage, string step, string infoMessage, string methodName)
         {
             try
             {
                 Log logData = new Log();
-                logData.apiName = "MonitoringAPI";
+                logData.info = key;
+                logData.apiName = "PointAdjustRobotAPI";
                 logData.data = infoMessage;
-                logData.level = "Erro";
+                logData.level = "Falha";
                 logData.step = step;
                 logData.methodName = methodName;
                 logData.timeStamp = DateTime.Now;
@@ -40,14 +41,14 @@ namespace PoitAdjustRobotAPI.Service
                 string fileName = "";
                 string logContent = "";
 
-                path = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
+                path = Directory.GetParent(Directory.GetCurrentDirectory()).ToString().Replace("\\Tests\\bin\\Debug", "");
                 path += "\\Log";
 
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
 
                 logContent = JsonConvert.SerializeObject(logData, Formatting.Indented);
-                fileName = "ERROR" + "-" + DateTime.Now.ToString("yyyy-MM-dd [HH-mm-ss.fff]") + ".txt";
+                fileName = "Falha" + "-" + key + "-" + DateTime.Now.ToString("yyyy-MM-dd [HH-mm-ss.fff]") + ".txt";
                 file = System.IO.File.AppendText(path + "\\" + fileName);
                 await file.WriteAsync(logContent);
                 file.Close();

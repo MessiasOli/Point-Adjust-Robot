@@ -3,7 +3,7 @@ using PoitAdjustRobotAPI.Core.Factories;
 
 namespace Tests
 {
-    public class RequestTokenTest
+    public class ShouldRequestTokenTest
     { 
         [Fact]
         public async Task GetTokenTest()

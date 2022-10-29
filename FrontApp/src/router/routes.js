@@ -22,7 +22,7 @@ const routes = [
       {
         path: "Settings",
         name: "Settings",
-        component: () => import("pages/Settings.vue"),
+        component: () => import("pages/Settings/Settings.vue"),
       },
     ],
   },

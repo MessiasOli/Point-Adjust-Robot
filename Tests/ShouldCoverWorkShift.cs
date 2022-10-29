@@ -3,7 +3,7 @@ using PoitAdjustRobotAPI.Core.Factories;
 
 namespace Tests
 {
-    public class CoverWorkshiftTest
+    public class ShouldCoverWorkShift
     {
         [Fact]
         public void TestCover()
