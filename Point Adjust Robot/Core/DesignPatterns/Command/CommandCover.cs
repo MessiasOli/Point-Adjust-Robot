@@ -4,8 +4,9 @@ using Point_Adjust_Robot.Core.Model;
 
 namespace Point_Adjust_Robot.Core.DesignPatterns.Command
 {
-    public class CommandAdjust : CommandFront
+    public class CommandCover : CommandFront
     {
-        public List<WorkShiftAdjustment> workShiftAdjustments { get; set; }
+        public List<WorkShiftCover> coverWorkShifts { get; set; } = new List<WorkShiftCover>();
+
     }
 }

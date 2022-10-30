@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Apps\PointAdjustRobot\API</_PublishTargetUrl>
+    <History>True|2022-10-30T15:24:00.5775927Z;True|2022-10-30T12:11:34.3147305-03:00;True|2022-10-30T12:10:01.5094952-03:00;True|2022-10-30T11:57:11.2053408-03:00;True|2022-10-30T11:48:44.6951562-03:00;True|2022-10-30T11:33:47.1347062-03:00;True|2022-10-30T11:19:52.9702909-03:00;True|2022-10-30T11:11:56.3270287-03:00;True|2022-10-30T10:41:07.2352032-03:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

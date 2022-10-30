@@ -1,6 +1,7 @@
-﻿public class WorkShiftAdjustment
+﻿using Point_Adjust_Robot.Core.Model;
+
+public class WorkShiftAdjustment : WorkShift
 {
-    public string matriculation { get; set; } = "";
     public string data { get; set; } = "";
     public string hour { get; set; } = "";
     public string replaceTime { get; set; } = "";

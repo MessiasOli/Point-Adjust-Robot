@@ -28,7 +28,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Logs
                     this.result.Add(JsonConvert.DeserializeObject<Log>(text));
                 }
 
-                this.result = result.OrderByDescending(l => l.timeStamp).ToList();
+                this.result = result.FindAll(l => l is not null && l.timeStamp != null).OrderByDescending(l => l.timeStamp).ToList();
             }
             catch (Exception e)
             {

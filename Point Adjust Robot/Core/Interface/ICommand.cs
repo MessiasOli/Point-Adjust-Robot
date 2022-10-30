@@ -2,6 +2,7 @@
 {
     public interface ICommand
     {
-        void Execute(); 
+        void Execute();
+        public string settings { get; set; }
     }
 }

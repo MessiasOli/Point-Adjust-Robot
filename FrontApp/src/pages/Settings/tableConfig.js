@@ -15,7 +15,7 @@ const Table = {
     {
       name: "info",
       required: true,
-      label: "Matrícula",
+      label: "Informação",
       align: "left",
       style: "width: 200px",
       field: (row) => row.info,

@@ -4,6 +4,6 @@
     {
         public string user { get; set; }
         public string password { get; set; }
-        public bool showChrome { get; set; }
+        public bool showChrome { get; set; } = true;
     }
 }

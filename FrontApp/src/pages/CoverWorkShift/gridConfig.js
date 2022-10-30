@@ -5,6 +5,12 @@ const GridAdjust = {
   },
   columns: [
     {
+      prop: "index",
+      name: "#",
+      sortable: true,
+      size: 60,
+    },
+    {
       prop: "operationType",
       name: "Tipo de Operação",
       sortable: true,
@@ -93,7 +99,7 @@ const GridAdjust = {
     {
       prop: "description",
       name: "Descrição",
-      size: 300,
+      size: 270,
     },
   ],
   rows: [

@@ -1,9 +1,9 @@
 ﻿namespace Point_Adjust_Robot.Core.Model
 {
-    public class CoverWorkShift
+    public class WorkShiftCover : WorkShift
     {
+        
         public string operationType { get; set; } = "";
-        public string matriculation { get; set; } = "";
         public string client { get; set; } = "";
         public string place { get; set; } = "";
         public string reason { get; set; } = "";

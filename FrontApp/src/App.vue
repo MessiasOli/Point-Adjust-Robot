@@ -92,7 +92,6 @@ export default defineComponent({
           cancel: true,
         })
         .onCancel((_) => {
-          console.log("allReady", allReady);
           setTimeout(() => {
             if (allReady) {
               this.$api.get("stopwork");
@@ -105,15 +104,18 @@ export default defineComponent({
         });
 
       var finish = (message, fail) => {
-        allReady = !(fail || !fail.conteins("falha"));
-        console.log("🦾🤖 >> allReady", allReady);
+        allReady = !(fail || (fail && !fail.conteins("falha")));
+        let success = fail == "success";
+
         dialog.update({
-          title: allReady
-            ? "Ops... aconteceu algo errado"
-            : "Processo concluído!",
+          title: !success
+            ? allReady
+              ? "Processando dados..."
+              : "Ops... aconteceu algo errado!"
+            : "Processo concluído",
           message: message,
-          progress: false,
-          ok: true,
+          progress: success || !allReady ? false : true,
+          ok: success ? true : false,
         });
       };
 

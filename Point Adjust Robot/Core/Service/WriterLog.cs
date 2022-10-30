@@ -22,6 +22,11 @@ namespace PoitAdjustRobotAPI.Service
             Send(key ,exception, step, strContent, method);
         }
 
+        internal static void WriteInfo(string info, string message, string step, string strContent, string method)
+        {
+            Send("Info-" + info, message, step, strContent, method);
+        }
+
         private async static void Send(string key, string errorMessage, string step, string infoMessage, string methodName)
         {
             try
@@ -30,7 +35,7 @@ namespace PoitAdjustRobotAPI.Service
                 logData.info = key;
                 logData.apiName = "PointAdjustRobotAPI";
                 logData.data = infoMessage;
-                logData.level = "Falha";
+                logData.level = key.Contains("Info") ? "Info" : "Falha";
                 logData.step = step;
                 logData.methodName = methodName;
                 logData.timeStamp = DateTime.Now;

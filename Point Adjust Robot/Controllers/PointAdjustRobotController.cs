@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Point_Adjust_Robot.Controllers;
 using Point_Adjust_Robot.Core.DesignPatterns.Command;
 using Point_Adjust_Robot.Core.Model;
+using Point_Adjust_Robot.Core.Model.Enum;
 using Point_Adjust_Robot.Core.UseCases.Logs;
 using PoitAdjustRobotAPI.Core.Factories;
 using PoitAdjustRobotAPI.Core.Interface;
@@ -40,16 +41,20 @@ namespace PoitAdjustRobotAPI.Controllers
             try
             {
                 worker.callToStop = false;
-                IUseCase<Return<List<WorkShiftAdjustment>>> useCase = WorkShiftFactory.GetAdjustiment(workShiftList, worker);
-                useCase.DoWork();
+                var key = $"{DateTime.Now.ToString("ddMMyyyyHHmmss")}|{JobType.Replacements}";
+                IUseCase<Return<List<WorkShiftAdjustment>>> useCase = WorkShiftFactory.GetAdjustiment(workShiftList, worker, key);
+                Thread t = new Thread(() => { useCase.DoWork(); });
+                t.Start();
 
-                if (!useCase.result.message.Contains("Erro") && !useCase.result.message.Contains("stop"))
-                    return Ok(JsonConvert.SerializeObject(useCase.result));
+                //if (!useCase.result.message.Contains("Erro") && !useCase.result.message.Contains("stop"))
+                //    return Ok(JsonConvert.SerializeObject(useCase.result));
 
-                if(useCase.result.message.Contains("stop"))
-                    return StatusCode(StatusCodes.Status206PartialContent, JsonConvert.SerializeObject(useCase.result));
+                //if(useCase.result.message.Contains("stop"))
+                //    return StatusCode(StatusCodes.Status206PartialContent, JsonConvert.SerializeObject(useCase.result));
 
-                return StatusCode(StatusCodes.Status205ResetContent, JsonConvert.SerializeObject(new SimpleMessage(useCase.result.message)));
+                //return StatusCode(StatusCodes.Status205ResetContent, JsonConvert.SerializeObject(new SimpleMessage(useCase.result.message)));
+
+                return Ok(key);
             }
             catch (Exception e)
             {
@@ -61,7 +66,7 @@ namespace PoitAdjustRobotAPI.Controllers
 
         [HttpPost("SetCoverWorkshift")]
         [AllowAnonymous]
-        public async Task<IActionResult> SetCoverWorkshift([FromBody] List<CoverWorkShift> coverWorkShift)
+        public async Task<IActionResult> SetCoverWorkshift([FromBody] CommandCover coverWorkShift)
         {
             string step = "Ajustando dados";
             string infoMessage = JsonConvert.SerializeObject(coverWorkShift);
@@ -69,7 +74,8 @@ namespace PoitAdjustRobotAPI.Controllers
             try
             {
                 worker.callToStop = false;
-                IUseCase<Return<List<CoverWorkShift>>> useCase = WorkShiftFactory.GetCoverWorkShift(coverWorkShift);
+                var key = $"{DateTime.Now.ToString("ddMMyyyyHHmmss")}|{JobType.Workplace}";
+                IUseCase<Return<List<WorkShiftCover>>> useCase = WorkShiftFactory.GetCoverWorkShift(coverWorkShift, worker, key);
                 useCase.DoWork();
 
                 if(!useCase.result.message.Contains("Erro"))
@@ -137,6 +143,49 @@ namespace PoitAdjustRobotAPI.Controllers
             {
                 WriterLog.Write(e, "API", step, infoMessage, "StopWorker");
                 var message = e.InnerException is null ? e.Message : e.Message + " Inner: " + e.InnerException.Message;
+            }
+        }
+
+        [HttpGet("GetStatus/{key}")]
+        public IActionResult GetStatus(string key)
+        {
+            string step = "Ajustando dados";
+            string infoMessage = "";
+
+            try
+            {
+                var status = worker.GetStatus(key);
+                var result = JsonConvert.SerializeObject(status);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                WriterLog.Write(e, "API", step, infoMessage, "GetStatus");
+                var message = e.InnerException is null ? e.Message : e.Message + " Inner: " + e.InnerException.Message;
+                return Conflict(message);
+            }
+        }
+
+        [HttpGet("getjobs")]
+        [HttpGet("getjob/{keyJob}")]
+        public IActionResult GetJobs(string? keyJob)
+        {
+            string step = "Ajustando dados";
+            string infoMessage = "";
+
+            try
+            {
+                dynamic status = status = keyJob is null ? worker.GetJobs : worker.GetJob(keyJob);
+                var result = JsonConvert.SerializeObject(status);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                WriterLog.Write(e, "API", step, infoMessage, "GetStatus");
+                var message = e.InnerException is null ? e.Message : e.Message + " Inner: " + e.InnerException.Message;
+                return Conflict(message);
             }
         }
     }

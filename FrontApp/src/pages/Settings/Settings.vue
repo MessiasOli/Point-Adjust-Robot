@@ -111,9 +111,10 @@
         </q-tr>
         <q-tr v-show="props.expand" :props="props">
           <q-td colspan="100%">
-            <div class="text-left">
-              <p>Passo: {{ props.row.step }} - {{ props.row.data }}.</p>
-              <p>Falha: {{ props.row.message }}</p>
+            <div class="text-left data-info">
+              <p>Passo: {{ props.row.step }}.</p>
+              <p>Menssagem: {{ props.row.message }}</p>
+              <textarea title="Outras informações" name="data" v-model="props.row.data" rows="15"></textarea>
             </div>
           </q-td>
         </q-tr>
@@ -164,7 +165,7 @@ export default {
       this.$api.get("/getlogs").then((res) => {
         if (res.status == 200) {
           this.filter = "rows";
-          this.rows = res.data;
+          this.rows = res.data.filter((l) => l);
           setTimeout(() => {
             this.filter = "";
           }, 400);
@@ -258,5 +259,21 @@ thead tr:last-child th {
 /* height of all previous header rows */
 thead tr:first-child th {
   top: 0;
+}
+
+.data-info{
+  width: 77vw;
+  word-break: break-all;
+}
+.data-info > p{
+  width: 100%;
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+.data-info > textarea{
+  width: 100%;
+  word-break: break-all;
+  overflow-wrap: break-word;
 }
 </style>

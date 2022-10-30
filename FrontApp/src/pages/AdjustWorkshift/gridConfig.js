@@ -5,6 +5,12 @@ const GridAdjust = {
   },
   columns: [
     {
+      prop: "index",
+      name: "#",
+      sortable: true,
+      size: 60,
+    },
+    {
       prop: "matriculation",
       name: "Matrícula",
       sortable: true,
@@ -23,11 +29,12 @@ const GridAdjust = {
     },
     { prop: "hour", name: "Hora", sortable: true, size: 100 },
     { prop: "reference", name: "Referência", sortable: true, size: 120 },
-    { prop: "justification", name: "Justificativa", sortable: true, size: 300 },
-    { prop: "note", name: "Observações", sortable: true, size: 300 },
+    { prop: "justification", name: "Justificativa", sortable: true, size: 270 },
+    { prop: "note", name: "Observações", sortable: true, size: 270 },
   ],
   rows: [
     {
+      index: "1",
       matriculation: "X000001",
       data: "20/10/2022",
       hour: "12:30",
@@ -37,6 +44,7 @@ const GridAdjust = {
       note: "Acerto 3 Marcações segundo Política de Ponto",
     },
     {
+      index: "2",
       matriculation: "X000001",
       data: "21/10/2022",
       hour: "12:30",
@@ -46,6 +54,7 @@ const GridAdjust = {
       note: "Acerto 3 Marcações segundo Política de Ponto",
     },
     {
+      index: "3",
       matriculation: "X000001",
       data: "21/10/2022",
       replaceTime: "",
@@ -55,6 +64,7 @@ const GridAdjust = {
       note: "Acerto 3 Marcações segundo Política de Ponto",
     },
     {
+      index: "4",
       matriculation: "X000001",
       data: "21/10/2022",
       replaceTime: "",

@@ -71,6 +71,7 @@
 import VGrid from "@revolist/vue3-datagrid";
 import GridAdjust from "./gridConfig";
 import * as moment from "moment";
+import CommandCover from "../../model/commands/CommandCover";
 
 export default {
   name: "CoverWorkShift",
@@ -157,16 +158,23 @@ export default {
     sendAdjusts() {
       let finish = this.working("Por favor aguarde...");
       let data = this.rows.filter((r) => r.matriculation != "");
+      let command;
+
+      try {
+        command = new CommandCover(data);
+      } catch {
+        this.showWarning("Você precisa inserir um usuário nexti");
+        this.$router.push({ name: "Settings" }).catch(() => {});
+        return;
+      }
 
       this.$api
-        .post(`/SetCoverWorkshift`, data)
+        .post(`/SetCoverWorkshift`, command)
         .then((res) => {
           if (res.status == 200) {
             finish(res.data.message);
             this.rows = res.data.content;
             this.Add1000Lines();
-
-            this.lastUpdate = moment().format("DD/MM/yyyy HH:mm:ss");
           } else {
             finish(res.data);
           }

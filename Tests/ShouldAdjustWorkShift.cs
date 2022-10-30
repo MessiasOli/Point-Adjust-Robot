@@ -17,7 +17,7 @@ namespace Tests
     public class ShouldAdjustWorkShift
     {
         [Fact, Order(0)]
-        public void TestAdjust()
+        public void _01_TestAdjust()
         {
            var date = this.validDate();
 
@@ -67,7 +67,7 @@ namespace Tests
         }
 
         [Fact, Order(1)]
-        public void CancelAdjust()
+        public void _02_CancelAdjust()
         {
             var date = this.validDate();
 
@@ -121,7 +121,7 @@ namespace Tests
         }
 
         [Fact, Order(2)]
-        public void TestAdjustTime()
+        public void _03_TestAdjustTime()
         {
             var date = this.validDate();
 
@@ -160,11 +160,10 @@ namespace Tests
 
             useCase.DoWork();
             Assert.True(useCase.result.message.Contains(" registros inseridos em "));
-            this.CancelAdjust();
         }
 
         [Fact, Order(3)]
-        public void TestManyData()
+        public void _04_TestManyData()
         {
             List<WorkShiftAdjustment> data = GetData();
 
@@ -172,14 +171,15 @@ namespace Tests
 
             useCase.DoWork();
             Assert.True(useCase.result.message.Contains(" registros inseridos em "));
-            this.CancelAdjust();
+            this._02_CancelAdjust();
         }
 
         private List<WorkShiftAdjustment> GetData()
         {
             var date = this.validDate(4);
+            List<WorkShiftAdjustment> dataToCancel = new List<WorkShiftAdjustment>();
 
-            List<WorkShiftAdjustment> data = new List<WorkShiftAdjustment>()
+            List<WorkShiftAdjustment> dataToInsert = new List<WorkShiftAdjustment>()
             {
                 new WorkShiftAdjustment()
                 {
@@ -203,7 +203,6 @@ namespace Tests
                 {
                     matriculation = "X000001",
                     data = FormatDate(date),
-                    replaceTime = "13:30",
                     hour = "12:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -213,47 +212,6 @@ namespace Tests
                 {
                     matriculation = "X000001",
                     data = FormatDate(date),
-                    replaceTime = "cancelar",
-                    hour = "18:00",
-                    reference = FormatDate(date),
-                    justification = "Outros",
-                    note = "Acerto 3 Marcações segundo Política de Ponto",
-                },
-                new WorkShiftAdjustment()
-                {
-                    matriculation = "X000001",
-                    data = FormatDate(date),
-                    replaceTime = "cancelar",
-                    hour = "07:30",
-                    reference = FormatDate(date),
-                    justification = "Outros",
-                    note = "Acerto 3 Marcações segundo Política de Ponto",
-                },
-                new WorkShiftAdjustment()
-                {
-                    matriculation = "X000001",
-                    data = FormatDate(date),
-                    replaceTime = "cancelar",
-                    hour = "11:00",
-                    reference = FormatDate(date),
-                    justification = "Outros",
-                    note = "Acerto 3 Marcações segundo Política de Ponto",
-                },
-                new WorkShiftAdjustment()
-                {
-                    matriculation = "X000001",
-                    data = FormatDate(date),
-                    replaceTime = "cancelar",
-                    hour = "12:00",
-                    reference = FormatDate(date),
-                    justification = "Outros",
-                    note = "Acerto 3 Marcações segundo Política de Ponto",
-                },
-                new WorkShiftAdjustment()
-                {
-                    matriculation = "X000001",
-                    data = FormatDate(date),
-                    replaceTime = "cancelar",
                     hour = "18:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -261,9 +219,53 @@ namespace Tests
                 },
             };
 
+            dataToCancel.AddRange(new List<WorkShiftAdjustment>()
+            {
+                new WorkShiftAdjustment()
+                {
+                    matriculation = "X000001",
+                    data = FormatDate(date),
+                    replaceTime = "cancelar",
+                    hour = "07:30",
+                    reference = FormatDate(date),
+                    justification = "Outros",
+                    note = "Acerto 3 Marcações segundo Política de Ponto",
+                },
+                new WorkShiftAdjustment()
+                {
+                    matriculation = "X000001",
+                    data = FormatDate(date),
+                    replaceTime = "cancelar",
+                    hour = "11:00",
+                    reference = FormatDate(date),
+                    justification = "Outros",
+                    note = "Acerto 3 Marcações segundo Política de Ponto",
+                },
+                new WorkShiftAdjustment()
+                {
+                    matriculation = "X000001",
+                    data = FormatDate(date),
+                    replaceTime = "cancelar",
+                    hour = "12:00",
+                    reference = FormatDate(date),
+                    justification = "Outros",
+                    note = "Acerto 3 Marcações segundo Política de Ponto",
+                },
+                new WorkShiftAdjustment()
+                {
+                    matriculation = "X000001",
+                    data = FormatDate(date),
+                    replaceTime = "cancelar",
+                    hour = "18:00",
+                    reference = FormatDate(date),
+                    justification = "Outros",
+                    note = "Acerto 3 Marcações segundo Política de Ponto",
+                },
+            });
+
             date = this.validDate(3);
 
-            data.AddRange(new List<WorkShiftAdjustment>()
+            dataToInsert.AddRange(new List<WorkShiftAdjustment>()
             {
                 new WorkShiftAdjustment()
                 {
@@ -287,7 +289,6 @@ namespace Tests
                 {
                     matriculation = "X000001",
                     data = FormatDate(date),
-                    replaceTime = "13:30",
                     hour = "12:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -297,12 +298,14 @@ namespace Tests
                 {
                     matriculation = "X000001",
                     data = FormatDate(date),
-                    replaceTime = "cancelar",
                     hour = "18:00",
                     reference = FormatDate(date),
                     justification = "Outros",
                     note = "Acerto 3 Marcações segundo Política de Ponto",
-                },
+                }
+            });
+
+            dataToCancel.AddRange(new List<WorkShiftAdjustment>() {
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
@@ -347,7 +350,7 @@ namespace Tests
 
             date = this.validDate(2);
 
-            data.AddRange(new List<WorkShiftAdjustment>()
+            dataToInsert.AddRange(new List<WorkShiftAdjustment>()
             {
                 new WorkShiftAdjustment()
                 {
@@ -371,7 +374,6 @@ namespace Tests
                 {
                     matriculation = "X000001",
                     data = FormatDate(date),
-                    replaceTime = "13:30",
                     hour = "12:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -381,12 +383,14 @@ namespace Tests
                 {
                     matriculation = "X000001",
                     data = FormatDate(date),
-                    replaceTime = "cancelar",
                     hour = "18:00",
                     reference = FormatDate(date),
                     justification = "Outros",
                     note = "Acerto 3 Marcações segundo Política de Ponto",
-                },
+                }
+            });
+
+            dataToCancel.AddRange(new List<WorkShiftAdjustment>() { 
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
@@ -431,7 +435,7 @@ namespace Tests
 
             date = this.validDate(1);
 
-            data.AddRange(new List<WorkShiftAdjustment>()
+            dataToInsert.AddRange(new List<WorkShiftAdjustment>()
             {
                 new WorkShiftAdjustment()
                 {
@@ -455,7 +459,6 @@ namespace Tests
                 {
                     matriculation = "X000001",
                     data = FormatDate(date),
-                    replaceTime = "13:30",
                     hour = "12:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -465,12 +468,14 @@ namespace Tests
                 {
                     matriculation = "X000001",
                     data = FormatDate(date),
-                    replaceTime = "cancelar",
                     hour = "18:00",
                     reference = FormatDate(date),
                     justification = "Outros",
                     note = "Acerto 3 Marcações segundo Política de Ponto",
                 },
+            });
+
+            dataToCancel.AddRange(new List<WorkShiftAdjustment>() { 
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
@@ -515,7 +520,7 @@ namespace Tests
 
             date = this.validDate();
 
-            data.AddRange(new List<WorkShiftAdjustment>()
+            dataToInsert.AddRange(new List<WorkShiftAdjustment>()
             {
                 new WorkShiftAdjustment()
                 {
@@ -539,7 +544,6 @@ namespace Tests
                 {
                     matriculation = "X000001",
                     data = FormatDate(date),
-                    replaceTime = "13:30",
                     hour = "12:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -549,12 +553,14 @@ namespace Tests
                 {
                     matriculation = "X000001",
                     data = FormatDate(date),
-                    replaceTime = "cancelar",
                     hour = "18:00",
                     reference = FormatDate(date),
                     justification = "Outros",
                     note = "Acerto 3 Marcações segundo Política de Ponto",
-                },
+                }, 
+            });
+
+            dataToCancel.AddRange(new List<WorkShiftAdjustment> () {
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
@@ -597,7 +603,9 @@ namespace Tests
                 },
             });
 
-            return data;
+            dataToInsert.AddRange(dataToCancel);
+
+            return dataToInsert;
         }
 
         public DateTime validDate(int days)

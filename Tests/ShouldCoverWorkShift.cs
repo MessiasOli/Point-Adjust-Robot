@@ -8,9 +8,9 @@ namespace Tests
         [Fact]
         public void TestCover()
         {
-            var useCase = WorkShiftFactory.GetCoverWorkShift(new List<CoverWorkShift>()
+            var useCase = WorkShiftFactory.GetCoverWorkShift(new List<WorkShiftCover>()
             {
-                new CoverWorkShift()
+                new WorkShiftCover()
                 {
                     operationType = "Cobertura de Posto",
                     matriculation = "X000001",
@@ -29,7 +29,7 @@ namespace Tests
                     departure2 = "",
                     description = "Acerto Hora Extra - Autorizada",
                 },
-                new CoverWorkShift()
+                new WorkShiftCover()
                 {
                     operationType = "Cobertura de Posto",
                     matriculation = "X000001",

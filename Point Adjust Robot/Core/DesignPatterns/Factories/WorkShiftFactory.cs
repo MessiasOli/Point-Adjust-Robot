@@ -9,16 +9,16 @@ namespace PoitAdjustRobotAPI.Core.Factories
 {
     public static class WorkShiftFactory
     {
-        public static IUseCase<Return<List<WorkShiftAdjustment>>> GetAdjustiment(List<WorkShiftAdjustment> workShiftList)
-        {
-            return new Adjustment(workShiftList);
-        }
+        public static IUseCase<Return<List<WorkShiftAdjustment>>> GetAdjustiment(List<WorkShiftAdjustment> workShiftList) => new Adjustment(workShiftList);
 
-        public static IUseCase<Return<List<CoverWorkShift>>> GetCoverWorkShift(List<CoverWorkShift> coverWorkShift)
+        public static IUseCase<Return<List<WorkShiftCover>>> GetCoverWorkShift(List<WorkShiftCover> coverWorkShift)
         {
             return new Cover(coverWorkShift);
         }
 
-        internal static IUseCase<Return<List<WorkShiftAdjustment>>> GetAdjustiment(CommandAdjust workShiftList, SingletonWorkshift worker) => new Adjustment(workShiftList, worker);
+        internal static IUseCase<Return<List<WorkShiftAdjustment>>> GetAdjustiment(CommandAdjust workShiftList, SingletonWorkshift worker, string key) => new Adjustment(workShiftList, worker, key);
+
+
+        internal static IUseCase<Return<List<WorkShiftCover>>> GetCoverWorkShift(CommandCover coverWorkShift, SingletonWorkshift worker, string key) => new Cover(coverWorkShift, worker, key);
     }
 }

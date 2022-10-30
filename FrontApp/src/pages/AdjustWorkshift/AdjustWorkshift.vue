@@ -20,16 +20,10 @@
     ></v-grid>
     <div class="footer">
       <div>
-        <q-badge
-          v-if="lastUpdate"
-          outline
-          transparent
-          align="middle"
-          color="primary"
-        >
-          {{ lastUpdate }}
+        <q-badge outline transparent align="middle" color="primary">
+          {{ rows.filter((a) => a.matriculation != "").length }}
         </q-badge>
-        <q-tooltip :offset="[0, 8]">Ultima atualização.</q-tooltip>
+        <q-tooltip :offset="[0, 8]">Número de linhas preenchidas.</q-tooltip>
       </div>
       <div class="group-btn">
         <div>
@@ -71,7 +65,7 @@
 import VGrid from "@revolist/vue3-datagrid";
 import GridAdjust from "./gridConfig";
 import * as moment from "moment";
-import CommandAdjust from "../model/CommandAdjust";
+import CommandAdjust from "../../model/commands/CommandAdjust";
 
 export default {
   name: "AdjustWorkshift",
@@ -147,6 +141,47 @@ export default {
       );
     },
 
+    getJob(keyJob){
+      this.$api.get(`/getjob/${keyJob}`)
+        .then((res) => {
+          if (res.status == 200) {
+            console.log("🦾🤖 >> res", res.data)
+            let untreatedData = JSON.parse(res.data.untreatedData);
+            console.log("🦾🤖 >> res", untreatedData)
+            this.rows = untreatedData
+            this.Add1000Lines();
+          }
+        }).catch(console.error);
+    },
+
+    getStatus(key, callback) {
+      this.$api
+        .get(`/getstatus/${key}`)
+        .then((res) => {
+          let concluded = res.data.msg.toLocaleLowerCase().includes("finalizado");
+
+          if (res.status == 200 && !concluded) {
+
+            callback(res.data.msg);
+            setTimeout(() => {this.getStatus(key, callback)}, 2000);
+          } else if (res.status == 200 && concluded) {
+            callback(res.data.msg, "success");
+            this.getJob(key)
+          } else if (res.status == 206) {
+            this.showMessage(res.data.msg.replace("stoped: ", ""), "success");
+            this.Add1000Lines();
+          } else {
+            setTimeout(() => {
+              this.getStatus(key, callback);
+            }, 2000);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          callback("Falha ao executar a inserção dos dados!", "falha");
+        });
+    },
+
     sendAdjusts() {
       let data = this.rows.filter((r) => r.matriculation != "");
       let commandAdjust;
@@ -158,18 +193,16 @@ export default {
         this.$router.push({ name: "Settings" }).catch(() => {});
         return;
       }
-      console.log("🦾🤖 >> commandAdjust", commandAdjust);
 
-      let finish = this.working("Por favor aguarde...");
+      let finish = this.working("Preparando para iniciar...");
       this.$api
         .post(`/adjustworkshift`, commandAdjust)
         .then((res) => {
           if (res.status == 200) {
-            finish(res.data.message);
-            this.rows = res.data.content;
-            this.Add1000Lines();
-
-            this.lastUpdate = moment().format("DD/MM/yyyy HH:mm:ss");
+            setTimeout(() => {
+              this.getStatus(res.data, finish);
+            }, 2000);
+            console.log("🦾🤖 >> res.data", res.data);
           } else if (res.status == 206) {
             this.showMessage(
               res.data.message.replace("stoped: ", ""),

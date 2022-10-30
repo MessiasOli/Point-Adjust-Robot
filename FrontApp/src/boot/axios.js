@@ -8,7 +8,8 @@ import axios from "axios";
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({
-  baseURL: "http://127.0.0.1:5000/pointadjustrobot",
+  baseURL: "http://127.0.0.1:5000/api/pointadjustrobot",
+  timeout: 0,
 });
 
 export default boot(({ app }) => {
