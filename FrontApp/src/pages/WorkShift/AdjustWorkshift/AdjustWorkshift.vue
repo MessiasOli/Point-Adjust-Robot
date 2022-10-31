@@ -1,13 +1,14 @@
 <template>
   <div padding>
     <div class="header">
-      <h6>Cobertura de Posto</h6>
-      <q-input v-model="search" filled placeholder="Filtrar">
+      <h6>Ajuste de Marcação</h6>
+      <q-input v-model="search" filled placeholder="Search">
         <template v-slot:append>
           <q-icon name="search" />
         </template>
       </q-input>
     </div>
+
     <v-grid
       ref="table"
       class="table"
@@ -17,19 +18,12 @@
       :options="options"
       :range="true"
     ></v-grid>
-
     <div class="footer">
       <div>
-        <q-badge
-          v-if="lastUpdate"
-          outline
-          transparent
-          align="middle"
-          color="primary"
-        >
-          {{ lastUpdate }}
+        <q-badge outline transparent align="middle" color="primary">
+          {{ rows.filter((a) => a.matriculation != "").length }}
         </q-badge>
-        <q-tooltip :offset="[0, 8]">Ultima atualização.</q-tooltip>
+        <q-tooltip :offset="[0, 8]">Número de linhas preenchidas.</q-tooltip>
       </div>
       <div class="group-btn">
         <div>
@@ -70,13 +64,13 @@
 <script>
 import VGrid from "@revolist/vue3-datagrid";
 import GridAdjust from "./gridConfig";
-import * as moment from "moment";
-import CommandCover from "../../model/commands/CommandCover";
+import CommandAdjust from "../../../model/commands/CommandAdjust";
+import { MixinWorkShift } from "../mixinWorkShift";
 
 export default {
-  name: "CoverWorkShift",
-
-  inject: ["showMessage", "dialog", "working"],
+  name: "AdjustWorkshift",
+  mixins: [ MixinWorkShift ],
+  inject: ["showMessage", "showWarning", "dialog", "working"],
   components: {
     VGrid,
   },
@@ -88,7 +82,7 @@ export default {
       rowsBkp: [],
       options: GridAdjust.options,
       wait: false,
-      lastUpdate: "",
+      lastUpdate: "", //moment().format("DD/MM/yyyy HH:mm:ss"),
       search: "",
     };
   },
@@ -105,20 +99,12 @@ export default {
       let filterUpper = filter.toUpperCase();
       this.rows = this.rowsBkp.filter((d) => {
         return (
-          d.operationType.toUpperCase().includes(filterUpper) ||
           d.matriculation.toUpperCase().includes(filterUpper) ||
-          d.client.toUpperCase().includes(filterUpper) ||
-          d.place.toUpperCase().includes(filterUpper) ||
-          d.reason.toUpperCase().includes(filterUpper) ||
-          d.startDate.toUpperCase().includes(filterUpper) ||
-          d.endDate.toUpperCase().includes(filterUpper) ||
-          d.description.toUpperCase().includes(filterUpper) ||
-          d.entry1.toUpperCase().includes(filterUpper) ||
-          d.departure1.toUpperCase().includes(filterUpper) ||
-          d.entry2.toUpperCase().includes(filterUpper) ||
-          d.departure2.toUpperCase().includes(filterUpper) ||
-          d.employeeHours.toUpperCase().includes(filterUpper) ||
-          d.hedgingFeature.toUpperCase().includes(filterUpper)
+          d.data.toUpperCase().includes(filterUpper) ||
+          d.hour.toUpperCase().includes(filterUpper) ||
+          d.reference.toUpperCase().includes(filterUpper) ||
+          d.justification.toUpperCase().includes(filterUpper) ||
+          d.note.toUpperCase().includes(filterUpper)
         );
       });
     },
@@ -155,26 +141,37 @@ export default {
       );
     },
 
+    getJob(keyJob){
+      this.$api.get(`/getjob/${keyJob}`)
+        .then((res) => {
+          if (res.status == 200) {
+            let untreatedData = JSON.parse(res.data.untreatedData);
+            this.rows = untreatedData
+            this.Add1000Lines();
+          }
+        }).catch(console.error);
+    },
+
     sendAdjusts() {
-      let finish = this.working("Por favor aguarde...");
       let data = this.rows.filter((r) => r.matriculation != "");
-      let command;
+      let commandAdjust;
 
       try {
-        command = new CommandCover(data);
+        commandAdjust = new CommandAdjust(data);
       } catch {
         this.showWarning("Você precisa inserir um usuário nexti");
         this.$router.push({ name: "Settings" }).catch(() => {});
         return;
       }
 
+      let finish = this.working("Preparando inicio...");
       this.$api
-        .post(`/SetCoverWorkshift`, command)
+        .post(`/adjustworkshift`, commandAdjust)
         .then((res) => {
           if (res.status == 200) {
-            finish(res.data.message);
-            this.rows = res.data.content;
-            this.Add1000Lines();
+            setTimeout(() => {
+              this.getStatus(res.data, finish);
+            }, 2000);
           } else {
             finish(res.data);
           }
@@ -185,6 +182,7 @@ export default {
         });
     },
   },
+  mounted() {},
 };
 </script>
 

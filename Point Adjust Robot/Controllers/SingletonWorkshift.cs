@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Point_Adjust_Robot.Core.Interface;
 using Point_Adjust_Robot.Core.Model;
+using Point_Adjust_Robot.Core.Tools;
 using PoitAdjustRobotAPI.Service;
 using WorkShiftStatus = Point_Adjust_Robot.Core.Model.WorkShiftStatus;
 
@@ -21,7 +22,6 @@ namespace Point_Adjust_Robot.Controllers
             this.serviceLogger = serviceLogger;
         }
 
-
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             return Task.CompletedTask;  
@@ -29,7 +29,8 @@ namespace Point_Adjust_Robot.Controllers
 
         public void StartWorkShift(string keyJob, WorkShift shift)
         {
-            this.jobs[keyJob].history[shift.Key].idStatus = Core.Model.Enum.WorkShiftStatus.Processando;
+            this.jobs[keyJob].history[shift.Key].idStatus = Core.Model.Enum.WorkShiftStatus.Iniciado;
+            this.jobs[keyJob].history[shift.Key].startUpdate = DateTime.Now;
         }
 
         public void SetWorkShiftError(string keyJob, string error, WorkShift shift)
@@ -91,16 +92,19 @@ namespace Point_Adjust_Robot.Controllers
             shifts.ForEach(s =>
             {
                 var shiftStatus = new WorkShiftStatus(s);
-                shiftStatus.idStatus = Core.Model.Enum.WorkShiftStatus.Pendente;
                 jobs[keyJob].history.Add(s.Key, shiftStatus);
-
             });
-
         }
 
         public void FinishJob(string keyJob, string untreatedData)
         {
             jobs[keyJob].Finish(untreatedData);
+        }
+
+        public void FinishJobWithError(string keyJob, Exception e, string untreatedData)
+        {
+            jobs[keyJob].error = e.InnerException is not null ? e.Message + " Inner " + e.InnerException : e.Message;
+            jobs[keyJob].FinishWithError(untreatedData);
         }
 
         public SimpleMessage GetStatus(string keyJob)
@@ -128,13 +132,13 @@ namespace Point_Adjust_Robot.Controllers
                 int countFail = status.FindAll(s => s.idStatus == Core.Model.Enum.WorkShiftStatus.Falhou).Count;
 
                 message = countFail == 0 ?
-                          $"{string.Format("{0:N}", status.Count)} finalizados com sucesso em {string.Format("{0:N}", time.TotalMinutes)} minutos." :
-                          $"{string.Format("{0:N}", status.Count)} concluídos sendo {countConcluid} finalizados e {countFail} falharam";
+                          $"{status.Count} finalizados com sucesso em {Utilities.GetDifMinutes(time.TotalMinutes)}." :
+                          $"{status.Count} processados sendo {countConcluid} com sucesso e {countFail} com falha.";
 
                 WriterLog.WriteInfo("Job", message, "Registrando finalização", JsonConvert.SerializeObject(job, Formatting.Indented), "GetStatus");
             }
             else
-                message = $"{totalProcessed} - {status.Count}";
+                message = $"{totalProcessed} - {status.Count} " + job.EstimatedTimeToFinish();
 
             return new SimpleMessage(message, percentage);
         }

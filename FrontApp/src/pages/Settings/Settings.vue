@@ -158,7 +158,6 @@ export default {
   methods: {
     show(props) {
       props.expand = !props.expand;
-      console.log("🦾🤖 >> props", props);
     },
 
     loadLogs() {
@@ -195,7 +194,6 @@ export default {
 
     saveConfig() {
       Auth.set(this.user, this.password, this.showChrome);
-      console.log("🦾🤖 >> this.showChrome", this.showChrome);
     },
 
     getSettings() {
@@ -203,7 +201,6 @@ export default {
       this.user = user;
       this.password = password;
       this.showChrome = showChrome;
-      console.log("🦾🤖 >> showChrome", showChrome);
     },
   },
 

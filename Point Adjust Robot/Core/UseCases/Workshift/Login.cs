@@ -37,7 +37,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                 driver.Navigate().GoToUrl("https://app.nexti.com/");
 
                 {
-                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
                     wait.Until(driver => driver.FindElement(By.Id("inputUsername")).Enabled && driver.FindElement(By.Id("inputDomain")).Enabled);
                 }
 
@@ -46,7 +46,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                 driver.FindElement(By.Id("next-step")).Click();
 
                 {
-                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
                     wait.Until(driver => driver.FindElement(By.Id("inputUsername")).Displayed && driver.FindElement(By.Id("inputUsername")).Enabled);
                 }
 
@@ -54,14 +54,31 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                 driver.FindElement(By.Id("inputPassword")).SendKeys(this.key);
                 driver.FindElement(By.CssSelector(".btn:nth-child(7)")).Click();
 
+
+                try
+                {
+                    WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(1));
+                    wait.Until(driver => driver.FindElement(By.XPath("/html/body/core-main/div/div[1]/div/div/div[2]/div/notifications/div/span")).Displayed);
+                    throw new ArgumentException("Usuário ou senha Incorretos");
+                }
+                catch(Exception e)
+                {
+                    if(e.Message == "Usuário ou senha Incorretos")
+                        throw;
+                }
+
+
                 {
                     WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
                     wait.Until(driver => driver.FindElement(By.XPath("/html/body/core-main/div/core-header/div[1]/ul/li[3]/a")).Displayed);
                 }
                 result = true;
             }
-            catch
+            catch(Exception e)
             {
+                if (e.Message == "Usuário ou senha Incorretos")
+                    throw;
+
                 try
                 {
                     driver.FindElement(By.XPath("/html/body/core-main/div/div[1]/div/div/div[2]/div/div[1]/h5")).Click();

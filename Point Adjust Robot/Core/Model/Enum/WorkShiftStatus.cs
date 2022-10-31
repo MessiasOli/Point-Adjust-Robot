@@ -3,6 +3,7 @@
     public enum WorkShiftStatus
     {
         Pendente,
+        Iniciado,
         Processando,
         Completo,
         Interrompido,

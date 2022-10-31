@@ -12,12 +12,12 @@ const routes = [
         path: "AdjustWorkShift",
         name: "AdjustWorkShift",
         component: () =>
-          import("src/pages/AdjustWorkshift/AdjustWorkshift.vue"),
+          import("src/pages/WorkShift/AdjustWorkshift/AdjustWorkshift.vue"),
       },
       {
         path: "CoverWorkShift",
         name: "CoverWorkShift",
-        component: () => import("pages/CoverWorkShift/CoverWorkShift.vue"),
+        component: () => import("pages/WorkShift/CoverWorkShift/CoverWorkShift.vue"),
       },
       {
         path: "Settings",

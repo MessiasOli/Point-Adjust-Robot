@@ -32,11 +32,7 @@ export default defineComponent({
         spinner: icons(spinnerInfo),
         message: message,
         position: "bottom-left",
-        color: !spinnerInfo
-          ? "primary"
-          : spinnerInfo == "success"
-          ? "primary"
-          : "purple",
+        color: "purple",
         timeout: 3000,
         progress: true,
       });
@@ -89,14 +85,19 @@ export default defineComponent({
           },
           persistent: true, // we want the user to not be able to close it
           ok: false, // we want the user to not be able to close it
-          cancel: true,
+          cancel: {
+            label: "Parar",
+            push: true,
+            color: "negative",
+          },
         })
         .onCancel((_) => {
           setTimeout(() => {
             if (allReady) {
+              this.$store.commit("callStopJob", true);
               this.$api.get("stopwork");
               this.show(
-                "Aguarde a confirmação em instantes...",
+                "Interrompendo o processo...",
                 "report_problem"
               );
             }

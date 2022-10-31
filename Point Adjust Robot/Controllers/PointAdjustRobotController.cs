@@ -46,14 +46,6 @@ namespace PoitAdjustRobotAPI.Controllers
                 Thread t = new Thread(() => { useCase.DoWork(); });
                 t.Start();
 
-                //if (!useCase.result.message.Contains("Erro") && !useCase.result.message.Contains("stop"))
-                //    return Ok(JsonConvert.SerializeObject(useCase.result));
-
-                //if(useCase.result.message.Contains("stop"))
-                //    return StatusCode(StatusCodes.Status206PartialContent, JsonConvert.SerializeObject(useCase.result));
-
-                //return StatusCode(StatusCodes.Status205ResetContent, JsonConvert.SerializeObject(new SimpleMessage(useCase.result.message)));
-
                 return Ok(key);
             }
             catch (Exception e)
@@ -76,12 +68,11 @@ namespace PoitAdjustRobotAPI.Controllers
                 worker.callToStop = false;
                 var key = $"{DateTime.Now.ToString("ddMMyyyyHHmmss")}|{JobType.Workplace}";
                 IUseCase<Return<List<WorkShiftCover>>> useCase = WorkShiftFactory.GetCoverWorkShift(coverWorkShift, worker, key);
-                useCase.DoWork();
 
-                if(!useCase.result.message.Contains("Erro"))
-                    return Ok(useCase.result);
+                Thread t = new Thread(() => { useCase.DoWork(); });
+                t.Start();
 
-                return StatusCode(StatusCodes.Status205ResetContent, JsonConvert.SerializeObject(new SimpleMessage(useCase.result.message)));
+                return Ok(key);
             }
             catch (Exception e)
             {
@@ -142,7 +133,6 @@ namespace PoitAdjustRobotAPI.Controllers
             catch (Exception e)
             {
                 WriterLog.Write(e, "API", step, infoMessage, "StopWorker");
-                var message = e.InnerException is null ? e.Message : e.Message + " Inner: " + e.InnerException.Message;
             }
         }
 

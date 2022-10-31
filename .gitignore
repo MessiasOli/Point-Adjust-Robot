@@ -3,6 +3,7 @@
 FrontApp/node_modules
 FrontApp/obj
 PointAdjustRobotAPI/bin
+PointAdjustRobotAPI/bin
 bin/
 obj/
 obj/Docker
@@ -10,6 +11,7 @@ obj/Docker
 # Quasar core related directories
 .quasar
 /dist
+/Log
 
 # Cordova related directories and files
 /src-cordova/node_modules
@@ -33,3 +35,4 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.cache
+*.vsidx

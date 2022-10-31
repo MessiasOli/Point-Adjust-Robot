@@ -22,6 +22,12 @@ namespace PoitAdjustRobotAPI.Service
             Send(key ,exception, step, strContent, method);
         }
 
+        internal static void WriteError(Exception e, string key, string step, string strContent, string method)
+        {
+            string exception = e.InnerException is null ? e.Message : e.Message + " Inner " + e.InnerException;
+            Send("Error-" + key, exception, step, strContent, method);
+        }
+
         internal static void WriteInfo(string info, string message, string step, string strContent, string method)
         {
             Send("Info-" + info, message, step, strContent, method);
@@ -35,7 +41,7 @@ namespace PoitAdjustRobotAPI.Service
                 logData.info = key;
                 logData.apiName = "PointAdjustRobotAPI";
                 logData.data = infoMessage;
-                logData.level = key.Contains("Info") ? "Info" : "Falha";
+                logData.level = key.Contains("Info") ? "Info" : key.Contains("Info") ? "Erro" : "Falha";
                 logData.step = step;
                 logData.methodName = methodName;
                 logData.timeStamp = DateTime.Now;

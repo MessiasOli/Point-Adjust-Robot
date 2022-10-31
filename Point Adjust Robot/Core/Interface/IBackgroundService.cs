@@ -18,6 +18,6 @@ namespace Point_Adjust_Robot.Core.Interface
         void FinishJob(string keyJob, string untreatedData);
         public List<WorkShiftStatus> GetStatusList(string keyJob);
         public void Reset();
-
+        void FinishJobWithError(string keyJob, Exception e, string v);
     }
 }

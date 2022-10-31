@@ -1,45 +1,35 @@
 ﻿using Point_Adjust_Robot.Core.Model;
-using PoitAdjustRobotAPI.Core.Interface;
-using System.Net.Http.Headers;
 using PoitAdjustRobotAPI.Service;
-using Newtonsoft.Json;
-using System.Text;
-using Microsoft.Extensions.Options;
-using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-using OpenQA.Selenium.Interactions;
-using Microsoft.AspNetCore.Components.Forms;
-using OpenQA.Selenium.DevTools.V104.Runtime;
-using System.IO;
-using System.Diagnostics.Eventing.Reader;
 using Point_Adjust_Robot.Core.Tools;
 using Point_Adjust_Robot.Core.DesignPatterns.Command;
 using Point_Adjust_Robot.Controllers;
+using Point_Adjust_Robot.Core.Model.Enum;
+using Newtonsoft.Json;
 
 namespace Point_Adjust_Robot.Core.UseCases.Workshift
 {
     public class Cover : UseCaseWebDriver<Return<List<WorkShiftCover>>>
     {
         private List<WorkShiftCover> coverWorkShift = new List<WorkShiftCover>();
-        private string key;
+        private string keyJob = $"{DateTime.Now.ToString("ddMMyyyyHHmmss")}|{JobType.Workplace}";
 
-        public Cover(List<WorkShiftCover> coverWorkShift)
-        {
-            this.coverWorkShift = coverWorkShift;
-            this.result = new Return<List<WorkShiftCover>>() { content = new List<WorkShiftCover>(), message = "" };
-        }
-
-        public Cover(CommandCover command, SingletonWorkshift worker) : base(command, worker)
+        public Cover(CommandCover command, SingletonWorkshift worker, string key) : base(command, worker)
         {
             this.coverWorkShift = command.coverWorkShifts;
-            this.worker = worker;
+            this.frontSettings = command.GetFrontSettings();
+
             this.result = new Return<List<WorkShiftCover>>() { content = new List<WorkShiftCover>(), message = "" };
+            this.worker = worker;
+            this.keyJob = key;
+            this.worker.InitJob(keyJob, new List<WorkShift>(coverWorkShift));
         }
 
-        public Cover(CommandCover command, SingletonWorkshift worker, string key) : this(command, worker)
+        public Cover(List<WorkShiftCover> coverWorkShifts) : base()
         {
-            this.key = key;
+            this.coverWorkShift = coverWorkShifts;
+            this.result = new Return<List<WorkShiftCover>>() { content = new List<WorkShiftCover>(), message = "" };
         }
 
         public override UseCaseWebDriver<Return<List<WorkShiftCover>>> DoWork()
@@ -49,7 +39,9 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
             try
             {
                 var start = DateTime.Now;
+                const int maximunInteraction = 10;
                 int countSucess = 0;
+                int countToRelog = maximunInteraction;
 
                 step = "Fazendo login";
                 var login = new Login(driver, this.frontSettings.user, this.frontSettings.password);
@@ -67,19 +59,34 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                 step = "Iniciando inserção em massa de dados";
                 foreach (var workShift in this.coverWorkShift)
                 {
-                    step = "Solicitação de parada iniciada";
-                    if (worker.CallToStop())
+                    try
                     {
-                        this.result.content.Add(workShift);
-                        continue;
-                    }
+                        step = "Solicitação de parada iniciada";
+                        if (worker.CallToStop())
+                        {
+                            this.result.content.Add(workShift);
+                            continue;
+                        }
 
-                    step = "Ajustando dados";
-                    string path = "";
-                    AdjustValues(workShift);
-                    AdRemove();
+                        if (countToRelog == 0)
+                        {
+                            driver.Quit();
+                            this.Initialize();
+                            login = new Login(driver, frontSettings.user, frontSettings.password);
+                            tools = new WebDriverTools(driver);
+                            if (!login.DoWork().result)
+                                throw new ArgumentException($"Falha ao restartar o sistema após {countSucess + result.content.Count} iterações.");
+                            countToRelog = maximunInteraction;
+                        }
 
-                    try {
+                        step = "Iniciando";
+                        countToRelog--;
+                        worker.StartWorkShift(keyJob, workShift);
+
+                        step = "Ajustando dados";
+                        string path = "";
+                        AdjustValues(workShift);
+                        AdRemove();
 
                         Thread.Sleep(1000);
                         step = "Clicando em filtro";
@@ -218,7 +225,15 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                         inputData.SendKeys(workShift.description);
 
                         driver.FindElement(By.XPath("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[2]/div[1]/div[2]/div[5]")).Click();
-                        Thread.Sleep(2000);
+
+                        step = "verificando retorno";
+                        var el = tools.GetElement("/html/body/core-main/div/div[2]/div[1]/div/div[1]/notifications/div");
+                        if (!el.Text.ToLower().Contains("sucesso"))
+                            throw new ArgumentException("Retorno do servidor nexti não contem a palavra sucesso!");
+
+                        step = "Setando Concluído";
+                        worker.SetWorkShiftCompleted(keyJob, workShift);
+
                         countSucess++;
                     }
                     catch (Exception e)
@@ -233,21 +248,27 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
 
                         }
 
+                        var infoMessage = JsonConvert.SerializeObject(workShift, Formatting.Indented);
                         result.content.Add(workShift);
+                        worker.SetWorkShiftError(keyJob, (step + " " + infoMessage), workShift);
                         WriterLog.Write(e, workShift.matriculation, $"Falha ao inserir a matrícula {workShift.matriculation}", step, "Adjustment");
                     }
                 }
 
                 var time = DateTime.Now - start;
-                this.result.message = GetResult(string.Format("{0:N}", time.TotalMinutes), countSucess);
+                this.worker.FinishJob(keyJob, JsonConvert.SerializeObject(this.result.content, Formatting.Indented));
+                this.result.message = GetResult(Utilities.GetDifMinutes(time.TotalMinutes), countSucess);
             }
             catch(Exception e)
             {
                 this.result.message = "Erro execução da requisição";
+                this.worker.FinishJobWithError(keyJob, e, JsonConvert.SerializeObject(this.result.content, Formatting.Indented));
                 WriterLog.Write(e, "Metodo", step, "Falha ao enviar requisição para a API", "Cover");
             }
-
-            Dispose();
+            finally
+            {
+                this.Dispose();
+            }
 
             return this;
         }
@@ -271,12 +292,12 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
         protected override string GetResult(string time, int countSucess)
         {
             if (this.worker.CallToStop())
-                return $"stoped: {countSucess} inseridos e {result.content.Count} foram interrompidos tempo gasto {time} minutos."; ;
+                return $"stoped: {countSucess} inseridos e {result.content.Count} foram interrompidos tempo gasto {time}."; ;
 
             if (result.content.Count == 0)
-                return $"{countSucess} registros inseridos em {time} minutos.";
+                return $"{countSucess} registros inseridos, tempo gasto {time}.";
 
-            return $"{countSucess} inseridos e {result.content.Count} falharam em {time} minutos. Analise os dados da tabela para descobrir o possível problema. Você também pode analizar os logs para mais informações.";
+            return $"{countSucess} inseridos e {result.content.Count} falharam, tempo gasto {time}. Analise os dados da tabela para descobrir o possível problema. Você também pode analizar os logs para mais informações.";
         }
 
         public void AdRemove()

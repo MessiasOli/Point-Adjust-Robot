@@ -104,6 +104,7 @@ const GridAdjust = {
   ],
   rows: [
     {
+      index: "1",
       operationType: "Cobertura de Posto",
       matriculation: "X000001",
       client: "TESTE NEXTI",
@@ -122,6 +123,7 @@ const GridAdjust = {
       description: "Acerto Hora Extra - Autorizada",
     },
     {
+      index: "2",
       operationType: "Cobertura de Posto",
       matriculation: "X000001",
       client: "TESTE NEXTI",
