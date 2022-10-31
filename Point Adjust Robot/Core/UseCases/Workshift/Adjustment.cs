@@ -41,7 +41,7 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
             try
             {
                 var start = DateTime.Now;
-                const int maximunInteraction = 10;
+                const int maximunInteraction = 8;
                 int countSucess = 0;
                 int countToRelog = maximunInteraction;
                 
@@ -220,6 +220,8 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
                     }
                     catch(Exception e)
                     {
+                        if (e.Message.Contains("Falha ao restartar"))
+                            continue;
 
                         result.content.Add(workShift);
                         var infoMessage = JsonConvert.SerializeObject(workShift, Formatting.Indented);

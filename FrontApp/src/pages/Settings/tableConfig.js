@@ -1,15 +1,13 @@
-import * as moment from "moment";
-
 const Table = {
   header: [
     {
       name: "timeStamp",
       required: true,
-      label: "Momento",
+      label: "Data e Hora",
       align: "left",
       // style: "width: 200px",
       field: (row) => row.timeStamp,
-      format: (val) => `${val ? moment(val).format("DD/MM HH:mm:ss") : val}`,
+      format: (val) => `${ val }`,
       sortable: true,
     },
     {

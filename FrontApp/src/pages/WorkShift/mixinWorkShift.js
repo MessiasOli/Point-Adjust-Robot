@@ -2,7 +2,6 @@ export var MixinWorkShift = {
   name:"EmptyMixin",
   data() {
     return {
-
     }
   },
 
@@ -15,8 +14,6 @@ export var MixinWorkShift = {
                           res.data.msg.toLocaleLowerCase().includes("processado");
 
           let stoped = this.$store.getters.callStopJob;
-          console.log("🦾🤖 >> stoped", stoped)
-          console.log("🦾🤖 >> concluded", concluded)
 
           if (res.status == 200 && !concluded) {
             callback(res.data.msg);
@@ -27,6 +24,7 @@ export var MixinWorkShift = {
           } else if(stoped){
             this.showMessage("Processo interrompido", "success");
             this.$store.commit("callStopJob", false)
+            this.getJob(key)
           }else{
             setTimeout(() => {
               this.getStatus(key, callback);

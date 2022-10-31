@@ -39,7 +39,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
             try
             {
                 var start = DateTime.Now;
-                const int maximunInteraction = 10;
+                const int maximunInteraction = 8;
                 int countSucess = 0;
                 int countToRelog = maximunInteraction;
 
@@ -243,10 +243,10 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                             AdRemove();
                             driver.FindElement(By.XPath("/html/body/core-main/div/searchfilter/div/div[1]/div[2]/div[1]/div/a")).Click();
                         }
-                        catch
-                        {
+                        catch { }
 
-                        }
+                        if (e.Message.Contains("Falha ao restartar"))
+                            continue;
 
                         var infoMessage = JsonConvert.SerializeObject(workShift, Formatting.Indented);
                         result.content.Add(workShift);

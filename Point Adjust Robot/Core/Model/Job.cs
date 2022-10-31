@@ -14,15 +14,17 @@ namespace Point_Adjust_Robot.Core.Model
         }
 
         public string key { get; set; }
-        public DateTime start { get; set; }
-        public DateTime finished { get; set; } = DateTime.Now;
-        public string Time => Utilities.GetDifMinutes((finished - start).TotalMinutes);
         public int total { get; set; }
+        public string TotalTime => Utilities.GetDifMinutes((finished - start).TotalMinutes);
+        public string AverageUnitTime { get; set; }
         public int completed { get; set; }
         public int failed { get; set; }
         public int interrupted { get; set; }
-        public string untreatedData { get; set; }
         public string error { get; set; } = "";
+        public bool IsDone => finished.CompareTo(start) > 0;
+        public string untreatedData { get; set; }
+        public DateTime start { get; set; }
+        public DateTime finished { get; set; } = DateTime.Now;
 
         public string EstimatedTimeToFinish()
         {
@@ -32,6 +34,7 @@ namespace Point_Adjust_Robot.Core.Model
 
             double totalMinutes = completed.Sum(t => (t.lastUpdate - t.startUpdate).TotalMinutes);
             totalMinutes = completed.Count > 0 ? totalMinutes / completed.Count : double.PositiveInfinity;
+            this.AverageUnitTime = completed.Count > 0 ? Utilities.GetDifMinutes(totalMinutes) : "00:00";
             totalMinutes = totalMinutes * totalRemaining;
 
             return !double.IsInfinity(totalMinutes) ? $"🤖 {Utilities.GetDifMinutes(totalMinutes)}" : "";
@@ -47,7 +50,6 @@ namespace Point_Adjust_Robot.Core.Model
             this.completed = list.FindAll(l => l.idStatus == Enum.WorkShiftStatus.Completo).Count;
             this.failed = list.FindAll(l => l.idStatus == Enum.WorkShiftStatus.Falhou).Count;
             this.interrupted = list.FindAll(l => l.idStatus == Enum.WorkShiftStatus.Interrompido).Count;
-            this.completed = list.FindAll(l => l.idStatus == Enum.WorkShiftStatus.Pendente).Count;
         }
 
         internal void FinishWithError(string untreatedData)
@@ -61,9 +63,7 @@ namespace Point_Adjust_Robot.Core.Model
             this.completed = list.FindAll(l => l.idStatus == Enum.WorkShiftStatus.Completo).Count;
             this.failed = list.FindAll(l => l.idStatus == Enum.WorkShiftStatus.Falhou).Count;
             this.interrupted = list.FindAll(l => l.idStatus == Enum.WorkShiftStatus.Interrompido).Count;
-            this.completed = list.FindAll(l => l.idStatus == Enum.WorkShiftStatus.Pendente).Count;
         }
 
-        public bool IsDone => finished.CompareTo(start) > 0;
     }
 }

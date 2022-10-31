@@ -105,7 +105,7 @@ export default defineComponent({
         });
 
       var finish = (message, fail) => {
-        allReady = !(fail || (fail && !fail.conteins("falha")));
+        allReady = !(fail || (fail && !fail.includes("falha")));
         let success = fail == "success";
 
         dialog.update({
@@ -117,6 +117,11 @@ export default defineComponent({
           message: message,
           progress: success || !allReady ? false : true,
           ok: success ? true : false,
+          cancel: !success ? {
+            label: "Parar",
+            push: true,
+            color: "negative",
+          } : false,
         });
       };
 

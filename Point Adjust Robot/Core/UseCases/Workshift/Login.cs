@@ -1,8 +1,7 @@
 ﻿using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
 using PoitAdjustRobotAPI.Core.Interface;
-using Point_Adjust_Robot.Core.Tools;
-using Point_Adjust_Robot.Core.Model;
+using PoitAdjustRobotAPI.Service;
 
 namespace Point_Adjust_Robot.Core.UseCases.Workshift
 {
@@ -32,8 +31,10 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
 
         public IUseCase<bool> DoWork()
         {
+            string step = "";
             try
             {
+                step = "Acessando a url";
                 driver.Navigate().GoToUrl("https://app.nexti.com/");
 
                 {
@@ -41,6 +42,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                     wait.Until(driver => driver.FindElement(By.Id("inputUsername")).Enabled && driver.FindElement(By.Id("inputDomain")).Enabled);
                 }
 
+                step = "Inserindo o nome do grupo";
                 driver.FindElement(By.Id("inputDomain")).Click();
                 driver.FindElement(By.Id("inputDomain")).SendKeys("grupooikos");
                 driver.FindElement(By.Id("next-step")).Click();
@@ -50,6 +52,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                     wait.Until(driver => driver.FindElement(By.Id("inputUsername")).Displayed && driver.FindElement(By.Id("inputUsername")).Enabled);
                 }
 
+                step = "Inserindo usuário e senha";
                 driver.FindElement(By.Id("inputUsername")).SendKeys(this.user);
                 driver.FindElement(By.Id("inputPassword")).SendKeys(this.key);
                 driver.FindElement(By.CssSelector(".btn:nth-child(7)")).Click();
@@ -57,6 +60,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
 
                 try
                 {
+                    step = "Verificando autenticação do usuário";
                     WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(1));
                     wait.Until(driver => driver.FindElement(By.XPath("/html/body/core-main/div/div[1]/div/div/div[2]/div/notifications/div/span")).Displayed);
                     throw new ArgumentException("Usuário ou senha Incorretos");
@@ -67,7 +71,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                         throw;
                 }
 
-
+                step = "Aguardando a entrada no sistema";
                 {
                     WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
                     wait.Until(driver => driver.FindElement(By.XPath("/html/body/core-main/div/core-header/div[1]/ul/li[3]/a")).Displayed);
@@ -87,7 +91,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                 {
 
                 }
-
+                WriterLog.Write(e, "Info-login", step, "Falha ao tentar logar","Login");
                 result = false;
             }
 

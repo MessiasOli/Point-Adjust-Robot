@@ -148,6 +148,7 @@ export default {
             let untreatedData = JSON.parse(res.data.untreatedData);
             this.rows = untreatedData
             this.Add1000Lines();
+            this.showMessage(`Tabela atualizada, ${res.data.completed} concluídos, restando ${this.rows.length}`);
           }
         }).catch(console.error);
     },
@@ -182,7 +183,9 @@ export default {
         });
     },
   },
-  mounted() {},
+  mounted() {
+    this.callBackGetJob = this.getJob
+  },
 };
 </script>
 

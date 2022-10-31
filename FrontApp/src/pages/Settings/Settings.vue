@@ -30,11 +30,12 @@
             ]"
             :dense="true"
           >
+          <!-- :name="isPwd ? 'visibility_off' : 'visibility'" -->
+          <!-- @click="isPwd = !isPwd" -->
             <template v-slot:append>
               <q-icon
-                :name="isPwd ? 'visibility_off' : 'visibility'"
+                name="visibility_off"
                 class="cursor-pointer"
-                @click="isPwd = !isPwd"
               />
             </template>
           </q-input>
@@ -187,7 +188,7 @@ export default {
 
     clearLogs() {
       this.dialog(
-        "Os registros são apagados automaticamente em 2 dias, ainda deseja apagar ?",
+        "Todo o histórico será perdido, tem certeza que deseja continuar ?",
         this.sentClearLogs
       );
     },

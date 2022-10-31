@@ -76,7 +76,7 @@ namespace Point_Adjust_Robot.Controllers
             }
 
             status.lastUpdate = DateTime.Now;
-            status.idStatus = Core.Model.Enum.WorkShiftStatus.Completo;
+            status.idStatus = Core.Model.Enum.WorkShiftStatus.Interrompido;
         }
 
         public List<WorkShiftStatus> GetStatusList(string keyJob) => this.jobs[keyJob].history.Values.ToList();
@@ -130,10 +130,13 @@ namespace Point_Adjust_Robot.Controllers
             {
                 int countConcluid = status.FindAll(s => s.idStatus == Core.Model.Enum.WorkShiftStatus.Completo).Count;
                 int countFail = status.FindAll(s => s.idStatus == Core.Model.Enum.WorkShiftStatus.Falhou).Count;
+                int countStoped = status.FindAll(s => s.idStatus == Core.Model.Enum.WorkShiftStatus.Interrompido).Count;
 
-                message = countFail == 0 ?
+                message = countFail == 0 && countStoped == 0 ?
                           $"{status.Count} finalizados com sucesso em {Utilities.GetDifMinutes(time.TotalMinutes)}." :
-                          $"{status.Count} processados sendo {countConcluid} com sucesso e {countFail} com falha.";
+                          countStoped == 0 ?
+                          $"{status.Count} processados sendo {countConcluid} com sucesso e {countFail} com falha." :
+                          $"{status.Count} processados sendo {countConcluid} com sucesso, {countFail} com falha e {countStoped} interrompidos.";
 
                 WriterLog.WriteInfo("Job", message, "Registrando finalização", JsonConvert.SerializeObject(job, Formatting.Indented), "GetStatus");
             }

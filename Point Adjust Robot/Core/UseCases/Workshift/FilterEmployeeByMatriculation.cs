@@ -30,6 +30,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                 step = "Limpando mensagem de anuncios.";
                 tools.ClickIfExists("/html/body/div[3]/div[2]/a[1]");
 
+                Thread.Sleep(300);
                 step = "Clicando em filtrar";
                 var xPathFilter = "/html/body/core-main/div/div[2]/div[1]/div/div[1]/div[2]/div/div/div[1]/div[1]/div[2]/i";
                 tools.AwaitAndClick(xPathFilter);

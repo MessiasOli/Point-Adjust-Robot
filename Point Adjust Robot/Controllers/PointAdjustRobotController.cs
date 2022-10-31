@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Point_Adjust_Robot;
 using Point_Adjust_Robot.Controllers;
 using Point_Adjust_Robot.Core.DesignPatterns.Command;
 using Point_Adjust_Robot.Core.Model;
@@ -20,7 +21,6 @@ namespace PoitAdjustRobotAPI.Controllers
 
         public PointAdjustRobotController(ILogger<SingletonWorkshift> logger,  SingletonWorkshift hostedService)
         {
-            new DeleteLogs().DoWork();
             this.worker = hostedService as SingletonWorkshift;
             GC.Collect(2);
         }
@@ -30,6 +30,13 @@ namespace PoitAdjustRobotAPI.Controllers
         public string Get()
         {
             return "Api PointAdjustRobot is running";
+        }
+
+        [HttpGet("version")]
+        [AllowAnonymous]
+        public string GetVersion()
+        {
+            return SystemInfo.Version;
         }
 
         [HttpPost("adjustworkshift")]

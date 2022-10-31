@@ -44,7 +44,7 @@ namespace PoitAdjustRobotAPI.Service
                 logData.level = key.Contains("Info") ? "Info" : key.Contains("Info") ? "Erro" : "Falha";
                 logData.step = step;
                 logData.methodName = methodName;
-                logData.timeStamp = DateTime.Now;
+                logData.timeStamp = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
                 logData.message = errorMessage;
 
                 System.IO.StreamWriter file;
@@ -59,7 +59,7 @@ namespace PoitAdjustRobotAPI.Service
                     Directory.CreateDirectory(path);
 
                 logContent = JsonConvert.SerializeObject(logData, Formatting.Indented);
-                fileName = "Falha" + "-" + key + "-" + DateTime.Now.ToString("yyyy-MM-dd [HH-mm-ss.fff]") + ".txt";
+                fileName = logData.level + "-" + key + "-" + DateTime.Now.ToString("yyyy-MM-dd [HH-mm-ss.fff]") + ".txt";
                 file = System.IO.File.AppendText(path + "\\" + fileName);
                 await file.WriteAsync(logContent);
                 file.Close();
