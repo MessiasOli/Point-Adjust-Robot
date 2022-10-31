@@ -1,6 +1,7 @@
 .DS_Store
 .thumbs.db
 FrontApp/node_modules
+FrontApp/dist
 FrontApp/obj
 PointAdjustRobotAPI/bin
 PointAdjustRobotAPI/bin
