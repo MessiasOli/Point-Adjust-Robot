@@ -16,6 +16,8 @@
       :columns="columns"
       :options="options"
       :range="true"
+      @afteredit="updateRows"
+      @afterfocus="updateRows"
     ></v-grid>
 
     <div class="footer">
@@ -76,7 +78,7 @@ import { MixinWorkShift } from "../mixinWorkShift";
 export default {
   name: "CoverWorkShift",
   mixins: [ MixinWorkShift ],
-  inject: ["showMessage", "dialog", "working"],
+  inject: ["showMessage", "showWarning", "dialog", "working"],
   components: {
     VGrid,
   },
@@ -84,7 +86,7 @@ export default {
   data() {
     return {
       columns: GridAdjust.columns,
-      rows: GridAdjust.rows,
+      rows: [],
       rowsBkp: [],
       options: GridAdjust.options,
       wait: false,
@@ -125,6 +127,10 @@ export default {
   },
 
   methods: {
+    updateRows(){
+      this.saveWorkplace(this.$refs.table.source)
+    },
+
     addLines() {
       this.Add1000Lines();
       this.showMessage("1000 novas linhas adicionadas!", "success");
@@ -144,6 +150,7 @@ export default {
 
     clearLines() {
       this.rows = [];
+      this.saveWorkplace([])
       this.Add1000Lines();
       this.showMessage("Tabela limpa!", "success");
     },
@@ -161,15 +168,21 @@ export default {
           if (res.status == 200) {
             let untreatedData = JSON.parse(res.data.untreatedData);
             this.rows = untreatedData
+            this.rowsBkp = untreatedData
             this.Add1000Lines();
+            this.showMessage(`Tabela atualizada, ${res.data.completed} concluídos, restando ${this.rows.filter(i => i.matriculation != "").length} com falha.`);
           }
         }).catch(console.error);
     },
 
     sendAdjusts() {
-      let finish = this.working("Preparando iniciar...");
       let data = this.rows.filter((r) => r.matriculation != "");
       let command;
+
+      if(data.length == 0) {
+        this.showWarning("Não há dados dados para ser enviado");
+        return
+      }
 
       try {
         command = new CommandCover(data);
@@ -179,6 +192,7 @@ export default {
         return;
       }
 
+      let finish = this.working("Preparando iniciar...");
       this.$api
         .post(`/SetCoverWorkshift`, command)
         .then((res) => {
@@ -195,6 +209,14 @@ export default {
           finish("Falha ao executar a inserção dos dados!", "falha");
         });
     },
+  },
+
+  mounted() {
+    setTimeout(() => {
+      this.rows = this.getWorkplace();
+      this.rows = this.rows.length > 0 ? this.rows : GridAdjust.rows
+      this.Add1000Lines()
+    })
   },
 };
 </script>

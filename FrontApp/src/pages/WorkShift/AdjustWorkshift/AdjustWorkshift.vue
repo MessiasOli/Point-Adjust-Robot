@@ -17,6 +17,8 @@
       :columns="columns"
       :options="options"
       :range="true"
+      @afteredit="updateRows"
+      @afterfocus="updateRows"
     ></v-grid>
     <div class="footer">
       <div>
@@ -66,6 +68,7 @@ import VGrid from "@revolist/vue3-datagrid";
 import GridAdjust from "./gridConfig";
 import CommandAdjust from "../../../model/commands/CommandAdjust";
 import { MixinWorkShift } from "../mixinWorkShift";
+import Table from 'src/pages/Settings/tableConfig';
 
 export default {
   name: "AdjustWorkshift",
@@ -78,7 +81,7 @@ export default {
   data() {
     return {
       columns: GridAdjust.columns,
-      rows: GridAdjust.rows,
+      rows: [],
       rowsBkp: [],
       options: GridAdjust.options,
       wait: false,
@@ -111,6 +114,10 @@ export default {
   },
 
   methods: {
+    updateRows(){
+      this.saveAdjustWorkshift(this.$refs.table.source)
+    },
+
     addLines() {
       this.Add1000Lines();
       this.showMessage("1000 novas linhas adicionadas!", "success");
@@ -130,6 +137,7 @@ export default {
 
     clearLines() {
       this.rows = [];
+      this.saveAdjustWorkshift([])
       this.Add1000Lines();
       this.showMessage("Tabela limpa!", "success");
     },
@@ -147,8 +155,9 @@ export default {
           if (res.status == 200) {
             let untreatedData = JSON.parse(res.data.untreatedData);
             this.rows = untreatedData
+            this.rowsBkp = untreatedData
             this.Add1000Lines();
-            this.showMessage(`Tabela atualizada, ${res.data.completed} concluídos, restando ${this.rows.length}`);
+            this.showMessage(`Tabela atualizada, ${res.data.completed} concluídos, restando ${this.rows.filter(i => i.matriculation != "").length} com falha.`);
           }
         }).catch(console.error);
     },
@@ -156,6 +165,11 @@ export default {
     sendAdjusts() {
       let data = this.rows.filter((r) => r.matriculation != "");
       let commandAdjust;
+
+      if(data.length == 0) {
+        this.showWarning("Não há dados dados para ser enviado");
+        return
+      }
 
       try {
         commandAdjust = new CommandAdjust(data);
@@ -184,7 +198,11 @@ export default {
     },
   },
   mounted() {
-    this.callBackGetJob = this.getJob
+    setTimeout(() => {
+      this.rows = this.getAdjustWorkshift();
+      this.rows = this.rows.length > 0 ? this.rows : GridAdjust.rows
+      this.Add1000Lines()
+    })
   },
 };
 </script>

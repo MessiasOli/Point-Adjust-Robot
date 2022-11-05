@@ -9,6 +9,10 @@ const routes = [
         component: () => import("pages/IndexPage.vue"),
       },
       {
+        path: "*",
+        redirect: "/",
+      },
+      {
         path: "AdjustWorkShift",
         name: "AdjustWorkShift",
         component: () =>

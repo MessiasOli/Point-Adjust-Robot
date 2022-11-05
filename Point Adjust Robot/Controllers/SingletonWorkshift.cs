@@ -92,7 +92,11 @@ namespace Point_Adjust_Robot.Controllers
             shifts.ForEach(s =>
             {
                 var shiftStatus = new WorkShiftStatus(s);
-                jobs[keyJob].history.Add(s.Key, shiftStatus);
+                if (jobs.ContainsKey(keyJob))
+                    jobs[keyJob].history.Add(s.Key, shiftStatus);
+                else
+                    jobs[keyJob].history[s.Key] = shiftStatus;
+
             });
         }
 

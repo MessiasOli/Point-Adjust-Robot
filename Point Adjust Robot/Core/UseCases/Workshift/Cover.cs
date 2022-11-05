@@ -261,6 +261,9 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
             }
             catch(Exception e)
             {
+                if (e.Message == "Usuário ou senha Incorretos")
+                    this.result.content = this.coverWorkShift;
+
                 this.result.message = "Erro execução da requisição";
                 this.worker.FinishJobWithError(keyJob, e, JsonConvert.SerializeObject(this.result.content, Formatting.Indented));
                 WriterLog.Write(e, "Metodo", step, "Falha ao enviar requisição para a API", "Cover");

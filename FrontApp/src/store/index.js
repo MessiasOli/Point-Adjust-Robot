@@ -43,8 +43,8 @@ const store = createStore({
   },
 });
 
-axios.get("../../package.json").then((res) => {
+axios.get("../../version.json").then((res) => {
   store.commit("appVersion", "v" + res.data.version);
-});
+})
 
 export default store;

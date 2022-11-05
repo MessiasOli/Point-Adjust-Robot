@@ -104,13 +104,14 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
                         {
                             step = "Abrindo a tabela caso não esteja visível";
                             tools.AwaitAndClick("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[1]/ul/li[2]/a");
+                            Thread.Sleep(1500);
                             tools.Await("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div[1]/div[3]");
                             Thread.Sleep(1500);
                         }
 
                         step = "Ajustando dados para procurar a hora no calendário";
                         string day = workShift.data.Split("/")[0] + " - ";
-                        bool foundElementToEdit = !String.IsNullOrEmpty(workShift.replaceTime);
+                        bool foundElementToEdit = !String.IsNullOrEmpty(workShift.replaceTime.Trim());
                         var (hourFound, deletePoint) = workShift.replaceTime.ToLower().Contains("cancelar") ? 
                                                     (workShift.hour, true) : 
                                                     (workShift.replaceTime, false);
@@ -118,6 +119,8 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
                         step = "Procurando a hora para subistituição na tabela calendário";
                         if (foundElementToEdit){
                             foundElementToEdit = false;
+
+                            tools.Await("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[2]/div/div[2]/div[2]/div[2]/div[1]");
                             foreach (var elDate in driver.FindElements(By.ClassName("row_day")).ToList())
                             {
                                 string text = elDate.Text;
@@ -143,12 +146,10 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
                         if (!foundElementToEdit)
                         {
                             step = "Clicando em plus.";
+                            Thread.Sleep(1500);
                             tools.AwaitAndClick(plusButton);
                             Thread.Sleep(1500);
-
-                            driver.FindElement(By.CssSelector(".row_day:nth-child(5) .col:nth-child(6)")).Click();
-                            Thread.Sleep(1500);
-                        
+                            tools.Await("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[4]/div/div/span/span[1]/span/span[1]");
                         }
 
                         if (!deletePoint)
@@ -190,6 +191,7 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
                         else
                         {
                             step = "Selecionando a opção cancelar.";
+                            Thread.Sleep(700);
                             tools.AwaitAndClick("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div[1]/div/label[2]");
                         }
 
@@ -208,10 +210,10 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
                         step = "Confirmando o formulário.";
                         driver.FindElement(By.LinkText("Confirmar")).Click();
 
-                        step = "verificando retorno";
+                        step = "Verificando retorno ao finalizar a requisição.";
                         var el = tools.GetElement("/html/body/core-main/div/div[2]/div[1]/div/div[1]/notifications/div");
                         if (!el.Text.ToLower().Contains("sucesso"))
-                            throw new ArgumentException("Retorno do servidor nexti não contem a palavra sucesso!");
+                            throw new ArgumentException($"Ao clicar em confirmar envio, o sistema Nexti retornou: {el.Text}");
 
                         step = "Setando Concluído";
                         worker.SetWorkShiftCompleted(keyJob, workShift);
@@ -237,6 +239,9 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
             }
             catch (Exception e)
             {
+                if(e.Message == "Usuário ou senha Incorretos")
+                    this.result.content = this.workShiftList;
+
                 this.result.message = "Erro execução da requisição.";
                 this.worker.FinishJobWithError(keyJob, e, JsonConvert.SerializeObject(this.result.content, Formatting.Indented));
                 WriterLog.WriteError(e, "Metodo", step, this.result.message, "Adjustment");

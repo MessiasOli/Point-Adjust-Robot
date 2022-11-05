@@ -35,9 +35,9 @@ namespace Point_Adjust_Robot.Core.Model
         protected void Initialize()
         {
             if (frontSettings.showChrome)
-                options.AddArguments("--start-maximized");
+                options.AddArguments("--window-size=1536,929");
             else
-                options.AddArguments("--headless", "--window-size=1920,929");
+                options.AddArguments("--headless", "--window-size=1536,929");
 
             var path = Directory.GetCurrentDirectory();
             path = path.Contains("Test") ?

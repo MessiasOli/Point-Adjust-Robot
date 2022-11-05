@@ -37,6 +37,24 @@ export var MixinWorkShift = {
           callback("Falha ao executar a inserção dos dados!", "falha");
         });
     },
+
+    getAdjustWorkshift(){
+      return localStorage.replacements ?  JSON.parse(localStorage.replacements) : []
+    },
+
+    saveAdjustWorkshift(adjust = Array){
+      adjust = adjust.filter(a => a.matriculation);
+      localStorage.replacements = JSON.stringify(adjust)
+    },
+
+    getWorkplace(){
+      return localStorage.workplace ?  JSON.parse(localStorage.workplace) : []
+    },
+
+    saveWorkplace(workplace = Array){
+      workplace = workplace.filter(a => a.matriculation)
+      localStorage.workplace = JSON.stringify(workplace)
+    },
   },
 
   mounted() {
