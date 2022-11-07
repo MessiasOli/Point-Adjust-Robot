@@ -19,13 +19,14 @@ namespace Tests
         [Fact, Order(0)]
         public void _01_TestAdjust()
         {
-           var date = this.validDate();
+           var date = this.validDate(-3);
 
             var useCase = WorkShiftFactory.GetAdjustiment(new List<WorkShiftAdjustment>()
             {
 
                 new WorkShiftAdjustment()
                 {
+                    index = "0",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     hour = "07:00",
@@ -35,6 +36,7 @@ namespace Tests
                 },
                 new WorkShiftAdjustment()
                 {
+                    index = "1",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     hour = "11:00",
@@ -44,6 +46,7 @@ namespace Tests
                 },
                 new WorkShiftAdjustment()
                 {
+                    index = "2",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     hour = "12:00",
@@ -53,6 +56,7 @@ namespace Tests
                 },
                 new WorkShiftAdjustment()
                 {
+                    index = "3",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     hour = "17:00",
@@ -63,19 +67,20 @@ namespace Tests
             });
 
             useCase.DoWork();
-            Assert.True(useCase.result.message.Contains(" registros inseridos em "));
+            Assert.True(useCase.result.message.Contains(" registros inseridos"));
         }
 
         [Fact, Order(1)]
         public void _02_CancelAdjust()
         {
-            var date = this.validDate();
+            var date = this.validDate(-3);
 
             var useCase = WorkShiftFactory.GetAdjustiment(new List<WorkShiftAdjustment>()
             {
 
                 new WorkShiftAdjustment()
                 {
+                    index = "0",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     replaceTime = "cancelar",
@@ -86,6 +91,7 @@ namespace Tests
                 },
                 new WorkShiftAdjustment()
                 {
+                    index = "1",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     replaceTime = "cancelar",
@@ -96,6 +102,7 @@ namespace Tests
                 },
                 new WorkShiftAdjustment()
                 {
+                    index = "2",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     replaceTime = "cancelar",
@@ -106,6 +113,7 @@ namespace Tests
                 },
                 new WorkShiftAdjustment()
                 {
+                    index = "3",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     replaceTime = "cancelar",
@@ -117,18 +125,19 @@ namespace Tests
             });
 
             useCase.DoWork();
-            Assert.True(useCase.result.message.Contains(" registros inseridos em "));
+            Assert.True(useCase.result.message.Contains(" registros inseridos"));
         }
 
         [Fact, Order(2)]
         public void _03_TestAdjustTime()
         {
-            var date = this.validDate();
+            var date = this.validDate(-3);
 
             var useCase = WorkShiftFactory.GetAdjustiment(new List<WorkShiftAdjustment>()
             {
                 new WorkShiftAdjustment()
                 {
+                    index = "0",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     hour = "13:30",
@@ -138,6 +147,7 @@ namespace Tests
                 },
                 new WorkShiftAdjustment()
                 {
+                    index = "1",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     replaceTime = "13:30",
@@ -148,6 +158,7 @@ namespace Tests
                 },
                 new WorkShiftAdjustment()
                 {
+                    index = "2",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     replaceTime = "cancelar",
@@ -159,10 +170,10 @@ namespace Tests
             });
 
             useCase.DoWork();
-            Assert.True(useCase.result.message.Contains(" registros inseridos em "));
+            Assert.True(useCase.result.message.Contains(" registros inseridos"));
         }
 
-        [Fact, Order(3)]
+        //[Fact, Order(3)]
         public void _04_TestManyData()
         {
             List<WorkShiftAdjustment> data = GetData();
@@ -176,13 +187,14 @@ namespace Tests
 
         private List<WorkShiftAdjustment> GetData()
         {
-            var date = this.validDate(4);
+            var date = this.validDate(-4);
             List<WorkShiftAdjustment> dataToCancel = new List<WorkShiftAdjustment>();
 
             List<WorkShiftAdjustment> dataToInsert = new List<WorkShiftAdjustment>()
             {
                 new WorkShiftAdjustment()
                 {
+                    index = "0",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     hour = "07:30",
@@ -192,6 +204,7 @@ namespace Tests
                 },
                 new WorkShiftAdjustment()
                 {
+                    index = "2",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     hour = "11:00",
@@ -201,6 +214,7 @@ namespace Tests
                 },
                 new WorkShiftAdjustment()
                 {
+                    index = "3",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     hour = "12:00",
@@ -210,6 +224,7 @@ namespace Tests
                 },
                 new WorkShiftAdjustment()
                 {
+                    index = "4",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     hour = "18:00",
@@ -223,6 +238,7 @@ namespace Tests
             {
                 new WorkShiftAdjustment()
                 {
+                    index = "1",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     replaceTime = "cancelar",
@@ -233,6 +249,7 @@ namespace Tests
                 },
                 new WorkShiftAdjustment()
                 {
+                    index = "2",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     replaceTime = "cancelar",
@@ -243,6 +260,7 @@ namespace Tests
                 },
                 new WorkShiftAdjustment()
                 {
+                    index = "3",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     replaceTime = "cancelar",
@@ -253,6 +271,7 @@ namespace Tests
                 },
                 new WorkShiftAdjustment()
                 {
+                    index = "4",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     replaceTime = "cancelar",
@@ -263,12 +282,13 @@ namespace Tests
                 },
             });
 
-            date = this.validDate(3);
+            date = this.validDate(-3);
 
             dataToInsert.AddRange(new List<WorkShiftAdjustment>()
             {
                 new WorkShiftAdjustment()
                 {
+                    index = "1",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     hour = "07:30",
@@ -278,6 +298,7 @@ namespace Tests
                 },
                 new WorkShiftAdjustment()
                 {
+                    index = "2",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     hour = "11:00",
@@ -287,6 +308,7 @@ namespace Tests
                 },
                 new WorkShiftAdjustment()
                 {
+                    index = "3",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     hour = "12:00",
@@ -296,6 +318,7 @@ namespace Tests
                 },
                 new WorkShiftAdjustment()
                 {
+                    index = "4",
                     matriculation = "X000001",
                     date = FormatDate(date),
                     hour = "18:00",
@@ -348,7 +371,7 @@ namespace Tests
                 },
             });
 
-            date = this.validDate(2);
+            date = this.validDate(-2);
 
             dataToInsert.AddRange(new List<WorkShiftAdjustment>()
             {
@@ -433,7 +456,7 @@ namespace Tests
                 },
             });
 
-            date = this.validDate(1);
+            date = this.validDate(-1);
 
             dataToInsert.AddRange(new List<WorkShiftAdjustment>()
             {
@@ -628,7 +651,7 @@ namespace Tests
             if (today.DayOfWeek == DayOfWeek.Sunday)
                 today = today.AddDays(-2);
 
-            var date = today.AddDays(-days);
+            var date = today.AddDays(days);
 
             if (date.DayOfWeek == DayOfWeek.Saturday)
                 date = date.AddDays(+2);
@@ -641,10 +664,10 @@ namespace Tests
 
         [Theory]
         [InlineData(0, "29/10/2022", "28/10/2022")]
-        [InlineData(1, "29/10/2022", "27/10/2022")]
-        [InlineData(2, "29/10/2022", "26/10/2022")]
-        [InlineData(3, "29/10/2022", "25/10/2022")]
-        [InlineData(4, "29/10/2022", "24/10/2022")]
+        [InlineData(-1, "29/10/2022", "27/10/2022")]
+        [InlineData(-2, "29/10/2022", "26/10/2022")]
+        [InlineData(-3, "29/10/2022", "25/10/2022")]
+        [InlineData(-4, "29/10/2022", "24/10/2022")]
         public void validDateTest(int days, string expect, string result)
         {
             var date = validDate(days, expect);

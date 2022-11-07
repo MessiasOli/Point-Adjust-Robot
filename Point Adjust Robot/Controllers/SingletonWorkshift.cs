@@ -29,6 +29,9 @@ namespace Point_Adjust_Robot.Controllers
 
         public void StartWorkShift(string keyJob, WorkShift shift)
         {
+            if (!this.jobs.ContainsKey(keyJob))
+                this.jobs.Add(keyJob, new Job(keyJob, shift));
+
             this.jobs[keyJob].history[shift.Key].idStatus = Core.Model.Enum.WorkShiftStatus.Iniciado;
             this.jobs[keyJob].history[shift.Key].startUpdate = DateTime.Now;
         }

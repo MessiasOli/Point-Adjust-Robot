@@ -51,7 +51,7 @@ namespace Tests
             });
 
             useCase.DoWork();
-            Assert.True(useCase.result.message.Contains(" registros inseridos em "));
+            Assert.True(useCase.result.message.Contains(" registros inseridos"));
         }
     }
 }

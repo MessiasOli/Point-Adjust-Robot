@@ -6,6 +6,14 @@ namespace Point_Adjust_Robot.Core.Model
 {
     public class Job
     {
+        public Job(string keyJob, WorkShift work)
+        {
+            this.key = keyJob;
+            this.total = 99999;
+            this.start = DateTime.Now;
+            this.history.Add(work.Key, new WorkShiftStatus(work));
+        }
+
         public Job(string keyJob, int count)
         {
             this.key = keyJob;

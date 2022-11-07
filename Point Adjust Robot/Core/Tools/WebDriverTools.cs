@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using Point_Adjust_Robot.Core.Model;
 
 namespace Point_Adjust_Robot.Core.Tools
 {
@@ -38,6 +39,52 @@ namespace Point_Adjust_Robot.Core.Tools
         {
             if(IsVisible(xPath))
                 GetElement(xPath).Click();
+        }
+
+        internal void CleanAd()
+        {
+            List<string> ads = new List<string>() 
+            {
+                "/html/body/div[3]/div[2]/a[1]",
+                "/html/body/div[2]/div[2]/a[1]"
+            };
+
+            ads.ForEach(xPath =>
+            {
+                if (IsVisible(xPath))
+                    GetElement(xPath).Click();
+            });
+        }
+
+        internal void ClickInTextByClass(string className, string matriculation)
+        {
+            try
+            {
+                By elementFound = By.ClassName(className);
+
+                {
+                    WebDriverWait wait = new WebDriverWait(driver, System.TimeSpan.FromSeconds(10));
+                    IWebElement founded;
+                    Thread.Sleep(700); 
+                    wait.Until(driver =>
+                        driver.FindElements(elementFound)[0].Displayed && 
+                        driver.FindElements(elementFound).ToList().Find(el => el.Text.Contains(matriculation)) is not null);
+
+                    Thread.Sleep(700);
+                    founded = driver.FindElements(elementFound).ToList().Find(el => el.Text.Contains(matriculation));
+
+                    if (founded is not null)
+                        founded.Click();
+
+                    else
+                        throw new ArgumentException($"Matrícula {matriculation} não encontrada.");
+                }
+            }
+            catch(Exception e)
+            {
+              throw new ArgumentException($"Matricula: {matriculation} não encontrada. Erro: {e.Message}");
+            }
+
         }
 
         internal bool IsVisible(string xPath)

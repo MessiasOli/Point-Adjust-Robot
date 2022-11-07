@@ -28,7 +28,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                 WebDriverTools tools = new WebDriverTools(driver);
 
                 step = "Limpando mensagem de anuncios.";
-                tools.ClickIfExists("/html/body/div[3]/div[2]/a[1]");
+                tools.CleanAd();
 
                 Thread.Sleep(300);
                 step = "Clicando em filtrar";
@@ -61,12 +61,15 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                 step = "Aguardando ir para mesa de operações.";
                 tools.Await(xPathFilter);
 
+                step = "Selecionando o usuário correspondente.";
+                tools.ClickInTextByClass("person_text", matriculation);
+
                 step = "Limpando mensagem de anuncios.";
-                tools.ClickIfExists("/html/body/div[3]/div[2]/a[1]");
+                tools.CleanAd();
             }
-            catch
+            catch(Exception e)
             {
-                throw new ArgumentException(step);
+                throw new ArgumentException(step  + " "+ e.Message);
             }
             return this;
         }

@@ -32,6 +32,7 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
         public Adjustment(List<WorkShiftAdjustment> workShiftList) : base()
         {
             this.workShiftList = workShiftList;
+            this.worker.InitJob(keyJob, new List<WorkShift>(workShiftList));
             this.result = new Return<List<WorkShiftAdjustment>>() { content = new List<WorkShiftAdjustment>(), message = "" };
         }
 
@@ -95,10 +96,6 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
                         filter.DoWork();
 
                         step = "Selecionando tabela de ajustes.";
-                        Thread.Sleep(700);
-                        tools.AwaitAndClick("/html/body/core-main/div/div[2]/div[1]/div/div[1]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/div/div/div[2]/div[3]/div/div[1]/div/div/div/div[3]/div/div/div/div/div[2]/h5/span[2]");
-                        Thread.Sleep(700);
-
                         var plusButton = "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[2]/div/div[2]/div[2]/div[1]/span[2]";
                         if (!tools.IsVisible(plusButton))
                         {
