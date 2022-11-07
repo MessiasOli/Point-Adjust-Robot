@@ -38,6 +38,13 @@ export var MixinWorkShift = {
         });
     },
 
+    handleError(e){
+      this.showWarning(e);
+
+      if(e.includes("usuário nexti"))
+        this.$router.push({ name: "Settings" }).catch(() => {});
+    },
+
     getAdjustWorkshift(){
       return localStorage.replacements ?  JSON.parse(localStorage.replacements) : []
     },

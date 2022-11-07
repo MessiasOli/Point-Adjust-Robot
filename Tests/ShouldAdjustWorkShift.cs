@@ -27,7 +27,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "07:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -36,7 +36,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "11:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -45,7 +45,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "12:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -54,7 +54,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "17:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -77,7 +77,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "07:00",
                     reference = FormatDate(date),
@@ -87,7 +87,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "11:00",
                     reference = FormatDate(date),
@@ -97,7 +97,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "12:00",
                     reference = FormatDate(date),
@@ -107,7 +107,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "17:00",
                     reference = FormatDate(date),
@@ -130,7 +130,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "13:30",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -139,7 +139,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "13:30",
                     hour = "12:00",
                     reference = FormatDate(date),
@@ -149,7 +149,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "12:00",
                     reference = FormatDate(date),
@@ -184,7 +184,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "07:30",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -193,7 +193,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "11:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -202,7 +202,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "12:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -211,7 +211,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "18:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -224,7 +224,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "07:30",
                     reference = FormatDate(date),
@@ -234,7 +234,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "11:00",
                     reference = FormatDate(date),
@@ -244,7 +244,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "12:00",
                     reference = FormatDate(date),
@@ -254,7 +254,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "18:00",
                     reference = FormatDate(date),
@@ -270,7 +270,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "07:30",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -279,7 +279,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "11:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -288,7 +288,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "12:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -297,7 +297,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "18:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -309,7 +309,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "07:30",
                     reference = FormatDate(date),
@@ -319,7 +319,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "11:00",
                     reference = FormatDate(date),
@@ -329,7 +329,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "12:00",
                     reference = FormatDate(date),
@@ -339,7 +339,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "18:00",
                     reference = FormatDate(date),
@@ -355,7 +355,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "07:30",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -364,7 +364,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "11:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -373,7 +373,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "12:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -382,7 +382,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "18:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -394,7 +394,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "07:30",
                     reference = FormatDate(date),
@@ -404,7 +404,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "11:00",
                     reference = FormatDate(date),
@@ -414,7 +414,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "12:00",
                     reference = FormatDate(date),
@@ -424,7 +424,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "18:00",
                     reference = FormatDate(date),
@@ -440,7 +440,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "07:30",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -449,7 +449,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "11:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -458,7 +458,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "12:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -467,7 +467,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "18:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -479,7 +479,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "07:30",
                     reference = FormatDate(date),
@@ -489,7 +489,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "11:00",
                     reference = FormatDate(date),
@@ -499,7 +499,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "12:00",
                     reference = FormatDate(date),
@@ -509,7 +509,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "18:00",
                     reference = FormatDate(date),
@@ -525,7 +525,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "07:30",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -534,7 +534,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "11:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -543,7 +543,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "12:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -552,7 +552,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     hour = "18:00",
                     reference = FormatDate(date),
                     justification = "Outros",
@@ -564,7 +564,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "07:30",
                     reference = FormatDate(date),
@@ -574,7 +574,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "11:00",
                     reference = FormatDate(date),
@@ -584,7 +584,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "12:00",
                     reference = FormatDate(date),
@@ -594,7 +594,7 @@ namespace Tests
                 new WorkShiftAdjustment()
                 {
                     matriculation = "X000001",
-                    data = FormatDate(date),
+                    date = FormatDate(date),
                     replaceTime = "cancelar",
                     hour = "18:00",
                     reference = FormatDate(date),

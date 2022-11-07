@@ -2,7 +2,7 @@
 
 public class WorkShiftAdjustment : WorkShift
 {
-    public string data { get; set; } = "";
+    public string date { get; set; } = "";
     public string hour { get; set; } = "";
     public string replaceTime { get; set; } = "";
     public string reference { get; set; } = "";
@@ -15,7 +15,7 @@ public class WorkShiftAdjustment : WorkShift
         return (time[0].Trim(), time[1].Trim());
     }
 
-    internal (string day, string month, string year) GetDate() => GetDate(this.data);
+    internal (string day, string month, string year) GetDate() => GetDate(this.date);
 
     internal (string day, string month, string year) GetReference() => GetDate(this.reference);
 

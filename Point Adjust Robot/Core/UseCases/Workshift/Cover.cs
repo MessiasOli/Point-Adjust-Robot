@@ -140,12 +140,12 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
 
                         AdRemove();
 
-                        step = "Inserindo Inicio de data.";
+                        step = "Inserindo Inicio de date.";
                         var date = driver.FindElement(By.XPath("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[2]/div[1]/div[2]/div[1]/div[2]/div[1]/div/datepicker/p/input"));
                         date.Clear();
                         date.SendKeys(workShift.startDate);
 
-                        step = "Inserindo fim de data.";
+                        step = "Inserindo fim de date.";
                         inputData = tools.GetElement("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[2]/div[1]/div[2]/div[1]/div[2]/div[2]/div/datepicker/p/input");
                         inputData.Click();
                         inputData.Clear();

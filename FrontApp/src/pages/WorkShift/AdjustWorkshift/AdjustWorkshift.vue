@@ -68,7 +68,6 @@ import VGrid from "@revolist/vue3-datagrid";
 import GridAdjust from "./gridConfig";
 import CommandAdjust from "../../../model/commands/CommandAdjust";
 import { MixinWorkShift } from "../mixinWorkShift";
-import Table from 'src/pages/Settings/tableConfig';
 
 export default {
   name: "AdjustWorkshift",
@@ -127,7 +126,7 @@ export default {
       for (let i = 0; i < 1000; i++)
         this.rows.push({
           matriculation: "",
-          data: "",
+          date: "",
           hour: "",
           reference: "",
           justification: "",
@@ -173,9 +172,9 @@ export default {
 
       try {
         commandAdjust = new CommandAdjust(data);
-      } catch {
-        this.showWarning("Você precisa inserir um usuário nexti");
-        this.$router.push({ name: "Settings" }).catch(() => {});
+      } catch (e){
+        console.log("🦾🤖 >> e", e)
+        this.handleError(e)
         return;
       }
 

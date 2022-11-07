@@ -16,7 +16,7 @@ const GridAdjust = {
       sortable: true,
     },
     {
-      prop: "data",
+      prop: "date",
       name: "Data",
       sortable: true,
       size: 120,
@@ -33,35 +33,68 @@ const GridAdjust = {
     { prop: "note", name: "Observações", sortable: true, size: 270 },
   ],
   rows: [
+    // {
+    //   "matriculation": "X000001",
+    //   "date": "03/11/2022",
+    //   "hour": "08:45",
+    //   "reference": "03/11/2022",
+    //   "justification": "Outros",
+    //   "note": "teste",
+    //   "index": "1",
+    //   "replaceTime": ""
+    // },
+    // {
+    //   "matriculation": "X000001",
+    //   "date": "03/11/2022",
+    //   "hour": "08:00",
+    //   "reference": "03/11/2022",
+    //   "justification": "Outros",
+    //   "note": "teste",
+    //   "index": "2",
+    //   "replaceTime": "08:45"
+    // },
+    // {
+    //   "matriculation": "X000001",
+    //   "date": "03/11/2022",
+    //   "hour": "08:00",
+    //   "reference": "03/11/2022",
+    //   "justification": "Outros",
+    //   "note": "teste",
+    //   "index": "3",
+    //   "replaceTime": "cancelar"
+    // }
     {
-      "matriculation": "X000001",
-      "data": "03/11/2022",
-      "hour": "08:45",
-      "reference": "03/11/2022",
-      "justification": "Outros",
-      "note": "teste",
+      "date": "1/11/2022",
+      "hour": "16:04",
+      "replaceTime": "",
+      "reference": "1/11/2022",
+      "justification": "Esquecimento",
+      "note": "Ajuste 3 marc. segundo Politica de Ponto. Teste 3 Nov",
       "index": "1",
-      "replaceTime": ""
+      "matriculation": "X000001",
+      "Key": "1-1852"
     },
     {
-      "matriculation": "X000001",
-      "data": "03/11/2022",
-      "hour": "08:00",
-      "reference": "03/11/2022",
-      "justification": "Outros",
-      "note": "teste",
+      "date": "1/11/2022",
+      "hour": "11:33",
+      "replaceTime": "",
+      "reference": "1/11/2022",
+      "justification": "Esquecimento",
+      "note": "Ajuste 3 marc. segundo Politica de Ponto. Teste 3 Nov",
       "index": "2",
-      "replaceTime": "08:45"
+      "matriculation": "X000001",
+      "Key": "2-3093"
     },
     {
-      "matriculation": "X000001",
-      "data": "03/11/2022",
-      "hour": "08:00",
-      "reference": "03/11/2022",
-      "justification": "Outros",
-      "note": "teste",
+      "date": "1/11/2022",
+      "hour": "11:03",
+      "replaceTime": "",
+      "reference": "1/11/2022",
+      "justification": "Esquecimento",
+      "note": "Ajuste 3 marc. segundo Politica de Ponto. Teste 3 Nov",
       "index": "3",
-      "replaceTime": "cancelar"
+      "matriculation": "X000001",
+      "Key": "3-4258"
     }
   ]
 };
@@ -69,7 +102,7 @@ const GridAdjust = {
 for (let i = 1; i < 1000; i++)
   GridAdjust.rows.push({
     matriculation: "",
-    data: "",
+    date: "",
     hour: "",
     reference: "",
     justification: "",

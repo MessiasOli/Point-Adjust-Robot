@@ -186,9 +186,8 @@ export default {
 
       try {
         command = new CommandCover(data);
-      } catch {
-        this.showWarning("Você precisa inserir um usuário nexti");
-        this.$router.push({ name: "Settings" }).catch(() => {});
+      } catch(e) {
+        this.handleError(e)
         return;
       }
 

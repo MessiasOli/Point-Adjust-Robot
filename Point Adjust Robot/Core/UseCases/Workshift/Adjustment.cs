@@ -110,7 +110,7 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
                         }
 
                         step = "Ajustando dados para procurar a hora no calendário";
-                        string day = workShift.data.Split("/")[0] + " - ";
+                        string day = workShift.date.Split("/")[0] + " - ";
                         bool foundElementToEdit = !String.IsNullOrEmpty(workShift.replaceTime.Trim());
                         var (hourFound, deletePoint) = workShift.replaceTime.ToLower().Contains("cancelar") ? 
                                                     (workShift.hour, true) : 
@@ -140,7 +140,7 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
                             }
 
                             if(!foundElementToEdit)
-                                throw new ArgumentException($"Não foi possível encontrar a hora para o ajuste {workShift.replaceTime} {workShift.hour} na data {workShift.data}");
+                                throw new ArgumentException($"Não foi possível encontrar a hora para o ajuste {workShift.replaceTime} {workShift.hour} na date {workShift.date}");
                         }
 
                         if (!foundElementToEdit)
@@ -161,7 +161,7 @@ namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
 
                             var inputData = tools.GetElement(path);
                             inputData.Clear();
-                            inputData.SendKeys(workShift.data);
+                            inputData.SendKeys(workShift.date);
                             inputData.SendKeys(Keys.Enter);
 
 
