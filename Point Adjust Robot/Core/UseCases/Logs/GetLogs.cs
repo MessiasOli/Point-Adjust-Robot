@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
-using PoitAdjustRobotAPI.Core.Interface;
-using PoitAdjustRobotAPI.Model;
-using PoitAdjustRobotAPI.Service;
+using PointAdjustRobotAPI.Core.Interface;
+using PointAdjustRobotAPI.Model;
+using PointAdjustRobotAPI.Service;
 
 namespace Point_Adjust_Robot.Core.UseCases.Logs
 {

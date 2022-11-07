@@ -4,7 +4,7 @@ using OpenQA.Selenium.Remote;
 using Point_Adjust_Robot.Controllers;
 using Point_Adjust_Robot.Core.DesignPatterns.Command;
 using Point_Adjust_Robot.Core.Interface;
-using PoitAdjustRobotAPI.Core.Interface;
+using PointAdjustRobotAPI.Core.Interface;
 using System.Diagnostics;
 
 namespace Point_Adjust_Robot.Core.Model

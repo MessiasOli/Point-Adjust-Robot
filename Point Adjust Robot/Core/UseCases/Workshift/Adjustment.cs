@@ -8,9 +8,9 @@ using Point_Adjust_Robot.Core.Model;
 using Point_Adjust_Robot.Core.Model.Enum;
 using Point_Adjust_Robot.Core.Tools;
 using Point_Adjust_Robot.Core.UseCases.Workshift;
-using PoitAdjustRobotAPI.Service;
+using PointAdjustRobotAPI.Service;
 
-namespace PoitAdjustRobotAPI.Core.UseCases.Workshift
+namespace PointAdjustRobotAPI.Core.UseCases.Workshift
 {
     public class Adjustment : UseCaseWebDriver<Return<List<WorkShiftAdjustment>>>
     {

@@ -1,4 +1,4 @@
-﻿namespace PoitAdjustRobotAPI.Core.Interface
+﻿namespace PointAdjustRobotAPI.Core.Interface
 {
     public interface IUseCase<T> : IDisposable
     {

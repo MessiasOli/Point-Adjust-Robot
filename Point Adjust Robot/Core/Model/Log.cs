@@ -1,4 +1,4 @@
-﻿namespace PoitAdjustRobotAPI.Model
+﻿namespace PointAdjustRobotAPI.Model
 {
     public class Log
     {

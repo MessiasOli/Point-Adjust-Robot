@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium.DevTools.V104.Debugger;
 using Point_Adjust_Robot.Core.Model;
-using PoitAdjustRobotAPI.Service;
+using PointAdjustRobotAPI.Service;
 using System.Net.Http.Headers;
 
 namespace Point_Adjust_Robot.Core.Service

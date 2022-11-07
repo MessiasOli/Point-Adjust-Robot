@@ -1,5 +1,5 @@
 ﻿using Point_Adjust_Robot.Core.Model;
-using PoitAdjustRobotAPI.Core.Factories;
+using PointAdjustRobotAPI.Core.Factories;
 
 namespace Tests
 {

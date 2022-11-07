@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
-using PoitAdjustRobotAPI.Core.Interface;
-using PoitAdjustRobotAPI.Service;
+using PointAdjustRobotAPI.Core.Interface;
+using PointAdjustRobotAPI.Service;
 
 namespace Point_Adjust_Robot.Core.UseCases.Workshift
 {

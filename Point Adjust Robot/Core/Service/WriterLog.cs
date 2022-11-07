@@ -1,12 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using OpenQA.Selenium.DevTools;
-using PoitAdjustRobotAPI.Model;
+using PointAdjustRobotAPI.Model;
+using Sentry;
 using System.Diagnostics;
 using System.Text;
-using Log = PoitAdjustRobotAPI.Model.Log;
+using Log = PointAdjustRobotAPI.Model.Log;
 
-namespace PoitAdjustRobotAPI.Service
+namespace PointAdjustRobotAPI.Service
 {
     public static class WriterLog
     {
@@ -62,6 +63,7 @@ namespace PoitAdjustRobotAPI.Service
                 fileName = logData.level + "-" + key + "-" + DateTime.Now.ToString("yyyy-MM-dd [HH-mm-ss.fff]") + ".txt";
                 file = System.IO.File.AppendText(path + "\\" + fileName);
                 await file.WriteAsync(logContent);
+                SentrySdk.CaptureMessage(logContent);
                 file.Close();
 
                 return;

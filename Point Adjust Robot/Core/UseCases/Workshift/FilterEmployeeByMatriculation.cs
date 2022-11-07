@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using Point_Adjust_Robot.Core.Tools;
-using PoitAdjustRobotAPI.Core.Interface;
+using PointAdjustRobotAPI.Core.Interface;
 
 namespace Point_Adjust_Robot.Core.UseCases.Workshift
 {
@@ -60,6 +60,14 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
 
                 step = "Aguardando ir para mesa de operações.";
                 tools.Await(xPathFilter);
+
+                var pathFilter = "/html/body/core-main/div/div[2]/div[1]/div/div[1]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/div/div/div[2]/div[3]/div/div[1]/div/div[1]/div/div[1]/input";
+                if (tools.IsVisible(pathFilter))
+                {
+                    var filter = tools.GetElement(pathFilter);
+                    filter.SendKeys(matriculation);
+                    filter.SendKeys(Keys.Enter);
+                }
 
                 step = "Selecionando o usuário correspondente.";
                 tools.ClickInTextByClass("person_text", matriculation);

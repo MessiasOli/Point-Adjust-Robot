@@ -2,7 +2,7 @@
 using Microsoft.Win32;
 using OpenQA.Selenium.DevTools.V104.Database;
 using Point_Adjust_Robot.Core.Model;
-using PoitAdjustRobotAPI.Core.Factories;
+using PointAdjustRobotAPI.Core.Factories;
 using Repository.Nexti;
 using System;
 using System.Collections.Generic;

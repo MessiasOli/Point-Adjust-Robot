@@ -2,10 +2,10 @@
 using Point_Adjust_Robot.Core.DesignPatterns.Command;
 using Point_Adjust_Robot.Core.Model;
 using Point_Adjust_Robot.Core.UseCases.Workshift;
-using PoitAdjustRobotAPI.Core.Interface;
-using PoitAdjustRobotAPI.Core.UseCases.Workshift;
+using PointAdjustRobotAPI.Core.Interface;
+using PointAdjustRobotAPI.Core.UseCases.Workshift;
 
-namespace PoitAdjustRobotAPI.Core.Factories
+namespace PointAdjustRobotAPI.Core.Factories
 {
     public static class WorkShiftFactory
     {

@@ -2,7 +2,7 @@
 using Point_Adjust_Robot.Core.Interface;
 using Point_Adjust_Robot.Core.Model;
 using Point_Adjust_Robot.Core.Tools;
-using PoitAdjustRobotAPI.Service;
+using PointAdjustRobotAPI.Service;
 using WorkShiftStatus = Point_Adjust_Robot.Core.Model.WorkShiftStatus;
 
 namespace Point_Adjust_Robot.Controllers

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using PoitAdjustRobotAPI.Core.Interface;
-using PoitAdjustRobotAPI.Service;
+using PointAdjustRobotAPI.Core.Interface;
+using PointAdjustRobotAPI.Service;
 using System.IO;
 using static System.Net.WebRequestMethods;
 

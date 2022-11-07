@@ -7,11 +7,11 @@ using Point_Adjust_Robot.Core.DesignPatterns.Command;
 using Point_Adjust_Robot.Core.Model;
 using Point_Adjust_Robot.Core.Model.Enum;
 using Point_Adjust_Robot.Core.UseCases.Logs;
-using PoitAdjustRobotAPI.Core.Factories;
-using PoitAdjustRobotAPI.Core.Interface;
-using PoitAdjustRobotAPI.Service;
+using PointAdjustRobotAPI.Core.Factories;
+using PointAdjustRobotAPI.Core.Interface;
+using PointAdjustRobotAPI.Service;
 
-namespace PoitAdjustRobotAPI.Controllers
+namespace PointAdjustRobotAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]

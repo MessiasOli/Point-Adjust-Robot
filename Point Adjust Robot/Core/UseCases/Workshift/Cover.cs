@@ -1,5 +1,5 @@
 ﻿using Point_Adjust_Robot.Core.Model;
-using PoitAdjustRobotAPI.Service;
+using PointAdjustRobotAPI.Service;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using Point_Adjust_Robot.Core.Tools;
