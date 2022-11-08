@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Point Adjust Robot\Point Adjust Robot.csproj" />
+    <ProjectReference Include="..\Point_Adjust_Robot\Point Adjust Robot.csproj" />
     <ProjectReference Include="..\Repository\Repository.csproj" />
   </ItemGroup>
 

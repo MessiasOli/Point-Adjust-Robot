@@ -51,9 +51,7 @@ namespace Point_Adjust_Robot.Core.Model
             cmd = new Process();
             cmd.StartInfo = pro;
             cmd.Start();
-            Thread.Sleep(500);
-            cmd.Start();
-            Thread.Sleep(500);
+            Thread.Sleep(1500);
 
             driver = new RemoteWebDriver(uri, options);
 

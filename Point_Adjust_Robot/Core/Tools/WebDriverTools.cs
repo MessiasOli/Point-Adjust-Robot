@@ -14,14 +14,13 @@ namespace Point_Adjust_Robot.Core.Tools
 
         public void Await(string xPath)
         {
-            WebDriverWait wait = new WebDriverWait(driver, System.TimeSpan.FromSeconds(10));
-            wait.Until(driver => driver.FindElement(By.XPath(xPath)).Displayed && driver.FindElement(By.XPath(xPath)).Enabled);
+            Await(xPath, 10);
         }
         
         public void Await(string xPath, double time)
         {
             WebDriverWait wait = new WebDriverWait(driver, System.TimeSpan.FromSeconds(time));
-            wait.Until(driver => driver.FindElement(By.XPath(xPath)).Displayed);
+            wait.Until(driver => driver.FindElement(By.XPath(xPath)).Displayed && driver.FindElement(By.XPath(xPath)).Enabled);
         }
 
         public void AwaitAndClick(string xPath)
@@ -89,9 +88,14 @@ namespace Point_Adjust_Robot.Core.Tools
 
         internal bool IsVisible(string xPath)
         {
+            return IsVisible(xPath, 0.5); 
+        }
+
+        internal bool IsVisible(string xPath, double time)
+        {
             try
             {
-                Await(xPath, 0.5);
+                Await(xPath, time);
                 return true;
             }
             catch

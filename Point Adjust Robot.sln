@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Point Adjust Robot", "Point Adjust Robot\Point Adjust Robot.csproj", "{26FDB209-A1DE-4A07-B816-DF645140635C}"
-EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "frontapp", "FrontApp\frontapp.esproj", "{A729BBEF-8A29-41AF-8BAB-468B868655DF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{FE40FFD1-1E2F-41B7-BDD7-62C1725603F8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{B5E55D1F-627A-4A39-A4C0-700942F41DF9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Point Adjust Robot", "Point_Adjust_Robot\Point Adjust Robot.csproj", "{72AF6A41-A699-4FF6-A0EA-D8ADA06DC236}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +19,6 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{26FDB209-A1DE-4A07-B816-DF645140635C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26FDB209-A1DE-4A07-B816-DF645140635C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26FDB209-A1DE-4A07-B816-DF645140635C}.Debug|x64.ActiveCfg = Debug|x64
-		{26FDB209-A1DE-4A07-B816-DF645140635C}.Debug|x64.Build.0 = Debug|x64
-		{26FDB209-A1DE-4A07-B816-DF645140635C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26FDB209-A1DE-4A07-B816-DF645140635C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26FDB209-A1DE-4A07-B816-DF645140635C}.Release|x64.ActiveCfg = Release|x64
-		{26FDB209-A1DE-4A07-B816-DF645140635C}.Release|x64.Build.0 = Release|x64
 		{A729BBEF-8A29-41AF-8BAB-468B868655DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A729BBEF-8A29-41AF-8BAB-468B868655DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A729BBEF-8A29-41AF-8BAB-468B868655DF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -55,6 +47,14 @@ Global
 		{B5E55D1F-627A-4A39-A4C0-700942F41DF9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B5E55D1F-627A-4A39-A4C0-700942F41DF9}.Release|x64.ActiveCfg = Release|x64
 		{B5E55D1F-627A-4A39-A4C0-700942F41DF9}.Release|x64.Build.0 = Release|x64
+		{72AF6A41-A699-4FF6-A0EA-D8ADA06DC236}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72AF6A41-A699-4FF6-A0EA-D8ADA06DC236}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72AF6A41-A699-4FF6-A0EA-D8ADA06DC236}.Debug|x64.ActiveCfg = Debug|x64
+		{72AF6A41-A699-4FF6-A0EA-D8ADA06DC236}.Debug|x64.Build.0 = Debug|x64
+		{72AF6A41-A699-4FF6-A0EA-D8ADA06DC236}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72AF6A41-A699-4FF6-A0EA-D8ADA06DC236}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72AF6A41-A699-4FF6-A0EA-D8ADA06DC236}.Release|x64.ActiveCfg = Release|x64
+		{72AF6A41-A699-4FF6-A0EA-D8ADA06DC236}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

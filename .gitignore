@@ -8,6 +8,8 @@ PointAdjustRobotAPI/bin
 bin/
 obj/
 obj/Docker
+Point_Adjust_Robot/.vs/
+/.vs
 
 # Quasar core related directories
 .quasar
@@ -37,3 +39,4 @@ yarn-error.log*
 *.sln
 *.cache
 *.vsidx
+*.user

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using OpenQA.Selenium.DevTools;
+using Point_Adjust_Robot;
 using PointAdjustRobotAPI.Model;
 using Sentry;
 using System.Diagnostics;
@@ -36,9 +37,11 @@ namespace PointAdjustRobotAPI.Service
 
         private async static void Send(string key, string errorMessage, string step, string infoMessage, string methodName)
         {
+            
             try
             {
                 Log logData = new Log();
+                logData.systemInfo = SystemInfo.Version;
                 logData.info = key;
                 logData.apiName = "PointAdjustRobotAPI";
                 logData.data = infoMessage;
@@ -63,7 +66,7 @@ namespace PointAdjustRobotAPI.Service
                 fileName = logData.level + "-" + key + "-" + DateTime.Now.ToString("yyyy-MM-dd [HH-mm-ss.fff]") + ".txt";
                 file = System.IO.File.AppendText(path + "\\" + fileName);
                 await file.WriteAsync(logContent);
-                SentrySdk.CaptureMessage(logContent);
+                SentrySdk.CaptureMessage(logData.level + " " + logContent);
                 file.Close();
 
                 return;

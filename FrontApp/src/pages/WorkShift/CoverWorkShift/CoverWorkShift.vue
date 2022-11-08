@@ -190,7 +190,7 @@ export default {
         this.handleError(e)
         return;
       }
-
+      this.$store.commit("callStopJob", false)
       let finish = this.working("Preparando iniciar...");
       this.$api
         .post(`/SetCoverWorkshift`, command)

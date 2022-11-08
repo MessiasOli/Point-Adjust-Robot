@@ -173,18 +173,6 @@ namespace Tests
             Assert.True(useCase.result.message.Contains(" registros inseridos"));
         }
 
-        //[Fact, Order(3)]
-        public void _04_TestManyData()
-        {
-            List<WorkShiftAdjustment> data = GetData();
-
-            var useCase = WorkShiftFactory.GetAdjustiment(data);
-
-            useCase.DoWork();
-            Assert.True(useCase.result.message.Contains(" registros inseridos em "));
-            this._02_CancelAdjust();
-        }
-
         private List<WorkShiftAdjustment> GetData()
         {
             var date = this.validDate(-4);
@@ -662,19 +650,31 @@ namespace Tests
             return date;
         }
 
-        [Theory]
+        [Theory, Order(3)]
         [InlineData(0, "29/10/2022", "28/10/2022")]
         [InlineData(-1, "29/10/2022", "27/10/2022")]
         [InlineData(-2, "29/10/2022", "26/10/2022")]
         [InlineData(-3, "29/10/2022", "25/10/2022")]
         [InlineData(-4, "29/10/2022", "24/10/2022")]
-        public void validDateTest(int days, string expect, string result)
+        public void _04_ValidDateTest(int days, string expect, string result)
         {
             var date = validDate(days, expect);
             Assert.Equal(date.ToString("dd/MM/yyyy"), result);
         }
 
         public string FormatDate(DateTime date) => date.ToString("dd/MM/yyyy");
+
+        //[Fact, Order(4)]
+        public void _05_TestManyData()
+        {
+            List<WorkShiftAdjustment> data = GetData();
+
+            var useCase = WorkShiftFactory.GetAdjustiment(data);
+
+            useCase.DoWork();
+            Assert.True(useCase.result.message.Contains(" registros inseridos em "));
+            this._02_CancelAdjust();
+        }
 
         public void GetAdjust()
         {

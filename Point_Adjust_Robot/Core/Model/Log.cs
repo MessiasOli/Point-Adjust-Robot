@@ -2,6 +2,7 @@
 {
     public class Log
     {
+        public string systemInfo { get; set; }
         public string timeStamp { get; set; }
         public string level { get; set; }
         public string message { get; set; }

@@ -30,16 +30,16 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                 step = "Limpando mensagem de anuncios.";
                 tools.CleanAd();
 
-                Thread.Sleep(300);
-                step = "Clicando em filtrar";
+                Thread.Sleep(1000);
+                step = "Clicando no ícone filtro, para encontrar um colaborador.";
                 var xPathFilter = "/html/body/core-main/div/div[2]/div[1]/div/div[1]/div[2]/div/div/div[1]/div[1]/div[2]/i";
                 tools.AwaitAndClick(xPathFilter);
 
                 step = "Remove filtros pré selecionados.";
                 if (tools.IsVisible("/html/body/core-main/div/searchfilter/div/div[1]/div[2]/div[3]/div/div[1]/a"))
                 {
-                    var yPathFiltered = "/html/body/core-main/div/searchfilter/div/div[1]/div[2]/div[3]/div/div[1]";
-                    foreach (var filtered in driver.FindElements(By.XPath(yPathFiltered)))
+                    var xPathFiltered = "/html/body/core-main/div/searchfilter/div/div[1]/div[2]/div[3]/div/div[1]";
+                    foreach (var filtered in driver.FindElements(By.XPath(xPathFiltered)))
                     {
                         filtered.FindElement(By.ClassName("item_close")).Click();
                     }
@@ -60,6 +60,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
 
                 step = "Aguardando ir para mesa de operações.";
                 tools.Await(xPathFilter);
+                Thread.Sleep(2500);
 
                 var pathFilter = "/html/body/core-main/div/div[2]/div[1]/div/div[1]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/div/div/div[2]/div[3]/div/div[1]/div/div[1]/div/div[1]/input";
                 if (tools.IsVisible(pathFilter))

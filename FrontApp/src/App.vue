@@ -91,7 +91,8 @@ export default defineComponent({
             color: "negative",
           },
         })
-        .onCancel((_) => {
+        .onCancel((event) => {
+          console.log("🦾🤖 >> event", event)
           setTimeout(() => {
             if (allReady) {
               this.$store.commit("callStopJob", true);

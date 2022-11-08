@@ -34,14 +34,14 @@ const GridAdjust = {
   ],
   rows: [
     {
-      "matriculation": "1680",
+      "matriculation": "X000001",
       "date": "03/11/2022",
       "hour": "08:45",
       "reference": "03/11/2022",
       "justification": "Outros",
       "note": "teste",
       "index": "1",
-      "replaceTime": "23:59"
+      "replaceTime": ""
     },
     {
       "matriculation": "X000001",

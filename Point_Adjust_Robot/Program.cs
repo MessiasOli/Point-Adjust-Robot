@@ -1,17 +1,17 @@
 using Point_Adjust_Robot.Controllers;
 using System.Globalization;
-//using Sentry;
+using Sentry;
 
-//using (SentrySdk.Init(o =>
-//{
-//    o.Dsn = "https://049c3391ea74466b90039be81f529cfc@o4504115449495552.ingest.sentry.io/4504120015585280";
-//    o.MaxBreadcrumbs = 50;
-//    o.Debug = true;
-//    // Enable Global Mode if running in a client app
-//    o.IsGlobalModeEnabled = true;
-//    o.TracesSampleRate = 1.0;
-//}))
-//{
+using (SentrySdk.Init(o =>
+{
+    o.Dsn = "https://049c3391ea74466b90039be81f529cfc@o4504115449495552.ingest.sentry.io/4504120015585280";
+    o.MaxBreadcrumbs = 50;
+    o.Debug = true;
+    // Enable Global Mode if running in a client app
+    o.IsGlobalModeEnabled = true;
+    o.TracesSampleRate = 1.0;
+}))
+{
     var builder = WebApplication.CreateBuilder(args);
 
     // Add services to the container.
@@ -59,4 +59,4 @@ using System.Globalization;
 
     app.Run();
 
-//}
+}

@@ -173,11 +173,10 @@ export default {
       try {
         commandAdjust = new CommandAdjust(data);
       } catch (e){
-        console.log("🦾🤖 >> e", e)
         this.handleError(e)
         return;
       }
-
+      this.$store.commit("callStopJob", false)
       let finish = this.working("Preparando inicio...");
       this.$api
         .post(`/adjustworkshift`, commandAdjust)
