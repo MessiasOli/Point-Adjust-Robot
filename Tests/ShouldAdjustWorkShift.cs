@@ -16,8 +16,9 @@ namespace Tests
 {
     public class ShouldAdjustWorkShift
     {
-        [Fact, Order(0)]
-        public void _01_TestAdjust()
+        [Fact]
+        [Order(1)]
+        public void _a1_TestAdjust()
         {
            var date = this.validDate(-3);
 
@@ -68,10 +69,12 @@ namespace Tests
 
             useCase.DoWork();
             Assert.True(useCase.result.message.Contains(" registros inseridos"));
+            useCase.Dispose();
         }
 
-        [Fact, Order(1)]
-        public void _02_CancelAdjust()
+        [Fact]
+        [Order(2)]
+        public void _a2_CancelAdjust()
         {
             var date = this.validDate(-3);
 
@@ -126,10 +129,12 @@ namespace Tests
 
             useCase.DoWork();
             Assert.True(useCase.result.message.Contains(" registros inseridos"));
+            useCase.Dispose();
         }
 
-        [Fact, Order(2)]
-        public void _03_TestAdjustTime()
+        [Fact]
+        [Order(3)]
+        public void _a3_TestAdjustTime()
         {
             var date = this.validDate(-3);
 
@@ -171,6 +176,7 @@ namespace Tests
 
             useCase.DoWork();
             Assert.True(useCase.result.message.Contains(" registros inseridos"));
+            useCase.Dispose();
         }
 
         private List<WorkShiftAdjustment> GetData()
@@ -650,13 +656,14 @@ namespace Tests
             return date;
         }
 
-        [Theory, Order(3)]
+        [Theory]
+        [Order(4)]
         [InlineData(0, "29/10/2022", "28/10/2022")]
         [InlineData(-1, "29/10/2022", "27/10/2022")]
         [InlineData(-2, "29/10/2022", "26/10/2022")]
         [InlineData(-3, "29/10/2022", "25/10/2022")]
         [InlineData(-4, "29/10/2022", "24/10/2022")]
-        public void _04_ValidDateTest(int days, string expect, string result)
+        public void _a4_ValidDateTest(int days, string expect, string result)
         {
             var date = validDate(days, expect);
             Assert.Equal(date.ToString("dd/MM/yyyy"), result);
@@ -665,7 +672,7 @@ namespace Tests
         public string FormatDate(DateTime date) => date.ToString("dd/MM/yyyy");
 
         //[Fact, Order(4)]
-        public void _05_TestManyData()
+        public void _a5_TestManyData()
         {
             List<WorkShiftAdjustment> data = GetData();
 
@@ -673,7 +680,7 @@ namespace Tests
 
             useCase.DoWork();
             Assert.True(useCase.result.message.Contains(" registros inseridos em "));
-            this._02_CancelAdjust();
+            this._a2_CancelAdjust();
         }
 
         public void GetAdjust()

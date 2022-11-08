@@ -35,7 +35,7 @@ namespace Point_Adjust_Robot.Core.Model
         protected void Initialize()
         {
             if (frontSettings.showChrome)
-                options.AddArguments("--window-size=1536,929");
+                options.AddArguments("--start-fullscreen");
             else
                 options.AddArguments("--headless", "--window-size=1536,929");
 
@@ -62,9 +62,13 @@ namespace Point_Adjust_Robot.Core.Model
 
         public virtual void Dispose()
         {
-            driver.Quit();
-            cmd.Close();
-            cmd.Dispose();
+            try
+            {
+                driver.Quit();
+                cmd.Close();
+                cmd.Dispose();
+            }
+            catch { }
         }
 
         public virtual IUseCase<T> DoWork()

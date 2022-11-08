@@ -75,7 +75,7 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
 
                         if (countToRelog == 0)
                         {
-                            driver.Quit();
+                            this.Dispose();
                             this.Initialize();
                             login = new Login(driver, frontSettings.user, frontSettings.password);
                             tools = new WebDriverTools(driver);
@@ -117,12 +117,13 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
                         step = "Procurando a hora para subistituição na tabela calendário";
                         if (foundElementToEdit){
                             foundElementToEdit = false;
-
                             tools.Await("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[2]/div/div[2]/div[2]/div[2]/div[1]");
                             foreach (var elDate in driver.FindElements(By.ClassName("row_day")).ToList())
                             {
                                 string text = elDate.Text;
+
                                 if (!(text.Contains(day) && text.Contains(hourFound))) continue;
+
                                 foreach(var elTime in elDate.FindElements(By.ClassName("time")).ToList())
                                 {
                                     text = elTime.Text;
