@@ -16,13 +16,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Setup .NET
+    - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 4.7.2, 6.0.x
+        dotnet-version: 6.0.401
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build "Point-Adjust-Robot/Point-Adjust-Robot/Point_Adjust_Robot/Point Adjust Robot.csproj"
+      run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
