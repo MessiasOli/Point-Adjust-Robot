@@ -18,8 +18,8 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
 
         public Login(IWebDriver driver, string user, string key) : this(driver)
         {
-            this.user = String.IsNullOrEmpty(user) ? this.user : user;
-            this.key = String.IsNullOrEmpty(key) ? this.key : key;
+            this.user = String.IsNullOrWhiteSpace(user) ? this.user : user;
+            this.key = String.IsNullOrWhiteSpace(key) ? this.key : key;
         }
 
         public bool result { get; set; } = true;

@@ -2,24 +2,15 @@
   <div padding>
     <div class="header">
       <h6>Ajuste de Marcação</h6>
-      <q-input v-model="search" filled placeholder="Search">
+      <q-input v-model="search" filled placeholder="Filtrar">
         <template v-slot:append>
           <q-icon name="search" />
         </template>
       </q-input>
     </div>
 
-    <v-grid
-      ref="table"
-      class="table"
-      theme="compact"
-      :source="rows"
-      :columns="columns"
-      :options="options"
-      :range="true"
-      @afteredit="updateRows"
-      @afterfocus="updateRows"
-    ></v-grid>
+    <div class="grid-adjust"></div>
+
     <div class="footer">
       <div>
         <q-badge outline transparent align="middle" color="primary">
@@ -64,7 +55,7 @@
 </template>
 
 <script>
-import VGrid from "@revolist/vue3-datagrid";
+import * as cheetahGrid from "cheetah-grid";
 import GridAdjust from "./gridConfig";
 import CommandAdjust from "../../../model/commands/CommandAdjust";
 import { MixinWorkShift } from "../mixinWorkShift";
@@ -73,12 +64,10 @@ export default {
   name: "AdjustWorkshift",
   mixins: [ MixinWorkShift ],
   inject: ["showMessage", "showWarning", "dialog", "working"],
-  components: {
-    VGrid,
-  },
 
   data() {
     return {
+      grid: {},
       columns: GridAdjust.columns,
       rows: [],
       rowsBkp: [],
@@ -90,36 +79,38 @@ export default {
   },
 
   watch: {
-    search(filter, lastFilter) {
+    search(filter) {
       if (!filter) {
         this.rows = this.rowsBkp;
+        this.setGrid();
         return;
       }
-
-      if (!lastFilter) this.rowsBkp = this.$refs.table.source;
 
       let filterUpper = filter.toUpperCase();
       this.rows = this.rowsBkp.filter((d) => {
         return (
-          d.matriculation.toUpperCase().includes(filterUpper) ||
-          d.data.toUpperCase().includes(filterUpper) ||
-          d.hour.toUpperCase().includes(filterUpper) ||
-          d.reference.toUpperCase().includes(filterUpper) ||
-          d.justification.toUpperCase().includes(filterUpper) ||
-          d.note.toUpperCase().includes(filterUpper)
+          d.matriculation && d.matriculation.toUpperCase().includes(filterUpper) ||
+          d.data && d.data.toUpperCase().includes(filterUpper) ||
+          d.hour && d.hour.toUpperCase().includes(filterUpper) ||
+          d.reference && d.reference.toUpperCase().includes(filterUpper) ||
+          d.justification && d.justification.toUpperCase().includes(filterUpper) ||
+          d.note && d.note.toUpperCase().includes(filterUpper)
         );
       });
+      this.Add1000Lines();
+      this.setGrid();
     },
   },
 
   methods: {
     updateRows(){
-      this.saveAdjustWorkshift(this.$refs.table.source)
+      this.saveAdjustWorkshift(this.grid.records)
     },
 
     addLines() {
       this.Add1000Lines();
       this.showMessage("1000 novas linhas adicionadas!", "success");
+      this.setGrid()
     },
 
     Add1000Lines() {
@@ -139,6 +130,7 @@ export default {
       this.saveAdjustWorkshift([])
       this.Add1000Lines();
       this.showMessage("Tabela limpa!", "success");
+      this.setGrid();
     },
 
     showDialog() {
@@ -157,6 +149,7 @@ export default {
             this.rowsBkp = untreatedData
             this.Add1000Lines();
             this.showMessage(`Tabela atualizada, ${res.data.completed} concluídos, restando ${this.rows.filter(i => i.matriculation != "").length} com falha.`);
+            this.setGrid();
           }
         }).catch(console.error);
     },
@@ -194,16 +187,40 @@ export default {
           finish("Falha ao executar a inserção dos dados!", "falha");
         });
     },
+
+    createGrid() {
+      this.grid = new cheetahGrid.ListGrid({
+        parentElement: document.querySelector(".grid-adjust"),
+        allowRangePaste: true,
+        header: GridAdjust.columns,
+        defaultRowHeight: GridAdjust.defaultRowHeight,
+        headerRowHeight: GridAdjust.headerRowHeight
+      });
+      this.grid.theme = "BASIC";
+    },
+
+    setGrid(table = this.rows) {
+      this.grid.records = table;
+    },
   },
   mounted() {
-    setTimeout(() => {
-      this.rows = this.getAdjustWorkshift();
-      this.rows = this.rows.length > 0 ? this.rows : GridAdjust.rows
-      this.Add1000Lines()
-    })
+    this.createGrid();
+    this.rowsBkp = this.getAdjustWorkshift();
+    this.rowsBkp = this.rowsBkp.length > 0 ? this.rowsBkp : GridAdjust.rows
+    this.rows = this.rowsBkp;
+    this.Add1000Lines()
+    this.setGrid()
   },
 };
 </script>
+
+<style>
+.grid-adjust .cheetah-grid__inline-menu--shown{
+  top: 40px !important;
+  max-height: 407px;
+  min-width: 235px;
+}
+</style>
 
 <style scoped>
 .header {
@@ -216,7 +233,7 @@ h6 {
   margin: 20px 8px;
 }
 
-.table {
+.grid-adjust {
   height: calc(100% - 130px);
 }
 

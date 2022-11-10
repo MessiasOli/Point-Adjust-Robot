@@ -1,105 +1,142 @@
+import * as cheetahGrid from "cheetah-grid";
+
+var reasonOptions = [
+  { value: null, caption: "Vazio" },
+  { value: "Aguardo de Processamento RH definitivo", caption: "Aguardo de Processamento RH definitivo" },
+  { value: "Ausência de colaborador", caption: "Ausência de colaborador" },
+  { value: "Cobertura de férias", caption: "Cobertura de férias" },
+  { value: "Cobertura de posto", caption: "Cobertura de posto" },
+  { value: "Hora-Extra - Não Programada Faturada", caption: "Hora-Extra - Não Programada Faturada" },
+  { value: "Hora-Extra - Não Programada Não Faturada", caption: "Hora-Extra - Não Programada Não Faturada" },
+  { value: "Hora-Extra - Programada Faturada", caption: "Hora-Extra - Programada Faturada" },
+  { value: "Hora-Extra - Programada Não Faturada", caption: "Hora-Extra - Programada Não Faturada" },
+  { value: "Implantação", caption: "Implantação" },
+];
+
+var featureOptions = [
+  { value: null, caption: "Vazio" },
+  { value: "FT", caption: "FT" },
+  { value: "HORA EXTRA", caption: "HORA EXTRA" },
+  { value: "HORA REGULAR", caption: "HORA REGULAR" },
+];
+
+var selectorReason = new cheetahGrid.columns.action.InlineMenuEditor({ options: reasonOptions, });
+var featureReason = new cheetahGrid.columns.action.InlineMenuEditor({ options: featureOptions, });
+var inputEditor = new cheetahGrid.columns.action.InlineInputEditor();
+
+var styleHeader = { textAlign: "justify", font: "15px sans-serif" };
+var styleCell = { textOverflow: "elipse" };
+
 const GridAdjust = {
-  opstions: {
-    canFocus: true,
-    range: true,
-  },
+  eventTypes: { ...cheetahGrid.ListGrid.EVENT_TYPE },
+  defaultRowHeight: 25,
+  headerRowHeight: 23,
   columns: [
     {
-      prop: "index",
-      name: "#",
-      sortable: true,
-      size: 60,
+      field: "index",
+      caption: "#",
+      width: 17,
+      headerStyle: styleHeader,
+      style: styleCell,
+      action: inputEditor
     },
     {
-      prop: "operationType",
-      name: "Tipo de Operação",
-      sortable: true,
-      size: 150,
+      field: "operationType",
+      caption: "Tipo de Operação",
+      width: "150",
+      headerStyle: styleHeader,
+      style: styleCell,
+      action: inputEditor
     },
     {
-      prop: "matriculation",
-      name: "Matrícula",
-      sortable: true,
-      size: 90,
+      field: "matriculation",
+      caption: "Matrícula",
+      width: 90,
+      action: inputEditor
     },
     {
-      prop: "client",
-      name: "Cliente",
-      sortable: true,
-      size: 80,
+      field: "client",
+      caption: "Cliente",
+      width: 180,
+      action: inputEditor
     },
     {
-      prop: "place",
-      name: "Posto",
-      sortable: true,
-      size: 100,
+      field: "place",
+      caption: "Posto",
+      width: 180,
+      action: inputEditor
     },
     {
-      prop: "reason",
-      name: "Motivo",
-      sortable: true,
-      size: 150,
+      field: "reason",
+      caption: "Motivo",
+      width: 357,
+      action: selectorReason,
     },
     {
-      prop: "hedgingFeature",
-      name: "Cobertura",
-      sortable: true,
-      size: 95,
+      field: "hedgingFeature",
+      caption: "Cobertura",
+      width: 165,
+      action: featureReason
     },
     {
-      prop: "startDate",
-      name: "Data Início",
-      sortable: true,
-      size: 110,
+      field: "startDate",
+      caption: "Data Início",
+      width: 95,
+      action: inputEditor
     },
     {
-      prop: "endDate",
-      name: "Data Fim",
-      sortable: true,
-      size: 110,
+      field: "endDate",
+      caption: "Data Fim",
+      width: 95,
+      action: inputEditor
     },
     {
-      prop: "enterTimeManually",
-      name: "Inf. Horario Man.",
-      sortable: true,
-      size: 140,
+      field: "enterTimeManually",
+      caption: "Inf. Horario Man.",
+      width: 125,
+      action: inputEditor
     },
     {
-      prop: "postCalculationProfile",
-      name: "Posto Util. no Perfil de Apur.",
-      sortable: true,
-      size: 210,
+      field: "postCalculationProfile",
+      caption: "Posto Util. no Perfil de Apur.",
+      width: 210,
+      action: inputEditor
     },
     {
-      prop: "employeeHours",
-      name: "Horario do Colaborador",
-      size: 185,
+      field: "employeeHours",
+      caption: "Horario do Colaborador",
+      width: 185,
+      action: inputEditor
     },
     {
-      prop: "entry1",
-      name: "Entrada",
-      sortable: true,
-      size: 80,
+      field: "entry1",
+      caption: "Entrada",
+      width: 65,
+      action: inputEditor
     },
     {
-      prop: "departure1",
-      name: "Saida",
-      size: 70,
+      field: "departure1",
+      caption: "Saida",
+      width: 50,
+      action: inputEditor
     },
     {
-      prop: "entry2",
-      name: "Entrada",
-      size: 80,
+      field: "entry2",
+      caption: "Entrada",
+      width: 65,
+      action: inputEditor
     },
     {
-      prop: "departure2",
-      name: "Saida",
-      size: 70,
+      field: "departure2",
+      caption: "Saida",
+      width: 50,
+      action: inputEditor
     },
     {
-      prop: "description",
-      name: "Descrição",
-      size: 270,
+      field: "description",
+      caption: "Descrição",
+      width: 270,
+      action: inputEditor
     },
   ],
   rows: [
@@ -143,25 +180,5 @@ const GridAdjust = {
     },
   ],
 };
-
-for (let i = 1; i < 1000; i++)
-  GridAdjust.rows.push({
-    operationType: "",
-    matriculation: "",
-    client: "",
-    place: "",
-    reason: "",
-    hedgingFeature: "",
-    startDate: "",
-    endDate: "",
-    enterTimeManually: "",
-    postCalculationProfile: "",
-    employeeHours: "",
-    entry1: "",
-    departure1: "",
-    entry2: "",
-    departure2: "",
-    description: "",
-  });
 
 export default GridAdjust;

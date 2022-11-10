@@ -8,17 +8,7 @@
         </template>
       </q-input>
     </div>
-    <v-grid
-      ref="table"
-      class="table"
-      theme="compact"
-      :source="rows"
-      :columns="columns"
-      :options="options"
-      :range="true"
-      @afteredit="updateRows"
-      @afterfocus="updateRows"
-    ></v-grid>
+    <div class="grid-cover"></div>
 
     <div class="footer">
       <div>
@@ -70,7 +60,7 @@
 </template>
 
 <script>
-import VGrid from "@revolist/vue3-datagrid";
+import * as cheetahGrid from "cheetah-grid";
 import GridAdjust from "./gridConfig";
 import CommandCover from "../../../model/commands/CommandCover";
 import { MixinWorkShift } from "../mixinWorkShift";
@@ -79,12 +69,13 @@ export default {
   name: "CoverWorkShift",
   mixins: [ MixinWorkShift ],
   inject: ["showMessage", "showWarning", "dialog", "working"],
-  components: {
-    VGrid,
-  },
+  // components: {
+  //   VGrid,
+  // },
 
   data() {
     return {
+      grid: {},
       columns: GridAdjust.columns,
       rows: [],
       rowsBkp: [],
@@ -99,10 +90,9 @@ export default {
     search(filter, lastFilter) {
       if (!filter) {
         this.rows = this.rowsBkp;
+        this.setGrid();
         return;
       }
-
-      if (!lastFilter) this.rowsBkp = this.$refs.table.source;
 
       let filterUpper = filter.toUpperCase();
       this.rows = this.rowsBkp.filter((d) => {
@@ -123,12 +113,14 @@ export default {
           d.hedgingFeature.toUpperCase().includes(filterUpper)
         );
       });
+      this.Add1000Lines();
+      this.setGrid();
     },
   },
 
   methods: {
     updateRows(){
-      this.saveWorkplace(this.$refs.table.source)
+      this.saveWorkplace(this.grid.records)
     },
 
     addLines() {
@@ -139,12 +131,23 @@ export default {
     Add1000Lines() {
       for (let i = 0; i < 1000; i++)
         this.rows.push({
+          index: "",
+          operationType: "",
           matriculation: "",
-          data: "",
-          hour: "",
-          reference: "",
-          justification: "",
-          note: "",
+          client: "",
+          place: "",
+          reason: "",
+          hedgingFeature: "",
+          startDate: "",
+          endDate: "",
+          enterTimeManually: "",
+          postCalculationProfile: "",
+          employeeHours: "",
+          entry1: "",
+          departure1: "",
+          entry2: "",
+          departure2: "",
+          description: "",
         });
     },
 
@@ -153,6 +156,7 @@ export default {
       this.saveWorkplace([])
       this.Add1000Lines();
       this.showMessage("Tabela limpa!", "success");
+      this.setGrid();
     },
 
     showDialog() {
@@ -171,6 +175,7 @@ export default {
             this.rowsBkp = untreatedData
             this.Add1000Lines();
             this.showMessage(`Tabela atualizada, ${res.data.completed} concluídos, restando ${this.rows.filter(i => i.matriculation != "").length} com falha.`);
+            this.setGrid();
           }
         }).catch(console.error);
     },
@@ -208,17 +213,41 @@ export default {
           finish("Falha ao executar a inserção dos dados!", "falha");
         });
     },
+
+    createGrid() {
+      this.grid = new cheetahGrid.ListGrid({
+        parentElement: document.querySelector(".grid-cover"),
+        allowRangePaste: true,
+        header: GridAdjust.columns,
+        defaultRowHeight: GridAdjust.defaultRowHeight,
+        headerRowHeight: GridAdjust.headerRowHeight
+      });
+      this.grid.theme = "BASIC";
+    },
+
+    setGrid(table = this.rows) {
+      this.grid.records = table;
+    },
   },
 
   mounted() {
-    setTimeout(() => {
-      this.rows = this.getWorkplace();
-      this.rows = this.rows.length > 0 ? this.rows : GridAdjust.rows
-      this.Add1000Lines()
-    })
+    this.createGrid();
+    this.rowsBkp = this.getWorkplace();
+    this.rowsBkp = this.rowsBkp.length > 0 ? this.rowsBkp : GridAdjust.rows
+    this.rows = this.rowsBkp;
+    this.Add1000Lines()
+    this.setGrid()
   },
 };
 </script>
+
+<style>
+.grid-cover .cheetah-grid__inline-menu--shown{
+  top: 40px !important;
+  max-height: 407px;
+  min-width: 235px;
+}
+</style>
 
 <style scoped>
 .header {
@@ -231,7 +260,7 @@ h6 {
   margin: 20px 8px;
 }
 
-.table {
+.grid-cover {
   height: calc(100% - 130px);
 }
 

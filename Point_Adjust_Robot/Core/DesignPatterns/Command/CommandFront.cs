@@ -15,7 +15,7 @@ namespace Point_Adjust_Robot.Core.DesignPatterns.Command
 
         public FrontSettings GetFrontSettings()
         {
-            if (!String.IsNullOrEmpty(settings))
+            if (!String.IsNullOrWhiteSpace(settings))
             {
                 var settingsDecripted = Convert.FromBase64String(settings);
                 string settingsJson = System.Text.Encoding.UTF8.GetString(settingsDecripted);

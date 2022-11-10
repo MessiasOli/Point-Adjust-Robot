@@ -1,15 +1,6 @@
-﻿using Microsoft.VisualBasic;
-using Microsoft.Win32;
-using OpenQA.Selenium.DevTools.V104.Database;
-using Point_Adjust_Robot.Core.Model;
+﻿using Point_Adjust_Robot.Core.Model;
 using PointAdjustRobotAPI.Core.Factories;
 using Repository.Nexti;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit.Extensions.Ordering;
 
 namespace Tests

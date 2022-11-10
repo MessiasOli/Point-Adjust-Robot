@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Remote;
 using Point_Adjust_Robot.Controllers;
 using Point_Adjust_Robot.Core.DesignPatterns.Command;
@@ -39,21 +40,34 @@ namespace Point_Adjust_Robot.Core.Model
             else
                 options.AddArguments("--headless", "--window-size=1536,929");
 
+            options.AddArguments("disable-infobars"); // disabling infobars
+            options.AddArguments("--disable-extensions"); // disabling extensions
+            options.AddArguments("--disable-gpu"); // applicable to windows os only
+            options.AddArguments("--disable-dev-shm-usage"); // overcome limited resource problems
+            options.AddArguments("--no-sandbox"); // Bypass OS security model
+
             var path = Directory.GetCurrentDirectory();
             path = path.Contains("Test") ?
                 Directory.GetParent(Directory.GetParent(Directory.GetParent(Directory.GetParent(path).ToString()).ToString()).ToString()).ToString() :
                 Directory.GetParent(path).ToString();
-            path += "\\Files\\";
+            path += "\\Files\\chromedriver.exe";
 
-            var uri = new Uri("http://localhost:9515/");
-            ProcessStartInfo pro = new ProcessStartInfo();
-            pro.FileName = path + "\\chromedriver.exe";
-            cmd = new Process();
-            cmd.StartInfo = pro;
-            cmd.Start();
-            Thread.Sleep(1500);
+            //cmd = Process.Start("CMD.exe", $"/C cd {path} | start chromedriver.exe");
 
-            driver = new RemoteWebDriver(uri, options);
+            Environment.SetEnvironmentVariable("webdriver_manager.chrome", path);
+            //ProcessStartInfo pro = new ProcessStartInfo();
+            //pro.FileName = path;
+            //cmd = new Process();
+            //cmd.StartInfo = pro;
+            //cmd.Start();
+            //Thread.Sleep(700);
+            //cmd.Start();
+            //Thread.Sleep(700);
+
+            //var uri = new Uri("http://localhost:9515/");
+            //driver = new RemoteWebDriver(uri, options);
+
+            driver = new ChromeDriver(options);
 
             js = (IJavaScriptExecutor)driver;
         }
@@ -65,8 +79,8 @@ namespace Point_Adjust_Robot.Core.Model
             try
             {
                 driver.Quit();
-                cmd.Close();
-                cmd.Dispose();
+                //cmd.Close();
+                //cmd.Dispose();
             }
             catch { }
         }

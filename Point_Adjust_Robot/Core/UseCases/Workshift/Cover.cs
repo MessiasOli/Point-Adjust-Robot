@@ -144,12 +144,14 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                         var date = driver.FindElement(By.XPath("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[2]/div[1]/div[2]/div[1]/div[2]/div[1]/div/datepicker/p/input"));
                         date.Clear();
                         date.SendKeys(workShift.startDate);
+                        date.SendKeys(Keys.Enter);
 
                         step = "Inserindo fim de date.";
                         inputData = tools.GetElement("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[2]/div[1]/div[2]/div[1]/div[2]/div[2]/div/datepicker/p/input");
                         inputData.Click();
                         inputData.Clear();
                         inputData.SendKeys(workShift.endDate);
+                        inputData.SendKeys(Keys.Enter);
                         date.Click();
 
                         step = "Verificando informação manual";
@@ -178,25 +180,19 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                             values = workShift.entry2.Split(":");
                             inputData.SendKeys(values[0]);
                             inputData.SendKeys(values[1]);
+                            inputData.SendKeys(Keys.Enter);
 
                             step = "Inserindo Saida 2";
                             inputData = driver.FindElement(By.XPath("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[2]/div[1]/div[2]/div[1]/div[2]/div[5]/div[4]/timepicker/input"));
                             inputData.Clear();
                             values = workShift.departure2.Split(":");
+                            inputData.Click();
                             inputData.SendKeys(values[0]);
                             inputData.SendKeys(values[1]);
                         }
 
-                        IWebElement inputDataToClick;
-                        {
-                            step = "Descendo a página";
-                            path = "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[2]";
-                            inputDataToClick = tools.GetElement(path);
-                            inputDataToClick.SendKeys(Keys.PageDown);
-                        }
-
                         step = "Inserindo horário do colaborador";
-                        if (!String.IsNullOrEmpty(workShift.employeeHours))
+                        if (!String.IsNullOrWhiteSpace(workShift.employeeHours))
                         {
                             inputData = driver.FindElement(By.XPath("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[2]/div[1]/div[2]/div[1]/div[2]/div[5]/div/autocomplete/div/div/input"));
                             inputData.Click();
@@ -206,8 +202,17 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                         }
 
                         step = "Selecionando o Motivo.";
-                        var select = new SelectElement(driver.FindElement(By.XPath("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div/div/select")));
+                        var selectElement = driver.FindElement(By.XPath("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div/div/select"));
+                        var select = new SelectElement(selectElement);
                         select.SelectByText(workShift.reason);
+
+                        IWebElement inputDataToClick;
+                        {
+                            step = "Descendo a página";
+                            path = "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[2]";
+                            inputDataToClick = tools.GetElement(path);
+                            inputDataToClick.SendKeys(Keys.PageDown);
+                        }
 
                         step = "Selecionando recurso da Cobertura.";
                         inputDataToClick = driver.FindElement(By.XPath("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[2]/div[1]/div[2]/div[3]/div/div/div/select"));
@@ -220,11 +225,11 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
 
                         step = "Inserindo descrição";
                         inputData = driver.FindElement(By.XPath("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[2]/div[1]/div[2]/div[4]/div/textarea"));
-                        inputData.Click();
                         inputData.Clear();
                         inputData.SendKeys(workShift.description);
 
-                        driver.FindElement(By.XPath("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[2]/div[1]/div[2]/div[5]")).Click();
+                        step = "Clicando em confimar";
+                        tools.AwaitAndClick("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[2]/div[1]/div[2]/div[5]");
 
                         step = "verificando retorno";
                         var el = tools.GetElement("/html/body/core-main/div/div[2]/div[1]/div/div[1]/notifications/div");

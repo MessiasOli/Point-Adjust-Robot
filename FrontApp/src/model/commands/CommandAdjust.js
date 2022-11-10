@@ -3,6 +3,9 @@ import Command from "./Command";
 export default class CommandAdjust extends Command {
   constructor(workShiftAdjustments = Array) {
     super();
+    let adjustdata = JSON.stringify(workShiftAdjustments).replace(/\\[nrt]/, "").replace(/\s\s/, /\s/)
+    workShiftAdjustments = JSON.parse(adjustdata)
+
     this.workShiftAdjustments = workShiftAdjustments.map(a =>
       ({
         ...a,

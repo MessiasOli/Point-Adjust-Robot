@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using OpenQA.Selenium.DevTools.V104.Debugger;
 using Point_Adjust_Robot.Core.Model;
 using PointAdjustRobotAPI.Service;
 using System.Net.Http.Headers;

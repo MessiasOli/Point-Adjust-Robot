@@ -89,7 +89,7 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
                         worker.StartWorkShift(keyJob, workShift);
 
                         step = "Ajustando dados";
-                        workShift.note = String.IsNullOrEmpty(workShift.note) ? "Nada a declarar." : workShift.note;
+                        workShift.note = String.IsNullOrWhiteSpace(workShift.note) ? "Nada a declarar." : workShift.note;
 
                         step = "Buscando usuário";
                         Thread.Sleep(1000);
@@ -109,7 +109,7 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
 
                         step = "Ajustando dados para procurar a hora no calendário";
                         string day = workShift.date.Split("/")[0] + " - ";
-                        bool foundElementToEdit = !String.IsNullOrEmpty(workShift.replaceTime.Trim());
+                        bool foundElementToEdit = !String.IsNullOrWhiteSpace(workShift.replaceTime.Trim());
                         var (hourFound, deletePoint) = workShift.replaceTime.ToLower().Contains("cancelar") ? 
                                                     (workShift.hour, true) : 
                                                     (workShift.replaceTime, false);
@@ -207,6 +207,7 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
                         driver.FindElement(By.Id("note")).SendKeys(workShift.note);
 
                         step = "Confirmando o formulário.";
+                        Thread.Sleep(700);
                         driver.FindElement(By.LinkText("Confirmar")).Click();
 
                         step = "Verificando retorno ao finalizar a requisição.";

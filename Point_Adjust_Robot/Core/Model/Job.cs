@@ -1,6 +1,4 @@
-﻿using OpenQA.Selenium.DevTools.V104.Profiler;
-using Point_Adjust_Robot.Core.Tools;
-using System.Collections.Generic;
+﻿using Point_Adjust_Robot.Core.Tools;
 
 namespace Point_Adjust_Robot.Core.Model
 {
