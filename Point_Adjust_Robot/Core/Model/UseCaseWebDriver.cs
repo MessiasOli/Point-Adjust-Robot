@@ -54,20 +54,15 @@ namespace Point_Adjust_Robot.Core.Model
 
             //cmd = Process.Start("CMD.exe", $"/C cd {path} | start chromedriver.exe");
 
-            Environment.SetEnvironmentVariable("webdriver_manager.chrome", path);
-            //ProcessStartInfo pro = new ProcessStartInfo();
-            //pro.FileName = path;
-            //cmd = new Process();
-            //cmd.StartInfo = pro;
-            //cmd.Start();
-            //Thread.Sleep(700);
-            //cmd.Start();
-            //Thread.Sleep(700);
+            ProcessStartInfo pro = new ProcessStartInfo();
+            pro.FileName = path;
+            cmd = new Process();
+            cmd.StartInfo = pro;
+            cmd.Start();
+            Thread.Sleep(1000);
 
-            //var uri = new Uri("http://localhost:9515/");
-            //driver = new RemoteWebDriver(uri, options);
-
-            driver = new ChromeDriver(options);
+            var uri = new Uri("http://localhost:9515/");
+            driver = new RemoteWebDriver(uri, options);
 
             js = (IJavaScriptExecutor)driver;
         }

@@ -229,7 +229,11 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
                         var infoMessage = JsonConvert.SerializeObject(workShift, Formatting.Indented);
                         worker.SetWorkShiftError(keyJob, (step + " " + infoMessage), workShift);
                         WriterLog.Write(e, workShift.matriculation, step, infoMessage, "Adjustment");
-                        SentrySdk.CaptureException(e);
+                        try
+                        {
+                            SentrySdk.CaptureException(e);
+                        }
+                        catch { }
                     }
                 }
 
@@ -246,7 +250,11 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
                 this.result.message = "Erro execução da requisição.";
                 this.worker.FinishJobWithError(keyJob, e, JsonConvert.SerializeObject(this.result.content, Formatting.Indented));
                 WriterLog.WriteError(e, "Metodo", step, this.result.message, "Adjustment");
-                SentrySdk.CaptureException(e);
+                try
+                {
+                    SentrySdk.CaptureException(e);
+                }
+                catch { }
             }
             finally
             {

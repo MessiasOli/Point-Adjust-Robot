@@ -13,7 +13,6 @@
     <div class="footer">
       <div>
         <q-badge
-          v-if="lastUpdate"
           outline
           transparent
           align="middle"

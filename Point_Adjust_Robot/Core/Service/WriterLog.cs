@@ -66,7 +66,12 @@ namespace PointAdjustRobotAPI.Service
                 fileName = logData.level + "-" + key + "-" + DateTime.Now.ToString("yyyy-MM-dd [HH-mm-ss.fff]") + ".txt";
                 file = System.IO.File.AppendText(path + "\\" + fileName);
                 await file.WriteAsync(logContent);
-                SentrySdk.CaptureMessage(logData.level + " " + logContent);
+                try
+                {
+                    SentrySdk.CaptureMessage(logData.level + " " + logContent);
+                }
+                catch {}
+
                 file.Close();
 
                 return;
