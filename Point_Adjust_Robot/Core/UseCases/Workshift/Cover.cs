@@ -102,13 +102,12 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
 
                         AdRemove();
 
-                        Thread.Sleep(1000);
                         step = "Clicando Em filtro";
                         path = "/html/body/core-main/div/searchfilter/div/div[1]/div[2]/div[4]/a[2]";
                         tools.AwaitAndClick(path);
 
                         step = "Buscando campo para atribuir cobertura de posto";
-                        Thread.Sleep(1000);
+                        Thread.Sleep(3500);
                         path = "/html/body/core-main/div/div[2]/div[1]/div/div[1]/div[2]/div/div/div[2]/div[1]/div/div[2]/div/div/div/div[1]/div/div/div[1]";
                         tools.AwaitAndClick(path);
 
@@ -116,9 +115,9 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
 
                         path = "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[1]/ul/li[4]/a";
                         tools.AwaitAndClick(path);
+                        Thread.Sleep(1000);
 
                         AdRemove();
-                        Thread.Sleep(1000);
                         step = "Clicando em plus";
                         path = "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[2]/div/div[2]/div[2]/span";
                         tools.AwaitAndClick(path);
