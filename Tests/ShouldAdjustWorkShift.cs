@@ -7,7 +7,7 @@ namespace Tests
 {
     public class ShouldAdjustWorkShift
     {
-        [Fact]
+        //[Fact]
         [Order(1)]
         public void _a1_TestAdjust()
         {
@@ -63,7 +63,7 @@ namespace Tests
             useCase.Dispose();
         }
 
-        [Fact]
+        //[Fact]
         [Order(2)]
         public void _a2_CancelAdjust()
         {
@@ -123,7 +123,7 @@ namespace Tests
             useCase.Dispose();
         }
 
-        [Fact]
+        //[Fact]
         [Order(3)]
         public void _a3_TestAdjustTime()
         {
