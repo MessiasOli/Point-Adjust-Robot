@@ -2,7 +2,7 @@
 {
     public static class Utilities
     {
-        public static string GetDifMinutes(string start, string final)
+        public static string GetDifMinutes  (string start, string final)
         {
             return GetDifMinutes(DateTime.ParseExact(start, "dd/MM/yyyy HH:mm:ss", null), DateTime.ParseExact(final, "dd/MM/yyyy HH:mm:ss", null));
         }

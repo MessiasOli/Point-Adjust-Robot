@@ -5,7 +5,7 @@ namespace Tests
 {
     public class ShouldGetAdjustWorkshiftInAPI
     {
-        [Fact]  
+        //[Fact]  
         public void GetAdjustId()
         {
             var repository = new PersonsRepository();
