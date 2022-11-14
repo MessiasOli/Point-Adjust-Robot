@@ -628,7 +628,8 @@ namespace Tests
 
         public DateTime validDate(int days, string dateRef)
         {
-            var today = DateTime.Parse(dateRef);
+            var today = DateTime.ParseExact(dateRef, "dd/MM/yyyy", null);
+
 
             if (today.DayOfWeek == DayOfWeek.Saturday)
                 today = today.AddDays(-1);

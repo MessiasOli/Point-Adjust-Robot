@@ -4,7 +4,7 @@
     {
         public static string GetDifMinutes(string start, string final)
         {
-            return GetDifMinutes(DateTime.Parse(start), DateTime.Parse(final));
+            return GetDifMinutes(DateTime.ParseExact(start, "dd/MM/yyyy HH:mm:ss", null), DateTime.ParseExact(final, "dd/MM/yyyy HH:mm:ss", null));
         }
 
         public static string GetDifMinutes(DateTime start, DateTime final)
