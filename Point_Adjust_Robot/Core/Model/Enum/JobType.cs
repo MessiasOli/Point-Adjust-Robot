@@ -3,6 +3,7 @@
     public enum JobType
     {
         Replacements,
-        Workplace
+        Workplace,
+        Absence
     }
 }

@@ -1,11 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-using OpenQA.Selenium.DevTools;
+﻿using Newtonsoft.Json;
 using Point_Adjust_Robot;
-using PointAdjustRobotAPI.Model;
+using Point_Adjust_Robot.Core.Tools;
 using Sentry;
 using System.Diagnostics;
-using System.Text;
 using Log = PointAdjustRobotAPI.Model.Log;
 
 namespace PointAdjustRobotAPI.Service
@@ -56,19 +53,15 @@ namespace PointAdjustRobotAPI.Service
                 string fileName = "";
                 string logContent = "";
 
-                path = Directory.GetParent(Directory.GetCurrentDirectory()).ToString().Replace("\\Tests\\bin\\Debug", "");
-                path += "\\Log";
-
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
+                path = GetPaths.Logs();
 
                 logContent = JsonConvert.SerializeObject(logData, Formatting.Indented);
                 fileName = logData.level + "-" + key + "-" + DateTime.Now.ToString("yyyy-MM-dd [HH-mm-ss.fff]") + ".txt";
-                file = System.IO.File.AppendText(path + "\\" + fileName);
+                file = File.AppendText(path + "\\" + fileName);
                 await file.WriteAsync(logContent);
                 try
                 {
-                    SentrySdk.CaptureMessage(logData.level + " " + logContent);
+                    SentrySdk.CaptureMessage(Environment.MachineName + " - " +  logData.level + " key: " + key + " - " + logContent);
                 }
                 catch {}
 
@@ -76,8 +69,10 @@ namespace PointAdjustRobotAPI.Service
 
                 return;
             }
-            catch
+            catch(Exception e)
             {
+                Console.WriteLine("Falha - ", JsonConvert.SerializeObject(e, Formatting.Indented));
+
                 try
                 {
                     using (EventLog eventLog = new EventLog("Application"))

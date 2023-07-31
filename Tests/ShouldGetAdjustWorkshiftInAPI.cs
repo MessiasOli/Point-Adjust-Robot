@@ -3,15 +3,16 @@ using Repository.Nexti;
 
 namespace Tests
 {
+    [TestCaseOrderer("Tests.AlphabeticalOrderer", "Tests")]
     public class ShouldGetAdjustWorkshiftInAPI
     {
-        //[Fact]  
+        [Fact]  
         public void GetAdjustId()
         {
             var repository = new PersonsRepository();
             Person person = repository.GetByParams(new string[] { "X000001" }).Result;
 
-            Assert.Equal(person.name, "MESSIAS TESTE"); 
+            Assert.Equal(person.name, "MESSIAS TESTE");
         }
     }
 }

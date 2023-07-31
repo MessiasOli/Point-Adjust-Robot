@@ -28,7 +28,7 @@ var Auth = {
   getEncrypted() {
     let data = this.get();
 
-    if (!data.user || !data.password) throw "Não há usuário cadastrado.";
+    if (!data.user || !data.password) throw "Não há usuário NEXTI cadastrado.";
 
     if (localStorage._resu) return localStorage._resu;
   },

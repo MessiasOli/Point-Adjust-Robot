@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Point_Adjust_Robot.Core.Tools;
 using PointAdjustRobotAPI.Core.Interface;
 using PointAdjustRobotAPI.Model;
 using PointAdjustRobotAPI.Service;
@@ -9,7 +10,8 @@ namespace Point_Adjust_Robot.Core.UseCases.Logs
     {
         string step = "";
         public List<Log> result { get; set; } = new List<Log>();
-    
+        public string lastError { get; set; }
+
         public void Dispose()
         {
             result.Clear();
@@ -19,9 +21,8 @@ namespace Point_Adjust_Robot.Core.UseCases.Logs
         {
             try
             {
-                var path = Directory.GetParent(Directory.GetCurrentDirectory()).ToString().Replace("\\Tests\\bin\\Debug", "");
-
-                var files = Directory.GetFiles(path + "\\Log");
+                var path = GetPaths.Logs();
+                var files = Directory.GetFiles(path);
                 foreach(var file in files.ToList())
                 {
                     var text = File.ReadAllText(file);

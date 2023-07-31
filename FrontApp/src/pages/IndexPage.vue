@@ -10,6 +10,7 @@
       <q-card-actions align="left">
         <q-btn to="AdjustWorkShift" flat>Ajuste de Marcação</q-btn>
         <q-btn to="CoverWorkShift" flat>Cobertura de Posto</q-btn>
+        <q-btn to="Absence" flat>Lançar Ausência</q-btn>
       </q-card-actions>
     </q-card>
   </q-page>

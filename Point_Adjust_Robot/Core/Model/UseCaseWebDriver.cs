@@ -1,10 +1,11 @@
-﻿using OpenQA.Selenium;
+﻿using Newtonsoft.Json;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Remote;
 using Point_Adjust_Robot.Controllers;
 using Point_Adjust_Robot.Core.DesignPatterns.Command;
 using Point_Adjust_Robot.Core.Interface;
+using Point_Adjust_Robot.Core.Tools;
 using PointAdjustRobotAPI.Core.Interface;
 using System.Diagnostics;
 
@@ -13,30 +14,31 @@ namespace Point_Adjust_Robot.Core.Model
     public class UseCaseWebDriver<T> : IUseCase<T> where T : class
     {
         public IWebDriver driver { get; private set; }
+        protected WebDriverTools tools;
         public IJavaScriptExecutor js { get; private set; }
         ChromeOptions options = new ChromeOptions();
         protected FrontSettings frontSettings;
         protected IBackgroundService worker;
         private Process cmd;
 
-        public UseCaseWebDriver ()
+        public UseCaseWebDriver (bool hideBroser)
         {
             frontSettings = new FrontSettings();
             this.worker = new SingletonWorkshift();
-            Initialize();
+            Initialize(hideBroser);
         }
 
         public UseCaseWebDriver(CommandFront command, IBackgroundService worker)
         {
             this.frontSettings = command.GetFrontSettings();
             this.worker = worker;
-            Initialize();
+            Initialize(false);
         }
 
-        protected void Initialize()
+        protected void Initialize(bool hideBroser)
         {
-            if (frontSettings.showChrome)
-                options.AddArguments("--start-fullscreen");
+            if (frontSettings.showChrome && !hideBroser)
+                options.AddArguments("--window-size=1360,768");
             else
                 options.AddArguments("--headless", "--window-size=1536,929");
 
@@ -52,8 +54,6 @@ namespace Point_Adjust_Robot.Core.Model
                 Directory.GetParent(path).ToString();
             path += "\\Files\\chromedriver.exe";
 
-            //cmd = Process.Start("CMD.exe", $"/C cd {path} | start chromedriver.exe");
-
             ProcessStartInfo pro = new ProcessStartInfo();
             pro.FileName = path;
             cmd = new Process();
@@ -61,21 +61,35 @@ namespace Point_Adjust_Robot.Core.Model
             cmd.Start();
             Thread.Sleep(1000);
 
-            var uri = new Uri("http://localhost:9515/");
+            var uri = new Uri("http://127.0.0.1:9515/");
             driver = new RemoteWebDriver(uri, options);
-
             js = (IJavaScriptExecutor)driver;
+
+            var zoomFactor = 1.30;
+            var windowSize = driver.Manage().Window.Size;
+            driver.Manage().Window.Size = new System.Drawing.Size((int)(windowSize.Width * zoomFactor), (int)(windowSize.Height * zoomFactor));
+
+            tools = new WebDriverTools(driver, js);
         }
 
         public virtual T result { get; set; }
+        public string lastError { get; set; }
+        public void ParseError(Exception e, string step)
+        {
+            string error = e.InnerException is not null ? e.Message + " Inner: " + e.InnerException.Message : e.Message;
+            this.lastError = JsonConvert.SerializeObject(
+                new
+                {
+                    step,
+                    error
+                }, Formatting.Indented);
+        }
 
         public virtual void Dispose()
         {
             try
             {
                 driver.Quit();
-                //cmd.Close();
-                //cmd.Dispose();
             }
             catch { }
         }

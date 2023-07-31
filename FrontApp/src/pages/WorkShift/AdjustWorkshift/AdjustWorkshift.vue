@@ -57,7 +57,7 @@
 <script>
 import * as cheetahGrid from "cheetah-grid";
 import GridAdjust from "./gridConfig";
-import CommandAdjust from "../../../model/commands/CommandAdjust";
+import CommandAdjust from "../../../services/commands/CommandAdjust";
 import { MixinWorkShift } from "../mixinWorkShift";
 
 export default {
@@ -166,6 +166,7 @@ export default {
       try {
         commandAdjust = new CommandAdjust(data);
       } catch (e){
+        console.error("🦾🤖 >> e", e)
         this.handleError(e)
         return;
       }

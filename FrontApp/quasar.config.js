@@ -53,6 +53,10 @@ module.exports = configure(function (/* ctx */) {
         node: "node16",
       },
 
+      rollupOptions:{
+        external: true
+      },
+
       vueRouterMode: "history", // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
@@ -89,7 +93,7 @@ module.exports = configure(function (/* ctx */) {
       config: {},
 
       // iconSet: 'material-icons', // Quasar icon set
-      lang: "pt-br", // Quasar language pack
+      // lang: "pt-br", // Quasar language pack
 
       // For special cases outside of where the auto-import strategy can have an impact
       // (like functional components as one of the examples),

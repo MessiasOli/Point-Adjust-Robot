@@ -9,15 +9,16 @@ using Point_Adjust_Robot.Core.Model.Enum;
 using Point_Adjust_Robot.Core.Tools;
 using Point_Adjust_Robot.Core.UseCases.Workshift;
 using PointAdjustRobotAPI.Service;
-using Sentry;
+using System.IO;
 
 namespace PointAdjustRobotAPI.Core.UseCases.Workshift
 {
     public class Adjustment : UseCaseWebDriver<Return<List<WorkShiftAdjustment>>>
     {
-        
+
         private List<WorkShiftAdjustment> workShiftList;
         private string keyJob = $"{DateTime.Now.ToString("ddMMyyyyHHmmss")}|{JobType.Replacements}";
+        private bool hideBroser = false;
 
         public Adjustment(CommandAdjust command, SingletonWorkshift worker, string key) : base(command, worker)
         {
@@ -30,8 +31,9 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
             this.worker.InitJob(keyJob, new List<WorkShift>(workShiftList));
         }
 
-        public Adjustment(List<WorkShiftAdjustment> workShiftList) : base()
+        public Adjustment(List<WorkShiftAdjustment> workShiftList, bool hideBroser) : base(hideBroser)
         {
+            this.hideBroser = hideBroser;
             this.workShiftList = workShiftList;
             this.worker.InitJob(keyJob, new List<WorkShift>(workShiftList));
             this.result = new Return<List<WorkShiftAdjustment>>() { content = new List<WorkShiftAdjustment>(), message = "" };
@@ -39,17 +41,17 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
 
         public override UseCaseWebDriver<Return<List<WorkShiftAdjustment>>> DoWork()
         {
-            string step = "Setando a organização Login";
+            string step = "Setando a organizaï¿½ï¿½o Login";
             try
             {
                 var start = DateTime.Now;
-                const int maximunInteraction = 8;
+                const int maximunInteraction = 5;
                 int countSucess = 0;
                 int countToRelog = maximunInteraction;
-                
+
                 step = "Fazendo login";
                 var login = new Login(driver, frontSettings.user, frontSettings.password);
-                var tools = new WebDriverTools(driver);
+
                 login.DoWork();
 
                 if (!login.result)
@@ -60,12 +62,12 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
                         throw new ArgumentException("Falha no login");
                 }
 
-                step = "Iniciando inserção em massa de dados";
+                step = "Iniciando inserÃ§Ã£o em massa de dados";
                 foreach (var workShift in this.workShiftList)
                 {
                     try
                     {
-                        step = "Solicitação de parada iniciada";
+                        step = "SolicitaÃ§Ã£o de parada iniciada";
                         if (worker.CallToStop())
                         {
                             this.result.content.Add(workShift);
@@ -76,11 +78,11 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
                         if (countToRelog == 0)
                         {
                             this.Dispose();
-                            this.Initialize();
+                            this.Initialize(this.hideBroser);
                             login = new Login(driver, frontSettings.user, frontSettings.password);
-                            tools = new WebDriverTools(driver);
+
                             if (!login.DoWork().result)
-                                throw new ArgumentException($"Falha ao restartar o sistema após {countSucess + result.content.Count} iterações.");
+                                throw new ArgumentException($"Falha ao restartar o sistema apÃ³s {countSucess + result.content.Count} iteraÃ§Ãµes.");
                             countToRelog = maximunInteraction;
                         }
 
@@ -91,7 +93,7 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
                         step = "Ajustando dados";
                         workShift.note = String.IsNullOrWhiteSpace(workShift.note) ? "Nada a declarar." : workShift.note;
 
-                        step = "Buscando usuário";
+                        step = "Buscando usuÃ¡rio";
                         Thread.Sleep(1000);
                         var filter = new FilterEmployeeByMatriculation(driver, workShift.matriculation);
                         filter.DoWork();
@@ -100,31 +102,41 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
                         var plusButton = "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[2]/div/div[2]/div[2]/div[1]/span[2]";
                         if (!tools.IsVisible(plusButton))
                         {
-                            step = "Abrindo a tabela caso não esteja visível";
+                            step = "Abrindo a tabela caso nÃ£o esteja visÃ­vel";
                             tools.AwaitAndClick("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[1]/ul/li[2]/a");
                             Thread.Sleep(1500);
-                            tools.Await("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[2]/div/div[2]/div[2]/div[2]/div[1]/div[1]/div[3]");
+                            tools.Await(plusButton);
                             Thread.Sleep(1500);
                         }
 
-                        step = "Ajustando dados para procurar a hora no calendário";
+                        step = "Ajustando dados para procurar a hora no calendÃ¡rio";
                         string day = workShift.date.Split("/")[0] + " - ";
                         bool foundElementToEdit = !String.IsNullOrWhiteSpace(workShift.replaceTime.Trim());
-                        var (hourFound, deletePoint) = workShift.replaceTime.ToLower().Contains("cancelar") ? 
-                                                    (workShift.hour, true) : 
+                        var (hourFound, deletePoint) = workShift.replaceTime.ToLower().Contains("cancelar") ?
+                                                    (workShift.hour, true) :
                                                     (workShift.replaceTime, false);
 
-                        step = "Procurando a hora para subistituição na tabela calendário";
-                        if (foundElementToEdit){
-                            foundElementToEdit = false;
+                        step = $"Verificando se estamos dentro do espaÃ§o de visÃ£o da data {workShift.date}";
+                        this.AdjustFieldOfView(workShift);
+
+                        step = "Procurando a hora para subistituiÃ§Ã£o na tabela calendÃ¡rio";
+                        if (foundElementToEdit)
+                        {
                             tools.Await("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[2]/div/div[2]/div[2]/div[2]/div[1]");
-                            foreach (var elDate in driver.FindElements(By.ClassName("row_day")).ToList())
+
+                            int countDay = 0;
+                            foundElementToEdit = false;
+                            var linesDate = driver.FindElements(By.ClassName("row_day")).ToList();
+                            foreach (var elDate in linesDate)
                             {
+                                countDay++;
                                 string text = elDate.Text;
+                                step = "Verificando a necessidade de rolar o calendÃ¡rio";
+                                tools.ScrollIntoView(elDate);
 
                                 if (!(text.Contains(day) && text.Contains(hourFound))) continue;
 
-                                foreach(var elTime in elDate.FindElements(By.ClassName("time")).ToList())
+                                foreach (var elTime in elDate.FindElements(By.ClassName("time")).ToList())
                                 {
                                     text = elTime.Text;
                                     if (text != hourFound) continue;
@@ -138,8 +150,8 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
                                 break;
                             }
 
-                            if(!foundElementToEdit)
-                                throw new ArgumentException($"Não foi possível encontrar a hora para o ajuste {workShift.replaceTime} {workShift.hour} na date {workShift.date}");
+                            if (!foundElementToEdit)
+                                throw new ArgumentException($"NÃ£o foi possÃ­vel encontrar a hora para o ajuste {workShift.replaceTime} {workShift.hour} na date {workShift.date}");
                         }
 
                         if (!foundElementToEdit)
@@ -153,48 +165,40 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
 
                         if (!deletePoint)
                         {
-                            step = "Inserindo Data.";
-                            var path = foundElementToEdit ?
+                            Thread.Sleep(300);
+                            step = $"Inserindo Data. {workShift.date}";
+                            var xPath = foundElementToEdit ?
                                 "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div[2]/div[1]/datepicker/p/input" :
                                 "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div/div[1]/datepicker/p/input";
 
-                            var inputData = tools.GetElement(path);
-                            inputData.Clear();
-                            inputData.SendKeys(workShift.date);
-                            inputData.SendKeys(Keys.Enter);
+                            tools.SendKeys(xPath, workShift.date, true).SendKeys(xPath, Keys.Enter);
 
-
-                            step = "Inserindo Horas.";
-                            path = foundElementToEdit ?
+                            Thread.Sleep(300);
+                            step = $"Inserindo Horas: {workShift.hour}";
+                            xPath = foundElementToEdit ?
                                 "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div[2]/div[2]/timepicker/input" :
                                 "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div/div[2]/timepicker/input";
 
-                            var inputHour = tools.GetElement(path);
-                            inputHour.Clear();
                             (string hour, string minutes) = workShift.GetHour();
-                            inputHour.SendKeys(hour);
-                            inputHour.SendKeys(minutes);
+                            tools.SendKeys(xPath, hour, true)
+                                 .SendKeys(xPath, minutes);
 
 
-                            step = "Inserindo Referencia.";
-                            path = foundElementToEdit ?
+                            step = $"Inserindo Referencia: {workShift.reference}";
+                            xPath = foundElementToEdit ?
                                 "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div[2]/div[3]/datepicker/p/input" :
                                 "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div/div[3]/datepicker/p/input";
 
-                            var inputReferencia = tools.GetElement(path);
-                            inputReferencia.Click();
-                            inputReferencia.Clear();
-                            inputReferencia.SendKeys(workShift.reference);
-                            inputReferencia.SendKeys(Keys.Enter);
+                            tools.SendKeys(xPath, workShift.reference, true);
                         }
                         else
                         {
-                            step = "Selecionando a opção cancelar.";
+                            step = "Selecionando a opÃ§Ã£o cancelar.";
                             Thread.Sleep(700);
                             tools.AwaitAndClick("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[2]/div[1]/div/label[2]");
                         }
 
-                        step = "Selecionando uma opção.";
+                        step = $"Selecionando uma opÃ§Ã£o: {workShift.justification}";
                         SelectElement selector;
                         var selectFound = tools.GetElement("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[1]/div/div[2]/div[1]/div[3]/div[1]/div/div[4]/div/div/select");
                         if (selectFound.Displayed)
@@ -203,24 +207,24 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
                             selector.SelectByText(workShift.justification);
                         }
 
-                        step = "Inserindo Observações.";
-                        driver.FindElement(By.Id("note")).SendKeys(workShift.note);
+                        step = $"Inserindo ObservaÃ§Ãµes: {workShift.note}";
+                        tools.SendKeys("note", workShift.note, ByEnum.Id);
 
-                        step = "Confirmando o formulário.";
+                        step = "Confirmando o formulario.";
                         Thread.Sleep(700);
                         driver.FindElement(By.LinkText("Confirmar")).Click();
 
-                        step = "Verificando retorno ao finalizar a requisição.";
+                        step = "Verificando retorno ao finalizar a requisiÃ§Ã£o.";
                         var el = tools.GetElement("/html/body/core-main/div/div[2]/div[1]/div/div[1]/notifications/div");
                         if (!el.Text.ToLower().Contains("sucesso"))
                             throw new ArgumentException($"Ao clicar em confirmar envio, o sistema Nexti retornou: {el.Text}");
 
-                        step = "Setando Concluído";
+                        step = "Setando ConcluÃ­do";
                         worker.SetWorkShiftCompleted(keyJob, workShift);
 
                         countSucess++;
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         if (e.Message.Contains("Falha ao restartar"))
                             continue;
@@ -228,12 +232,8 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
                         result.content.Add(workShift);
                         var infoMessage = JsonConvert.SerializeObject(workShift, Formatting.Indented);
                         worker.SetWorkShiftError(keyJob, (step + " " + infoMessage), workShift);
+                        this.ParseError(e, step);
                         WriterLog.Write(e, workShift.matriculation, step, infoMessage, "Adjustment");
-                        try
-                        {
-                            SentrySdk.CaptureException(e);
-                        }
-                        catch { }
                     }
                 }
 
@@ -244,17 +244,13 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
             }
             catch (Exception e)
             {
-                if(e.Message == "Usuário ou senha Incorretos")
+                if (e.Message == "UsuÃ¡rio ou senha Incorretos")
                     this.result.content = this.workShiftList;
 
-                this.result.message = "Erro execução da requisição.";
+                this.result.message = "Erro execuï¿½ï¿½o da requisiÃ§Ã£o.";
+                this.ParseError(e, step);
                 this.worker.FinishJobWithError(keyJob, e, JsonConvert.SerializeObject(this.result.content, Formatting.Indented));
                 WriterLog.WriteError(e, "Metodo", step, this.result.message, "Adjustment");
-                try
-                {
-                    SentrySdk.CaptureException(e);
-                }
-                catch { }
             }
             finally
             {
@@ -267,12 +263,63 @@ namespace PointAdjustRobotAPI.Core.UseCases.Workshift
         protected override string GetResult(string time, int countSucess)
         {
             if (this.worker.CallToStop())
-                return $"stoped: {countSucess} inseridos e {result.content.Count} foram interrompidos tempo gasto {time}.";;
+                return $"stoped: {countSucess} inseridos e {result.content.Count} foram interrompidos tempo gasto {time}."; ;
 
             if (result.content.Count == 0)
                 return $"{countSucess} registros inseridos, tempo gasto {time}.";
 
-            return $"{countSucess} inseridos e {result.content.Count} falharam, tempo gasto {time}. Analise os dados da tabela para descobrir o possível problema. Você também pode analizar os logs para mais informações.";
+            return $"{countSucess} inseridos e {result.content.Count} falharam, tempo gasto {time}. Analise os dados da tabela para descobrir o possï¿½vel problema. VocÃª tambÃ©m pode analizar os logs para mais informaÃ§Ãµes.";
+        }
+
+        protected void AdjustFieldOfView(WorkShiftAdjustment workshift)
+        {
+            string step = "Verificando necessidade de retroceder data";
+            try
+            {
+                DateTime date = DateTime.ParseExact(workshift.reference, "dd/MM/yyyy", null);
+                var minusDay = 16 - date.Day;
+                string[] nameMonths = {
+                    "Janeiro", "Fevereiro", "MarÃ§o", "Abril", "Maio", "Junho",
+                    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+                };
+
+                DateTime dateRef = DateTime.ParseExact(date.AddDays(minusDay).ToString("dd/MM/yyyy"), "dd/MM/yyyy", null);
+                var currentMonth = "";
+
+                step = "Se for o mÃªs ";
+                if (date >= dateRef)
+                    currentMonth = nameMonths[date.Month < 12 ? date.Month : 11];
+                else
+                    currentMonth = nameMonths[date.Month - 1];
+
+                step = "Verifica o mÃªs Ã  vista";
+                var monthSelected = tools.GetElement("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[2]/div/div[1]/span/div[2]/button[1]");
+
+                step = "Se for o mesmo mÃªs retorna e prossegue.";
+                var month = monthSelected.Text;
+                if (month == currentMonth) return;
+
+                step = "Abrindo o DropDown de mÃªses.";
+                tools.AwaitAndClick("/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[2]/div/div[1]/span/div[2]/button[2]");
+
+                var xPath = "/html/body/core-main/div/div[2]/div[1]/div/div[2]/sidebar/div/div[2]/div[2]/div[2]/div/div[1]/span/div[2]/ul/li/a";
+                var elements = driver.FindElements(By.XPath(xPath));
+
+                foreach (var element in elements)
+                {
+                    month = element.Text;
+                    if (month.Contains(currentMonth))
+                    {
+                        element.Click();
+                        Thread.Sleep(700);
+                        break;
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException($"Mudar calendÃ¡rio>{step}>Error:{Utilities.GetMessageException(e)}");
+            }
         }
     }
 }

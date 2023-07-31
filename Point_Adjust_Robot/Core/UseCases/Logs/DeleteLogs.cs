@@ -21,6 +21,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Logs
         }
 
         public bool result { get; set; }
+        public string lastError { get; set; }
 
         public void Dispose() {}
 

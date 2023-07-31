@@ -12,9 +12,9 @@ Point_Adjust_Robot/.vs/
 /.vs
 
 # Quasar core related directories
-.quasar
 /dist
 /Log
+/.Quasar
 
 # Cordova related directories and files
 /src-cordova/node_modules
@@ -40,3 +40,6 @@ yarn-error.log*
 *.cache
 *.vsidx
 *.user
+.vscode/tasks.json
+/videos
+FrontApp/cypress/videos/routes.cy.js.mp4

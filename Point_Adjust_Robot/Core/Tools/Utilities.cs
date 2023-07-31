@@ -2,7 +2,7 @@
 {
     public static class Utilities
     {
-        public static string GetDifMinutes  (string start, string final)
+        public static string GetDifMinutes(string start, string final)
         {
             return GetDifMinutes(DateTime.ParseExact(start, "dd/MM/yyyy HH:mm:ss", null), DateTime.ParseExact(final, "dd/MM/yyyy HH:mm:ss", null));
         }
@@ -31,5 +31,7 @@
                          $"{HH}:{MM}:{SS}") : 
                    $"{day}D {HH}:{MM}:{SS}";
         }
+
+        public static string GetMessageException(Exception e) => e.Message + e.InnerException is not null ? $" Erro interno: {e.InnerException}" : "";
     }
 }

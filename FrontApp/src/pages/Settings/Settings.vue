@@ -4,81 +4,34 @@
       <div>
         <label>Digite aqui o usuário Nexti que será utilizado no robô</label>
         <div class="auth" @submit="onSubmit" @reset="onReset">
-          <q-input
-            class="q-pa-sm"
-            filled
-            v-model="user"
-            label="Usuário nexti"
-            lazy-rules
-            :rules="[
+          <q-input class="q-pa-sm" filled v-model="user" label="Usuário nexti" lazy-rules :rules="[
+            (val) =>
+              (val && val.length > 0) || 'Necessário inserir um login válido',
+          ]" @change="saveConfig" :dense="true" />
+          <q-input class="q-pa-sm" v-model="password" filled :type="isPwd ? 'password' : 'text'" label="Senha Nexti"
+            @change="saveConfig" :rules="[
               (val) =>
                 (val && val.length > 0) || 'Necessário inserir um login válido',
-            ]"
-            @change="saveConfig"
-            :dense="true"
-          />
-          <q-input
-            class="q-pa-sm"
-            v-model="password"
-            filled
-            :type="isPwd ? 'password' : 'text'"
-            label="Senha Nexti"
-            @change="saveConfig"
-            :rules="[
-              (val) =>
-                (val && val.length > 0) || 'Necessário inserir um login válido',
-            ]"
-            :dense="true"
-          >
-          <!-- :name="isPwd ? 'visibility_off' : 'visibility'" -->
-          <!-- @click="isPwd = !isPwd" -->
+            ]" :dense="true">
+            <!-- :name="isPwd ? 'visibility_off' : 'visibility'" -->
+            <!-- @click="isPwd = !isPwd" -->
             <template v-slot:append>
-              <q-icon
-                name="visibility_off"
-                class="cursor-pointer"
-              />
+              <q-icon name="visibility_off" class="cursor-pointer" />
             </template>
           </q-input>
         </div>
       </div>
       <div>
-        <q-toggle
-          v-model="showChrome"
-          checked-icon="check"
-          color="green"
-          label="Abrir Chrome ao executar as rotinas."
-          unchecked-icon="clear"
-        />
-        <q-btn
-          @click="clearLogs"
-          icon-right="delete"
-          color="primary"
-          label="Limpar Logs"
-          unchecked-icon="clear"
-        />
+        <q-toggle v-model="showChrome" checked-icon="check" color="green" label="Abrir Chrome ao executar as rotinas."
+          unchecked-icon="clear" />
+        <q-btn @click="clearLogs" icon-right="delete" color="primary" label="Limpar Logs" unchecked-icon="clear" />
       </div>
     </div>
     <hr />
-    <q-table
-      ref="table"
-      title="Registros do sistema"
-      :filter="filter"
-      :rows="rows"
-      :columns="columns"
-      row-key="timeStamp"
-      class="my-sticky-virtscroll-table"
-      virtual-scroll
-      :rows-per-page-options="[0]"
-      :virtual-scroll-sticky-size-start="48"
-    >
+    <q-table ref="table" title="Registros do sistema" :filter="filter" :rows="rows" :columns="columns"
+      row-key="timeStamp" class="my-sticky-virtscroll-table" :rows-per-page-options="[0]">
       <template v-slot:top-right>
-        <q-input
-          borderless
-          dense
-          debounce="200"
-          color="primary"
-          v-model="filter"
-        >
+        <q-input borderless dense debounce="200" color="primary" v-model="filter">
           <template v-slot:append>
             <q-icon name="search" />
           </template>
@@ -97,14 +50,8 @@
       <template v-slot:body="props">
         <q-tr :props="props">
           <q-td auto-width>
-            <q-btn
-              size="sm"
-              color="accent"
-              round
-              dense
-              @click="show(props)"
-              :icon="props.expand ? 'remove' : 'add'"
-            ></q-btn>
+            <q-btn size="sm" color="accent" round dense @click="show(props)"
+              :icon="props.expand ? 'remove' : 'add'"></q-btn>
           </q-td>
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
             {{ col.value }}
@@ -222,7 +169,7 @@ export default {
   justify-content: space-around;
 }
 
-.settings > div:last-child {
+.settings>div:last-child {
   display: flex;
   flex-direction: column;
 }
@@ -250,26 +197,29 @@ thead tr th {
   position: sticky;
   z-index: 1;
 }
+
 /* this will be the loading indicator */
 thead tr:last-child th {
   top: 48px;
 }
+
 /* height of all previous header rows */
 thead tr:first-child th {
   top: 0;
 }
 
-.data-info{
+.data-info {
   width: 77vw;
   word-break: break-all;
 }
-.data-info > p{
+
+.data-info>p {
   width: 100%;
   word-break: break-all;
   overflow-wrap: break-word;
 }
 
-.data-info > textarea{
+.data-info>textarea {
   width: 100%;
   word-break: break-all;
   overflow-wrap: break-word;

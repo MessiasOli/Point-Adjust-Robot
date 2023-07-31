@@ -2,18 +2,22 @@
 using OpenQA.Selenium;
 using PointAdjustRobotAPI.Core.Interface;
 using PointAdjustRobotAPI.Service;
+using Point_Adjust_Robot.Core.Tools;
 
 namespace Point_Adjust_Robot.Core.UseCases.Workshift
 {
     public class Login : IUseCase<bool>
     {
         private IWebDriver driver;
-        private string user = "messias.teste";
-        private string key = "1234";
+        private string user = "";
+        private string key = "";
+        WebDriverTools tools;
 
         public Login(IWebDriver driver)
         {
             this.driver = driver;
+            this.tools = new WebDriverTools(driver);
+
         }
 
         public Login(IWebDriver driver, string user, string key) : this(driver)
@@ -23,6 +27,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
         }
 
         public bool result { get; set; } = true;
+        public string lastError { get; set; }
 
         public void Dispose()
         {
@@ -49,10 +54,11 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
 
                 {
                     WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-                    wait.Until(driver => driver.FindElement(By.Id("inputUsername")).Displayed && driver.FindElement(By.Id("inputUsername")).Enabled);
+                    wait.Until(driver =>  driver.FindElement(By.Id("inputUsername")).Displayed && driver.FindElement(By.Id("inputUsername")).Enabled);
                 }
 
                 step = "Inserindo usuário e senha";
+                
                 driver.FindElement(By.Id("inputUsername")).SendKeys(this.user);
                 driver.FindElement(By.Id("inputPassword")).SendKeys(this.key);
                 driver.FindElement(By.CssSelector(".btn:nth-child(7)")).Click();

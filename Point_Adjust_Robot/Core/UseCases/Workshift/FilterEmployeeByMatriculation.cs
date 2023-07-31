@@ -17,6 +17,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
         }
 
         public bool result { get; set; } = true;
+        public string lastError { get; set; }
 
         public void Dispose(){}
 
@@ -71,6 +72,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
                 }
 
                 step = "Selecionando o usuário correspondente.";
+                
                 tools.ClickInTextByClass("person_text", matriculation);
 
                 step = "Limpando mensagem de anuncios.";
@@ -78,7 +80,7 @@ namespace Point_Adjust_Robot.Core.UseCases.Workshift
             }
             catch(Exception e)
             {
-                throw new ArgumentException(step  + " "+ e.Message);
+                throw new ArgumentException(step  + " " + Utilities.GetMessageException(e));
             }
             return this;
         }

@@ -6,14 +6,8 @@
     </div>
     <div class="main-input">
       <label for="fileSelect">Clique aqui para importar o excell</label>
-      <input
-        type="file"
-        ref="file"
-        @change="selectedFile"
-        hidden="true"
-        id="fileSelect"
-        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-      />
+      <input type="file" ref="file" @change="selectedFile" hidden="true" id="fileSelect"
+        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
     </div>
   </div>
 </template>
@@ -40,11 +34,11 @@ export default {
   text-align: center;
 }
 
-.main-input > label {
+.main-input>label {
   cursor: pointer;
 }
 
-.main-input > button {
+.main-input>button {
   margin-left: 4px;
 }
 

@@ -6,7 +6,7 @@ namespace Point_Adjust_Robot.Core.DesignPatterns.Command
 {
     public class CommandFront : ICommand
     {
-        public string settings { get; set; }
+        public string settings { get; set; } = "";
 
         public virtual void Execute()
         {

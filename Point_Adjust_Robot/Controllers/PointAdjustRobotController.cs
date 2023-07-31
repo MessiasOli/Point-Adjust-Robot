@@ -13,8 +13,8 @@ using PointAdjustRobotAPI.Service;
 
 namespace PointAdjustRobotAPI.Controllers
 {
+    [Route("api/[Controller]")]
     [ApiController]
-    [Route("[controller]")]
     public class PointAdjustRobotController : ControllerBase
     {
         private SingletonWorkshift worker;
@@ -65,7 +65,7 @@ namespace PointAdjustRobotAPI.Controllers
 
         [HttpPost("SetCoverWorkshift")]
         [AllowAnonymous]
-        public async Task<IActionResult> SetCoverWorkshift([FromBody] CommandCover coverWorkShift)
+        public IActionResult SetCoverWorkshift([FromBody] CommandCover coverWorkShift)
         {
             string step = "Ajustando dados";
             string infoMessage = JsonConvert.SerializeObject(coverWorkShift);
@@ -84,6 +84,32 @@ namespace PointAdjustRobotAPI.Controllers
             catch (Exception e)
             {
                 WriterLog.Write(e, "API", step, infoMessage, "SetWorkShiftAdjustment");
+                var message = e.InnerException is null ? e.Message : e.Message + " Inner: " + e.InnerException.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, message);
+            }
+        }
+
+        [HttpPost("SetAbsenceWorkshift")]
+        [AllowAnonymous]
+        public IActionResult SetAbsenceWorkshift([FromBody] CommandAbsence absenceWorkshift)
+        {
+            string step = "Ajustando dados";
+            string infoMessage = JsonConvert.SerializeObject(absenceWorkshift);
+
+            try
+            {
+                worker.callToStop = false;
+                var key = $"{DateTime.Now.ToString("ddMMyyyyHHmmss")}|{JobType.Absence}";
+                IUseCase<Return<List<WorkshiftAbsence>>> useCase = WorkShiftFactory.GetSetAbsence(absenceWorkshift, worker, key);
+
+                Thread t = new Thread(() => { useCase.DoWork(); });
+                t.Start();
+
+                return Ok(key);
+            }
+            catch (Exception e)
+            {
+                WriterLog.Write(e, "API", step, infoMessage, "SetAbsenceWorkshift");
                 var message = e.InnerException is null ? e.Message : e.Message + " Inner: " + e.InnerException.Message;
                 return StatusCode(StatusCodes.Status500InternalServerError, message);
             }
@@ -185,5 +211,7 @@ namespace PointAdjustRobotAPI.Controllers
                 return Conflict(message);
             }
         }
+
+
     }
 }

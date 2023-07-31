@@ -4,5 +4,6 @@
     {
         public T result { get; set; }
         public IUseCase<T> DoWork();
+        public string lastError { get; set; }
     }
 }

@@ -1,0 +1,125 @@
+stages: 
+  - Package
+  - Test
+  - Deploy
+
+Package API: &Base
+  stage: Package
+  tags:
+    - builder
+  only: 
+    - main
+    - develop
+    - /hotfix.*/
+    - release
+  script:
+    - dotnet publish Point_Adjust_Robot/ --framework net6.0 -r win-x64
+    - dotnet build Tests/
+
+Package Web: 
+  <<: *Base
+  stage: Package
+  variables:
+     GIT_STRATEGY: none
+  script:
+    - cd FrontApp
+    - npm install
+    - npm run build
+  artifacts:
+    name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
+    paths:
+     - ./FrontApp/dist/spa/
+     - ./Point_Adjust_Robot/bin/Debug/net6.0/win-x64/publish/
+     - ./Files/
+    expire_in: 1 month
+    
+Test Selenium: &Test
+  <<: *Base
+  stage: Test
+  needs: ["Package API", Package Web]
+  only: 
+  - main
+  - develop
+  - /hotfix.*/
+  variables:
+     GIT_STRATEGY: none
+  script:
+    - IF (Test-Path -Path Log) { echo "Log exists" } ELSE { mkdir Log }
+    - cd Tests
+    - dotnet build 
+    - dotnet test --no-restore --verbosity normal
+
+Up Site: &UpSite
+  <<: *Base
+  stage: Test
+  needs: ["Package API", Package Web]
+  only: 
+    - main
+    - develop
+    - /hotfix.*/
+  variables:
+     CPATH: C:\Apps\PointAdjustRobot
+     GIT_STRATEGY: none
+  environment: 
+    name: production
+    url: http://localhost:5000
+  before_script: 
+    - if($(Get-WebAppPoolState -Name "RoboDePontos").Value -eq "Started"){ Stop-WebAppPool -Name "RoboDePontos"; Write-Host "App RoboDePontos Parado"}
+    - if($(Get-WebAppPoolState -Name "RoboDePontos.API").Value -eq "Started"){ Stop-WebAppPool -Name "RoboDePontos.API"; Write-Host "App RoboDePontos.API Parado"}
+    - Start-Sleep -Seconds 5
+  script:
+    - if (-not(Test-Path -Path $CPATH)){ md $CPATH }
+    - Remove-item ${CPATH}\* -Force -r
+    - md ${CPATH}\API
+    - move .\Point_Adjust_Robot\bin\Debug\net6.0\win-x64\publish\* ${CPATH}\API\
+    - move .\FrontApp\dist\spa\* ${CPATH}\
+    - md ${CPATH}\Files
+    - md ${CPATH}\Log
+    - move .\Files\* ${CPATH}\Files
+  after_script:
+    - Start-WebAppPool -Name "RoboDePontos"
+    - Start-WebAppPool -Name "RoboDePontos.API"
+
+Teste Cypress:
+  <<: *Test
+  dependencies: []
+  needs: ["Up Site"]
+  before_script:
+    - cd FrontApp
+    - npm install
+  script:
+    - npm run test
+
+Deploy_Client1: &Client
+  <<: *UpSite
+  stage: Deploy
+  when: manual
+  needs: ["Package Web"]
+  tags:
+    - client1
+  variables:
+     CPATH: C:\WebApp
+     GIT_STRATEGY: none
+  only: 
+    - release
+  environment: 
+    name: production
+    url: http://localhost:5000
+  before_script: 
+    - if($(Get-WebAppPoolState -Name "RoboDePontos").Value -eq "Started"){ Stop-WebAppPool -Name "RoboDePontos"; Write-Host "App RoboDePontos Parado"}
+    - if($(Get-WebAppPoolState -Name "RoboDePontos.API").Value -eq "Started"){ Stop-WebAppPool -Name "RoboDePontos.API"; Write-Host "App RoboDePontos.API Parado"}
+    - if($(Get-Process chromedriver -ErrorAction 0).StartInfo){ Write-Host "Parando chromedriver."; Stop-Process -Id $(Get-Process chromedriver).id -Force }
+    # - Remove-item ./* -Force -r
+    # - Invoke-WebRequest -Uri https://gitlab.com/api/v4/projects/40802116/jobs/artifacts/main/download?job=Package+Web -Headers @{"PRIVATE-TOKEN" = "glpat-fAxt4Xa5F5JzEPL57iMz"} -Method GET -OutFile artifacts.zip
+    # - Expand-Archive -Path ./artifacts.zip -DestinationPath . -Force
+    # - Remove-item ./*.zip -Force -r
+
+Deploy_Aline:
+  <<: *Client
+  tags:
+    - aline
+
+Deploy_Manzi:
+  <<: *Client
+  tags:
+    - manzi

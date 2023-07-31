@@ -24,6 +24,11 @@ const routes = [
         component: () => import("pages/WorkShift/CoverWorkShift/CoverWorkShift.vue"),
       },
       {
+        path: "Absence",
+        name: "Absence",
+        component: () => import("pages/WorkShift/Absence/Absence.vue"),
+      },
+      {
         path: "Settings",
         name: "Settings",
         component: () => import("pages/Settings/Settings.vue"),

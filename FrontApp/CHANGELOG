@@ -1,0 +1,59 @@
+Nunca esqueça dos CHANGELOG
+
+# v1.1.7
+  - Ajuste no tamanho da tela de renderização para 1360,768 com zoom de 1.3x
+  - Atualizado o Chromedriver para 111.0.5563.147
+
+# v1.1.6
+  - Corrigido bug de inserir de em até na funcionalidade de ausencia.
+  - Ajustado o sistema de garantia de que um input do tipo select persistisse o dado.
+  - Reduzido o ciclo de atividade do chromedriver antes do reinicio do browser em busca de um melhor o desempenho.
+
+# v1.1.5
+  - Todos os retornos da next agora irá para os logs.
+  - Ajuste no botão confirmar na confirmação de cobertura de posto e inserir dados de funcionário ausente
+
+# v1.1.4
+  - Ajuste ao inserir o dado em um input, tentando por 4 segundo caso haja falhas.
+  - Ajuste ao dar f5 quebrava a pagina, agora há um redirecionamento a página inicial.
+
+# v1.1.3
+  - Feito melhoria ao inserir dados no formulário.
+
+# v1.1.2
+  - Ajuste da tabela de logs.
+  - Ajuste ao selecionar o mês corrente para a função ajuste de Marcação.
+  - Atualização do chromedriver para versão 108.0.5359.71
+
+# v1.1.1
+  - Adicionado a opção de inserir apenas os dois primeiros horários na cobertura de posto.
+
+# v1.1.0
+  - Feito nova feature para inserir dados de funcionário ausente.
+  - Feito a página Lançar Ausência.
+  - Criado método backend.
+  - Feito a comunicação com o backend.
+  - Criado Tests BackEnd.
+  - Criado Tests FrontEnd.
+
+# v1.0.7
+  - Ajuste no flag que determina se ficará na tabela de data e hora padrão da nexti ou se se volta um mês.
+  - Problema resolvido: dias 16 voltava um mes e se comportava de forma inadequada.
+
+# v1.0.6
+  - Ajustado hora com espaço
+  - Inserido regra para atualizar o mês do calendário que é apresentado por default no site nexti.
+
+# v1.0.5
+  - Ajustado o tempo da incersão da cobertura de posto.
+
+# v1.0.4
+  - Feito filtros de enter, tab e espaços duplos.
+  - Foi trocado a tabela para melhorar o filtro de erros e facilitar na hora de selecionar um select box.
+
+# v1.0.3
+  - Ajustado busca de usuário por filtro quando há mais de um usuário filtrado.
+  - Ajustado os tempos de aguarde ao filtrar usuário.
+  - Agora o sistema da fullscreen a fim de mostrar toda a página.
+  - Aumentado o delay após abrir o chromedriver, internamente no código, a fim de aguardar ele ficar operante.
+  - Adiconado monitoramento de logs remotamente.

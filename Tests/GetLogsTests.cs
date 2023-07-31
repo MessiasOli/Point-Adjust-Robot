@@ -6,6 +6,7 @@ using Xunit.Extensions.Ordering;
 
 namespace Tests
 {
+    [TestCaseOrderer("Tests.AlphabeticalOrderer", "Tests")]
     public class GetLogsTests
     {
         [Fact]
@@ -31,7 +32,7 @@ namespace Tests
             IUseCase<bool> delete = new DeleteLogs(true);
             delete.DoWork();
 
-            IUseCase<List<Log>> useCase = new Point_Adjust_Robot.Core.UseCases.Logs.GetLogs();
+            IUseCase<List<Log>> useCase = new GetLogs();
             useCase.DoWork();
 
             Assert.True(useCase.result.Count == 0);
